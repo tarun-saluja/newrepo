@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 
-=======
 import 'package:flutter/material.dart';
 import 'package:memob/dashboard.dart';
 import 'package:memob/login.dart';
@@ -16,7 +14,6 @@ void main() {
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new Login();
   }));
->>>>>>> 04d1cde8a738f4495c2143e4f7106ae0d552394b
 
   // Define our home page.
   router.define('Dashboard', handler: new Handler(
