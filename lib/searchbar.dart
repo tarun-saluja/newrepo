@@ -6,13 +6,13 @@ class SearchBar  extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Search App'),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
-                })
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //       icon: Icon(Icons.search),
+          //       onPressed: () {
+          //         showSearch(context: context, delegate: DataSearch());
+          //       })
+          // ],
         ),
         drawer: Drawer(),
     );

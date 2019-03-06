@@ -22,5 +22,8 @@ void main() {
   }));
 
   runApp(new MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.white
+      ),
       home:  SplashScreen(), onGenerateRoute: router.generator));
 } 
