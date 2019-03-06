@@ -3,6 +3,7 @@ import 'package:memob/searchbar.dart';
 
 import './recentlyUpdated.dart';
 import './allMeetings.dart';
+import './drawer.dart';
 
 class Dashboard extends StatelessWidget {
   @override
@@ -32,7 +33,7 @@ class Dashboard extends StatelessWidget {
                 ],
               ),
             ),
-            drawer: Drawer(),
+            drawer: Dwidget(),
             body: Container(
               decoration: new BoxDecoration(
                 image: new DecorationImage(
