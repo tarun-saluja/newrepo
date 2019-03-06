@@ -29,7 +29,10 @@ class Meetings extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Detail(uuid: meetings[index].uuid),
+                builder: (context) => Detail(
+                  meetings[index].uuid,
+                meetings[index].title,
+                meetings[index].eventUuid),
               ));
         },
         child: Card(

@@ -1,11 +1,26 @@
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:memob/utilities.dart' as utilities;
+// import 'package:memob/speechDialog.dart';
+// import 'package:memob/attachmentListDialog.dart';
+// import 'package:memob/cameraPage.dart';
+import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
+import 'package:flutter/cupertino.dart';
+// import 'package:simple_permissions/simple_permissions.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/services.dart';
 
 import './share.dart';
 
 class Detail extends StatefulWidget {
-  final String uuid;
+  final String meetingUuid;
+  final String meetingTitle;
+  final String meetingEventId;
 
-  Detail({Key key, @required this.uuid}) : super(key: key);
+  Detail([this.meetingUuid,this.meetingTitle,this.meetingEventId]);
 
 
   @override
@@ -15,22 +30,162 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
-  String _uuid;
+  //String _uuid;
+  Map<String, dynamic> data;
+  List<dynamic> attachmentCountData;
+  List<dynamic> attachmentData;
+
+  bool noteLoaded = false;
+  bool attachmentCountLoaded = false;
+  bool attachmentLoaded = false;
+  bool emptyAttachment = false;
+
+  String noteText;
+  bool recordPermission = false;
+
+  bool _connectionStatus = false;
+  final Connectivity _connectivity = new Connectivity();
+
+  int attachmentCount;
+
+  var finalDateTime;
+
+  Future<bool> initConnectivity() async {
+    var connectionStatus;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      connectionStatus = (await _connectivity.checkConnectivity());
+
+      this.setState(() {
+        if(connectionStatus == ConnectivityResult.none){
+          _connectionStatus = false;
+        }else{
+          _connectionStatus = true;
+        }
+      });
+    } on PlatformException catch (e) {
+      _connectionStatus = false;
+    }
+
+    if (!mounted) {
+      return false;
+    }
+    return _connectionStatus;
+  }
+
+  // Future<Null> checkRecordPermission() async {
+  //   bool res = await SimplePermissions.checkPermission(Permission.RecordAudio);
+  //   if (res.toString() == 'true') {
+  //     recordPermission = true;
+  //   } else {
+  //     bool res =
+  //         await SimplePermissions.requestPermission(Permission.RecordAudio);
+  //     if (res.toString() == 'true') {
+  //       recordPermission = true;
+  //     }
+  //   }
+  // }
+
+  Future<Null> fetchData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        getRecentNotes(value);
+        getRecentNotesCount(value);
+      } else {
+        utilities.showLongToast(value);
+      }
+    });
+  }
+
+  Future<String> getRecentNotes(String token) async {
+
+    final response = await http.get(
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $token',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        data = json.decode(response.body);
+
+        List<dynamic> rawNote = data['raw_note'];
+
+        noteLoaded = true;
+        noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
+        print(noteText);
+        finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
+      });
+    } else {
+      // If that response was not OK, throw an error.
+      noteLoaded = true;
+      throw Exception('Failed to load post');
+    }
+    return 'Success';
+  }
+
+  Future<String> getRecentNotesCount(String token) async {
+    final response = await http.get(
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v2/attachments/?event=${widget.meetingEventId}'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $token',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        attachmentCountData = json.decode(response.body);
+
+        if (attachmentCountData.isNotEmpty) {
+          attachmentCount = attachmentCountData[0]['count'];
+        } else {
+          attachmentCount = 0;
+        }
+        attachmentCountLoaded = true;
+      });
+    } else {
+      // If that response was not OK, throw an error.
+      attachmentCountLoaded = true;
+      throw Exception('Failed to load post');
+    }
+    return 'Success';
+  }
 
   @override
   void initState() {
-    if (widget.uuid != null) {
-      _uuid = widget.uuid;
-    }
     super.initState();
+
+    initConnectivity().then((result){
+      if(result){
+        this.fetchData();
+      }else{
+        noteLoaded = true;
+        attachmentCountLoaded = true;
+      }
+    });
   }
+  // @override
+  // void initState() {
+  //   if (widget.uuid != null) {
+  //     _uuid = widget.uuid;
+  //   }
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(this._uuid),
+        title: Text(widget.meetingTitle),
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: choiceAction,
@@ -59,7 +214,7 @@ class _DetailState extends State<Detail> {
                       border: Border.all(color: Colors.blue, width: 1.0),
                       borderRadius: BorderRadius.circular(20.0)),
                   child: Text(
-                    'Date Time'
+                    '$finalDateTime'
                     ),
                 ),
                 Container(
@@ -109,7 +264,7 @@ class _DetailState extends State<Detail> {
             ),
             child: ListView(
               children: <Widget>[
-                Text('noteText',style: TextStyle(fontSize: 18.0, color: Colors.black),),
+                Text('$noteText',style: TextStyle(fontSize: 18.0, color: Colors.black),),
               ],
             ),
           )
