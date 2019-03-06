@@ -1,18 +1,48 @@
 import 'package:flutter/material.dart';
 
 
-class Detail extends StatelessWidget {
+class Detail extends StatefulWidget {
   final String uuid;
 
   Detail({Key key, @required this.uuid}) : super(key: key);
 
+
+  @override
+  State<StatefulWidget> createState() {
+    return _DetailState();
+  }
+}
+
+class _DetailState extends State<Detail> {
+  String _uuid;
+
+  @override
+  void initState() {
+    if (widget.uuid != null) {
+      _uuid = widget.uuid;
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(this.uuid),
+        title: Text(this._uuid),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: choiceAction,
+            itemBuilder: (BuildContext context){
+              return Constants.choices.map((String choice){
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -86,4 +116,62 @@ class Detail extends StatelessWidget {
       ),
     );
   }
+  void choiceAction(String choice)
+  {
+    if (choice==Constants.Share)
+    print('share');
+    else
+    print("sign out");
+
+  }
 }
+
+class Constants{
+  static const String Share = 'Share';
+  static const String Leave = 'Leave';
+
+  static const List<String> choices = <String>[
+    Share,
+    Leave,
+  ];
+}
+
+// class Choice {
+//   const Choice({this.title, this.icon});
+
+//   final String title;
+//   final IconData icon;
+// }
+
+// const List<Choice> choices = const <Choice>[
+//   const Choice(title: 'Car', icon: Icons.directions_car),
+//   const Choice(title: 'Bicycle', icon: Icons.directions_bike),
+//   const Choice(title: 'Boat', icon: Icons.directions_boat),
+//   const Choice(title: 'Bus', icon: Icons.directions_bus),
+//   const Choice(title: 'Train', icon: Icons.directions_railway),
+//   const Choice(title: 'Walk', icon: Icons.directions_walk),
+// ];
+
+// class ChoiceCard extends StatelessWidget {
+//   const ChoiceCard({Key key, this.choice}) : super(key: key);
+
+//   final Choice choice;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final TextStyle textStyle = Theme.of(context).textTheme.display1;
+//     return Card(
+//       color: Colors.white,
+//       child: Center(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: <Widget>[
+//             Icon(choice.icon, size: 128.0, color: textStyle.color),
+//             Text(choice.title, style: textStyle),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -15,12 +15,12 @@ class Dashboard extends StatelessWidget {
             appBar: AppBar(
               title: Text('Dashboard'),
               actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
-                })
-          ],
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      showSearch(context: context, delegate: DataSearch());
+                    })
+              ],
               bottom: TabBar(
                 indicatorColor: Colors.blue,
                 tabs: [
