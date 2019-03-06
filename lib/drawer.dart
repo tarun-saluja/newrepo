@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:memob/utilities.dart' as utilities;
+import 'dart:async';
+import 'dart:convert';
 //import 'package:http/http.dart' as http;
 
 class Dwidget extends StatelessWidget {
@@ -84,6 +87,14 @@ class Dwidget extends StatelessWidget {
           new ListTile(
             leading: const Icon(Icons.call_to_action),
             title: new Text("Logout"),
+            onTap: () async{
+
+                utilities.removeToken().then((result){
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/Login', (Route<dynamic> route) => false);
+                });
+
+                },
           ),
         ],
       ),
