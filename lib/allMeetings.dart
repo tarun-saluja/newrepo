@@ -4,9 +4,9 @@ import './meetingClass.dart';
 import './meetings.dart';
 
 class AllMeetings extends StatefulWidget {
-  MeetingClass startingMeeting;
+  List<MeetingClass> meetings;
 
-  AllMeetings({this.startingMeeting});
+  AllMeetings([this.meetings]);
 
   @override
   State<StatefulWidget> createState() {
@@ -15,14 +15,15 @@ class AllMeetings extends StatefulWidget {
 }
 
 class _AllMeetingsState extends State<AllMeetings> {
-  List<MeetingClass> _meetings = [
-    new MeetingClass(
-        "uuid", "Meeting 1", "2019-03-04", "endTime", "eventUuid", true, true),
-    new MeetingClass(
-        "uuid", "Meeting 2", "2019-03-05", "endTime", "eventUuid", true, true),
-    new MeetingClass(
-        "uuid", "Meeting 3", "2019-03-04", "endTime", "eventUuid", true, true)
-  ];
+  List<MeetingClass> _meetings;
+
+  @override
+  void initState() {
+    if(widget.meetings != null){
+      _meetings = widget.meetings;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

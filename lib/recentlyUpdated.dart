@@ -4,9 +4,9 @@ import './NotesClass.dart';
 import './notes.dart';
 
 class RecentlyUpdated extends StatefulWidget {
-  NotesClass startingNote;
+  List<NotesClass> startingNote;
 
-  RecentlyUpdated({this.startingNote});
+  RecentlyUpdated([this.startingNote]);
 
   @override
   State<StatefulWidget> createState() {
@@ -15,6 +15,14 @@ class RecentlyUpdated extends StatefulWidget {
 }
 
 class _RecentlyUpdatedState extends State<RecentlyUpdated> {
+
+  @override
+  void initState() {
+    if(widget.startingNote != null){
+      _notes = widget.startingNote;
+    }
+    super.initState();
+  }
   List<NotesClass> _notes = [
     new NotesClass(
         1, "MeetNotes Scrum", true, "04-03-2019", "meeting_uuid", "event_uuid"),
