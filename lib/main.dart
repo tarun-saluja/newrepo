@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memob/dashboard.dart';
 import 'package:memob/homepage.dart';
 import 'package:memob/login.dart';
 import 'package:memob/splashscreen.dart';
@@ -15,9 +16,9 @@ void main() {
   }));
 
   // Define our home page.
-  router.define('HomePage', handler: new Handler(
+  router.define('Dashboard', handler: new Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-    return new HomePage();
+    return new Dashboard();
   }));
 
   runApp(new MaterialApp(

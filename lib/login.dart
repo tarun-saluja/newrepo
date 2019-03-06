@@ -52,7 +52,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
         utilities.setTokenData(token).then((onValue){
           Navigator.pushReplacementNamed(
           context,
-          'HomePage',
+          'Dashboard',
         );
         });
         _latestLink = link ?? 'Unknown';
@@ -80,7 +80,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
       // Store token data in shared preferences
       utilities.setTokenData(token).then((onValue){
 
-        Navigator.pushReplacementNamed(context, 'HomePage');
+        Navigator.pushReplacementNamed(context, 'Dashboard');
       });
     }, onError: (err) {
       print('got err: $err');

@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (value != null) {
         Navigator.pushReplacementNamed(
           context,
-          'HomePage',
+          'Dashboard',
         );
       } else {
         Navigator.pushReplacementNamed(context, 'Login');
