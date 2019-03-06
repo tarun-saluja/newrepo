@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import './share.dart';
 
 class Detail extends StatefulWidget {
   final String uuid;
@@ -119,7 +120,13 @@ class _DetailState extends State<Detail> {
   void choiceAction(String choice)
   {
     if (choice==Constants.Share)
-    print('share');
+    {
+      Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => new Share(),
+              ));
+    }
     else
     print("sign out");
 
