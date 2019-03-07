@@ -279,7 +279,10 @@ class _DetailState extends State<Detail> {
       Navigator.push(
               context,
               new MaterialPageRoute(
-                builder: (context) => new Share(),
+                builder: (context) => new Share(
+                  widget.meetingTitle,
+                  '$noteText'
+                ),
               ));
     }
     else

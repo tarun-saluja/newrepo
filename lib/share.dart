@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import './cancelbutton.dart';
 import './sendbutton.dart';
@@ -33,15 +34,33 @@ const String defaultUserName = "User";
 // }
 
 class Share extends StatefulWidget {
+  final String meetingTitle;
+  final String meetingBody;
+
+  Share([this.meetingTitle, this.meetingBody]);
+
+  // @override
+  // State createState() => ShareWindow();
+
   @override
-  State createState() => new ShareWindow();
+  State<StatefulWidget> createState() {
+    return ShareWindow();
+  }
 }
 
 class ShareWindow extends State<Share> with TickerProviderStateMixin {
   final List<Msg> _messages = <Msg>[];
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
+  // String _meetingTitle;
+  // String _meetingBody;
 
+// @override
+//   void initState() {
+//     _meetingTitle = widget.meetingTitle;
+//     _meetingBody = widget.meetingBody;
+//     super.initState();
+//   }
   @override
   Widget build(BuildContext ctx) {
     return new Scaffold(
@@ -52,35 +71,57 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
       drawer: new Dwidget(),
       body: new Column(children: <Widget>[
         new Divider(),
-          new Container(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  CancelButton(),
-                  Text(
-                    "Share Notes",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  ),
-                  SendButton(),
-                ]),
-          ),
-          new Divider(color: Colors.black,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text("All Attendees"),
-              Text("Only Me"),
-              Text("Domain"),
-            ],
-          ),
-          new Divider(color: Colors.black,),
+        new Container(
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                CancelButton(onPressed: () {
+                  Navigator.pop(context);
+                }),
+                Text(
+                  "Share Notes",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
+                SendButton(
+                  onPressed: () async {
+                    String _mail='';
+                    
+                    for (Msg temp in _messages)
+                    {
+                       _mail+=temp.txt + ',';
+                    }
+                    final url =
+                        'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },
+                ),
+              ]),
+        ),
+        new Divider(
+          color: Colors.black,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text("All Attendees"),
+            Text("Only Me"),
+            Text("Domain"),
+          ],
+        ),
+        new Divider(
+          color: Colors.black,
+        ),
         new Flexible(
             child: new ListView.builder(
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
-              reverse: true,
-              padding: new EdgeInsets.all(6.0),
-            )),
+          itemBuilder: (_, int index) => _messages[index],
+          itemCount: _messages.length,
+          reverse: true,
+          padding: new EdgeInsets.all(6.0),
+        )),
         new Divider(height: 1.0),
         new Container(
           child: _buildComposer(),
@@ -90,52 +131,60 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     );
   }
 
-
   Widget _buildComposer() {
     return new IconTheme(
-        data: new IconThemeData(color: Theme.of(context).accentColor),
-        child: new Container(
+      data: new IconThemeData(color: Theme.of(context).accentColor),
+      child: new Container(
           margin: const EdgeInsets.symmetric(horizontal: 9.0),
           child: new Row(
             children: <Widget>[
               new Flexible(
-                  child: new TextField(
-                    controller: _textController,
-                    onChanged: (String txt) {
-                      setState(() {
-                        _isWriting = txt.length > 0;
-                      });
-                    },
-                    onSubmitted: _submitMsg,
-                    decoration:
-                      new InputDecoration.collapsed(hintText: "Add email to invite"),
-                  ),
+                child: new TextField(
+                  controller: _textController,
+                  onChanged: (String txt) {
+                    setState(() {
+                      _isWriting = txt.length > 0;
+                    });
+                  },
+                  onSubmitted: _submitMsg,
+                  decoration: new InputDecoration.collapsed(
+                      hintText: "Add email to invite"),
+                ),
               ),
               new Container(
-                margin: new EdgeInsets.symmetric(horizontal: 3.0),
-                child: Theme.of(context).platform == TargetPlatform.iOS
-                  ? new CupertinoButton(
-                    child: new Text("Submit"),
-                    onPressed: _isWriting ? () => _submitMsg(_textController.text)
-                        : null
-                )
-                    : new IconButton(
-                    icon: new Icon(Icons.add),
-                    onPressed: _isWriting
-                      ? () => _submitMsg(_textController.text)
-                        : null,
-                )
-              ),
+                  margin: new EdgeInsets.symmetric(horizontal: 3.0),
+                  child: Theme.of(context).platform == TargetPlatform.iOS
+                      ? new CupertinoButton(
+                          child: new Text("Submit"),
+                          onPressed: _isWriting
+                              ? () => _submitMsg(_textController.text)
+                              : null)
+                      : new IconButton(
+                          icon: new Icon(Icons.add),
+                          onPressed: _isWriting
+                              ? () => _submitMsg(_textController.text)
+                              : null,
+                        )),
             ],
           ),
           decoration: Theme.of(context).platform == TargetPlatform.iOS
-          ? new BoxDecoration(
-            border:
-              new Border(top: new BorderSide(color: Colors.brown))) :
-              null
-        ),
+              ? new BoxDecoration(
+                  border: new Border(top: new BorderSide(color: Colors.brown)))
+              : null),
     );
   }
+  //  _sendEmail(String meetingTitle,String meetingBody)
+  // {
+
+  // }
+  // _launchEmailApp() async {
+  //   const url = 'mailto:smith@example.org?subject=News&body=New%20plugin';
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   void _submitMsg(String txt) {
     _textController.clear();
@@ -145,9 +194,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     Msg msg = new Msg(
       txt: txt,
       animationController: new AnimationController(
-          vsync: this,
-        duration: new Duration(milliseconds: 800)
-      ),
+          vsync: this, duration: new Duration(milliseconds: 800)),
     );
     setState(() {
       _messages.insert(0, msg);
@@ -162,7 +209,6 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     }
     super.dispose();
   }
-
 }
 
 class Msg extends StatelessWidget {
