@@ -4,6 +4,9 @@ import 'package:memob/dashboard.dart';
 import 'package:memob/login.dart';
 import 'package:memob/splashscreen.dart';
 import 'package:fluro/fluro.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:memob/utilities.dart' as utilities;
 
 void main() {
 
@@ -27,3 +30,16 @@ void main() {
       ),
       home:  SplashScreen(), onGenerateRoute: router.generator));
 } 
+Future<Null> initUniLink() async {
+  try {
+    String initialLink = await getInitialLink();
+
+    if (initialLink != null) {
+      List<String> link = initialLink.split("=");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', link[1]);
+    }
+  } on Exception {
+    utilities.showLongToast("exception");
+  }
+}

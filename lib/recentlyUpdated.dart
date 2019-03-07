@@ -1,11 +1,6 @@
-import 'dart:convert';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:memob/utilities.dart' as utilities;
 import './NotesClass.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import './notes.dart';
 
 class RecentlyUpdated extends StatefulWidget {

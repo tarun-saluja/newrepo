@@ -155,7 +155,6 @@ class _DashboardState extends State<Dashboard> {
   }
   @override
   initState() {
-    super.initState();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
@@ -164,6 +163,7 @@ class _DashboardState extends State<Dashboard> {
         noteDataLoaded = true;
       }
     });
+    super.initState();
   }
 
   @override

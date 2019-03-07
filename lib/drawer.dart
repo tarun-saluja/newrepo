@@ -1,33 +1,12 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:memob/actionItems.dart';
+import 'package:memob/dashboard.dart';
 import 'package:memob/utilities.dart' as utilities;
-import 'dart:async';
-import 'dart:convert';
-//import 'package:http/http.dart' as http;
+
 
 class Dwidget extends StatelessWidget {
   List data;
-
-  // Future<String> getData() async {
-  //   var response = await http.get(
-  //       Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
-  //       headers: {"Accept": "application/json"});
-  //   data = jsonDecode(response.body);
-  //   print(data[1]["title"]);
-
-  //   return "Success!";
-  // }
-  // @override
-  // void initState()
-  // {
-  //   this.getData();
-  // }
-  // new ListView.builder(
-  //               itemCount: data == null ? 0:data.length,
-  //               itemBuilder: (BuildContext context, int index){
-
   @override
   Widget build(BuildContext context) {
     return new Drawer(
@@ -55,6 +34,13 @@ class Dwidget extends StatelessWidget {
             ),
           ),
           new ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Dashboard(),
+                  ));
+            },
             leading: const Icon(Icons.dashboard),
             title: new Text("Dashboard"),
           ),
@@ -67,6 +53,13 @@ class Dwidget extends StatelessWidget {
             title: new Text("Notes"),
           ),
           new ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ActionItems(),
+                  ));
+            },
             leading: const Icon(Icons.call_to_action),
             title: new Text("Action Items"),
           ),
@@ -77,15 +70,15 @@ class Dwidget extends StatelessWidget {
             children: <Widget>[Text("children 1"), Text("children 2")],
           ),
           new ListTile(
-            leading: const Icon(Icons.call_to_action),
+            leading: const Icon(Icons.settings),
             title: new Text("Settings"),
           ),
           new ListTile(
-            leading: const Icon(Icons.call_to_action),
+            leading: const Icon(Icons.person),
             title: new Text("User"),
           ),
           new ListTile(
-            leading: const Icon(Icons.call_to_action),
+            leading: const Icon(Icons.exit_to_app),
             title: new Text("Logout"),
             onTap: () async{
 
