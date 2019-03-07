@@ -19,7 +19,9 @@ class Notes extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
-              builder: (context) => Detail(uuid: notes[index].meetingUuid)
+              builder: (context) => Detail(notes[index].meetingUuid,
+              notes[index].meetingTitle,
+              notes[index].eventUuid)
             ));
           },
       child: Card(
