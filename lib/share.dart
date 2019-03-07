@@ -36,8 +36,9 @@ const String defaultUserName = "User";
 class Share extends StatefulWidget {
   final String meetingTitle;
   final String meetingBody;
+  final List<String> asigneeEmail;
 
-  Share([this.meetingTitle, this.meetingBody]);
+  Share([this.meetingTitle, this.meetingBody, this.asigneeEmail]);
 
   // @override
   // State createState() => ShareWindow();
@@ -55,12 +56,11 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   // String _meetingTitle;
   // String _meetingBody;
 
-// @override
-//   void initState() {
-//     _meetingTitle = widget.meetingTitle;
-//     _meetingBody = widget.meetingBody;
-//     super.initState();
-//   }
+@override
+  void initState() {
+    super.initState();
+    _initAdd();
+  }
   @override
   Widget build(BuildContext ctx) {
     return new Scaffold(
@@ -185,6 +185,11 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   //     throw 'Could not launch $url';
   //   }
   // }
+  void _initAdd()
+  {
+    for(String temp in widget.asigneeEmail)
+    _submitMsg(temp);
+  }
 
   void _submitMsg(String txt) {
     _textController.clear();

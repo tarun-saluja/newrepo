@@ -41,6 +41,7 @@ class _DetailState extends State<Detail> {
   bool emptyAttachment = false;
 
   String noteText;
+  List<String> attendeesEmail;
   bool recordPermission = false;
 
   bool _connectionStatus = false;
@@ -115,6 +116,18 @@ class _DetailState extends State<Detail> {
         data = json.decode(response.body);
 
         List<dynamic> rawNote = data['raw_note'];
+        List<dynamic> attendees = data['attendees'];
+        attendeesEmail = new List();
+
+        
+
+        for(int i = 0; i<attendees.length; i++)
+        {
+          attendeesEmail.add('${data['attendees'][i]['email']}');
+          //print('${data['attendees'][i]['email']}');
+        }
+
+        print(attendeesEmail);
 
         noteLoaded = true;
         noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
@@ -281,7 +294,8 @@ class _DetailState extends State<Detail> {
               new MaterialPageRoute(
                 builder: (context) => new Share(
                   widget.meetingTitle,
-                  '$noteText'
+                  '$noteText',
+                  attendeesEmail,
                 ),
               ));
     }

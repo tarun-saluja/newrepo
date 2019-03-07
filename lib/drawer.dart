@@ -10,6 +10,8 @@ import 'package:memob/utilities.dart' as utilities;
 
 class Dwidget extends StatelessWidget {
   List data;
+  List<Widget> teams_data = [Text('hello'),Text('hashedin')];
+
 
   // Future<String> getData() async {
   //   var response = await http.get(
@@ -89,7 +91,8 @@ class Dwidget extends StatelessWidget {
           new ExpansionTile(
             leading: const Icon(Icons.group),
             title: new Text("Team"),
-            children: <Widget>[Text("children 1"), Text("children 2")],
+            //children: <Widget>[Text("children 1"), Text("children 2")],
+            children: teams_data,
           ),
           new ListTile(
             leading: const Icon(Icons.call_to_action),
