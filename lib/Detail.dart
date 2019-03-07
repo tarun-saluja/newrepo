@@ -209,7 +209,7 @@ class _DetailState extends State<Detail> {
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration(  
                       color: Colors.white70,
                       border: Border.all(color: Colors.blue, width: 1.0),
                       borderRadius: BorderRadius.circular(20.0)),
