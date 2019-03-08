@@ -19,7 +19,7 @@ class SearchBar  extends StatelessWidget {
     );
   }
 }
-class DataSearch extends SearchDelegate<String> {
+class DataSearch extends SearchDelegate<NotesClass> {
   List<NotesClass> _notes;
   DataSearch([this._notes]);
   
@@ -55,21 +55,31 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    final suggestionList = query.isEmpty ? recentNames : _notes.where((p)=>p.meetingTitle.toLowerCase().contains(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+            leading: Icon(Icons.title),
+            title: Text(suggestionList[index].meetingTitle),
+            onTap: (){
+              close(context,suggestionList[index]);
+            },
+          ),
+      itemCount: suggestionList.length,
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    names=new List();
-    for (var i = 0; i < _notes.length; i++) {
-      names.add(_notes[i].meetingTitle.toString());
-      }
-    final suggestionList = query.isEmpty ? recentNames : names.where((p)=>p.contains(query)).toList();
+    final suggestionList = query.isEmpty ? recentNames : _notes.where((p)=>p.meetingTitle.toLowerCase().contains(query)).toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.location_city),
-            title: Text(suggestionList[index]),
+            leading: Icon(Icons.title),
+            title: Text(suggestionList[index].meetingTitle),
+            onTap: (){
+              close(context,suggestionList[index]);
+            },
           ),
       itemCount: suggestionList.length,
     );
