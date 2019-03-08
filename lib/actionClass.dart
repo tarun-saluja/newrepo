@@ -1,12 +1,10 @@
-import 'package:memob/assigneeClass.dart';
-import 'package:memob/meetingClass.dart';
 
 class ActionClass {
   String uuid;
   String eventUuid;
   //MeetingClass meeting;
   String note;
- // AssigneeClass assignee;
+  String profilePicture;
   String assignedTo;
   String status;
   bool isDeleted;
@@ -21,7 +19,7 @@ class ActionClass {
       this.eventUuid,
       //this.meeting,
       this.note,
-     // this.assignee,
+      this.profilePicture,
       this.assignedTo,
       this.status,
       this.isDeleted,
@@ -34,6 +32,6 @@ class ActionClass {
 
   @override
   String toString() {
-    return 'Action{uuid: $uuid, event_uuid: $eventUuid, note: $note, assiged_to: $assignedTo, status: $status, is_deleted: $isDeleted, created_at: $createdAt, due_date: $dueDate, is_externally_modified: $isExternallyModified}';
+    return 'Action{uuid: $uuid, event_uuid: $eventUuid, note: $note, profile_picture: $profilePicture, assiged_to: $assignedTo, status: $status, is_deleted: $isDeleted, created_at: $createdAt, due_date: $dueDate, is_externally_modified: $isExternallyModified}';
   }
 }
