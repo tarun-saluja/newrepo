@@ -1,86 +1,45 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+import 'package:memob/dashboard.dart';
+import 'package:memob/login.dart';
+import 'package:memob/splashscreen.dart';
+import 'package:fluro/fluro.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:memob/utilities.dart' as utilities;
 
-void main() => runApp(MyApp());
+void main() {
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      theme: new ThemeData(primarySwatch: Colors.amber),
-      home: new HomePage(),
-    );
-  }
-}
+  Router router = new Router();
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Drawer App"),
-        elevation: defaultTargetPlatform == TargetPlatform.android?5.0:0.0,
+  // Define our splash page.
+  router.define('Login', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new Login();
+  }));
+
+  // Define our home page.
+  router.define('Dashboard', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new Dashboard();
+  }));
+
+  runApp(new MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.white
       ),
-      drawer:new Drawer(
-        child: new ListView(
-          children: <Widget>[
-            new Container(
-                child: new DrawerHeader(
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      new Image.asset(
-                        'assets/meetnotes_icon.png',
-                        width: 50.0,
-                        height: 50.0,
-                      ),
-                      Text(
-                        "MEETNOTES",
-                        textAlign: TextAlign.center,
-                        textScaleFactor: 2.0,
-                        style: new TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  decoration: BoxDecoration(color: Colors.white70),
-                ),
-              ),
-            new Divider(),
-            new ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: new Text("Dashboard"),
-            ),
-            new ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: new Text("Meetings"),
-            ),
-            new ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: new Text("Notes"),
-            ),
-            new ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: new Text("Action Items"),
-            ),
-            new ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: new Text("Team"),
+      home:  SplashScreen(), onGenerateRoute: router.generator));
+} 
+Future<Null> initUniLink() async {
+  try {
+    String initialLink = await getInitialLink();
 
-            ),
-            new Divider(),
-            new ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: new Text("Team"),
-
-            ),
-          ],
-        ),
-      ),
-      body: new Container(
-        child: new Center(
-          child: new Text("HomePage"),
-        ),
-      ),
-    );
+    if (initialLink != null) {
+      List<String> link = initialLink.split("=");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', link[1]);
+    }
+  } on Exception {
+    utilities.showLongToast("exception");
   }
 }
