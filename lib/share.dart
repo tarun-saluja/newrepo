@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import './cancelbutton.dart';
 import './sendbutton.dart';
 import './drawer.dart';
+import './utilities.dart';
 
 final ThemeData iOSTheme = new ThemeData(
   primarySwatch: Colors.red,
@@ -37,8 +44,17 @@ class Share extends StatefulWidget {
   final String meetingTitle;
   final String meetingBody;
   final List<String> asigneeEmail;
+  final String rawHtml;
+  final String delta;
+  final String meetingUuid;
 
-  Share([this.meetingTitle, this.meetingBody, this.asigneeEmail]);
+  Share(
+      [this.meetingTitle,
+      this.meetingBody,
+      this.asigneeEmail,
+      this.rawHtml,
+      this.delta,
+      this.meetingUuid]);
 
   // @override
   // State createState() => ShareWindow();
@@ -53,14 +69,17 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   final List<Msg> _messages = <Msg>[];
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
+  String userToken;
+  Map body;
   // String _meetingTitle;
   // String _meetingBody;
 
-@override
+  @override
   void initState() {
     super.initState();
     _initAdd();
   }
+
   @override
   Widget build(BuildContext ctx) {
     return new Scaffold(
@@ -84,19 +103,19 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                 ),
                 SendButton(
                   onPressed: () async {
-                    String _mail='';
-                    
-                    for (Msg temp in _messages)
-                    {
-                       _mail+=temp.txt + ',';
+                    String _mail = '';
+
+                    for (Msg temp in _messages) {
+                      _mail += temp.txt + ',';
                     }
-                    final url =
-                        'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
+                     postData(body);
+                      final url =
+                          'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
                   },
                 ),
               ]),
@@ -147,8 +166,8 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                     });
                   },
                   onSubmitted: _submitMsg,
-                  decoration: new InputDecoration.collapsed(
-                      hintText: "Add email to invite"),
+                  decoration:
+                      new InputDecoration.collapsed(hintText: "Add email"),
                 ),
               ),
               new Container(
@@ -185,10 +204,73 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   //     throw 'Could not launch $url';
   //   }
   // }
-  void _initAdd()
-  {
-    for(String temp in widget.asigneeEmail)
-    _submitMsg(temp);
+  void _initAdd() {
+    for (String temp in widget.asigneeEmail) _submitMsg(temp);
+    print(widget.rawHtml);
+    print(widget.delta);
+    body = {
+      'type': "Email",
+      'mailRecipients': ["athar.ejaz@hashedin.com"],
+      'rawHTML': "${widget.rawHtml}",
+      'delta':"${widget.delta}"
+    };
+  }
+
+  // Future postData() async {
+  //   Response response;
+  //   Dio dio = new Dio();
+  //   Future<String> userToken =getTokenData();
+  //   dynamic url =
+  //       "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
+  //   try {
+  //     response = await dio.post(url, data: {
+  //       "type": "EMAIL",
+  //       "mailRecipients": ["athar.ejaz@hashedin.com"],
+  //       "rawHTML": widget.rawHtml,
+  //       "delta": widget.delta
+  //     },
+  //     options: Options(headers: {
+  //       "Authorization" : 'Token $userToken',
+  //       "Content-Type": "multipart/form-data",
+
+  //     }));
+  //   } catch (e) {
+  //     print("Error Upload: " + e.toString());
+  //   }
+  //   print("Response Upload:" + response.toString());
+  // }
+
+  Future<Null> postData(Map body) async{
+    print(body);
+    Future<String> token = getTokenData(); 
+    dynamic url ="https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        sendEmail(url,body);
+      } else {
+        showLongToast(value);
+        return null;
+      }
+    });
+
+    return null;
+  }
+
+  Future<Null> sendEmail(String url, Map body) async{
+    var data = json.encode(body);
+    print(data);
+    var response = await http.post(url, 
+    headers: {
+      HttpHeaders.AUTHORIZATION: 'Token $userToken',
+      HttpHeaders.CONTENT_TYPE: 'application/json',
+      HttpHeaders.ACCEPT: 'application/json',
+      HttpHeaders.CACHE_CONTROL: 'no-cache'
+    },
+      body: data); 
+
+    print(response.statusCode);
+    print("${response.body}");
   }
 
   void _submitMsg(String txt) {

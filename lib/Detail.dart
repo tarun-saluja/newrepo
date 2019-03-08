@@ -42,6 +42,8 @@ class _DetailState extends State<Detail> {
 
   String noteText;
   List<String> attendeesEmail;
+  String rawHtml ;
+  String delta ;
   bool recordPermission = false;
 
   bool _connectionStatus = false;
@@ -117,6 +119,11 @@ class _DetailState extends State<Detail> {
 
         List<dynamic> rawNote = data['raw_note'];
         List<dynamic> attendees = data['attendees'];
+        rawHtml = data['raw_note'][0]['raw_html'];
+        delta = data['raw_note'][0]['delta'];
+
+        print(rawHtml);
+        print(delta);
         attendeesEmail = new List();
 
         
@@ -296,6 +303,9 @@ class _DetailState extends State<Detail> {
                   widget.meetingTitle,
                   '$noteText',
                   attendeesEmail,
+                  rawHtml,
+                  delta,
+                  widget.meetingUuid
                 ),
               ));
     }
