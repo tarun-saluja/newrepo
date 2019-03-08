@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 
 import './cancelbutton.dart';
 import './sendbutton.dart';
