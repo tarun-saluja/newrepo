@@ -178,7 +178,7 @@ class _DashboardState extends State<Dashboard> {
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
+                  showSearch(context: context, delegate: DataSearch(_notes));
                 })
           ],
               bottom: TabBar(
@@ -193,7 +193,7 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
-            drawer: Dwidget(),
+            drawer: Dwidget(userToken),
             body: Container(
               decoration: new BoxDecoration(
                 image: new DecorationImage(

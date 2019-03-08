@@ -30,8 +30,7 @@ class _ActionItems extends State<ActionItems>{
   final Connectivity _connectivity = new Connectivity();
 
 
-  bool meetingDataLoaded = false;
-  bool noteDataLoaded = false;
+  bool actionDataLoaded = false;
 
   var finalDateTime;
 
@@ -66,7 +65,7 @@ class _ActionItems extends State<ActionItems>{
       if (value != null) {
         userToken = value;
         getAllActionsData();
-           if (meetingDataLoaded && noteDataLoaded) return null;
+           if (actionDataLoaded) return null;
       }
        else {
         utilities.showLongToast(value);
@@ -109,12 +108,12 @@ class _ActionItems extends State<ActionItems>{
             allActions.add(action);
           }
         
-        meetingDataLoaded = true;
+        actionDataLoaded = true;
       });
       return null;
     } else {
       // If that response was not OK, throw an error.
-      meetingDataLoaded = true;
+      actionDataLoaded = true;
       return null;
     }
   }
@@ -125,8 +124,7 @@ class _ActionItems extends State<ActionItems>{
       if (result) {
         this.fetchData();
       } else {
-        meetingDataLoaded = true;
-        noteDataLoaded = true;
+        actionDataLoaded = true;
       }
     });
        super.initState();

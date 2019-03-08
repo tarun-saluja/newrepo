@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:memob/searchbar.dart';
 import './NotesClass.dart';
 import './notes.dart';
 
@@ -29,7 +30,7 @@ List<NotesClass> _notes;
       children: <Widget>[
         Expanded(
           child: Notes(_notes),
-        )
+        ),
       ],
     );
   }

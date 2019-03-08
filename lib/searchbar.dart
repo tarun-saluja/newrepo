@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memob/NotesClass.dart';
 
 class SearchBar  extends StatelessWidget {
   @override
@@ -19,9 +20,14 @@ class SearchBar  extends StatelessWidget {
   }
 }
 class DataSearch extends SearchDelegate<String> {
-  final names = ["gaurav", "dipanshu", "yash","abcd","abcde","abcdef"];
+  List<NotesClass> _notes;
+  DataSearch([this._notes]);
+  
+  List<String> names = new List();
 
   final recentNames = [];
+
+  
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -54,7 +60,11 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty ? recentNames : names.where((p)=>p.startsWith(query)).toList();
+    names=new List();
+    for (var i = 0; i < _notes.length; i++) {
+      names.add(_notes[i].meetingTitle.toString());
+      }
+    final suggestionList = query.isEmpty ? recentNames : names.where((p)=>p.contains(query)).toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(

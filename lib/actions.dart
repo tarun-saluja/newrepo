@@ -29,7 +29,7 @@ class Actions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget actionCard = Center(child: Text('No available Actions'),);
+    Widget actionCard = Center(child: CircularProgressIndicator(),);
     if(allActions.length > 0) {
       actionCard = ListView.builder(
         itemBuilder: _buildActionItem,
