@@ -1,6 +1,7 @@
-import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
@@ -13,23 +14,21 @@ class Dwidget extends StatelessWidget {
   List<Widget> teams_data = [Text('hello'),Text('hashedin')];
 
 
-  // Future<String> getData() async {
-  //   var response = await http.get(
-  //       Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
-  //       headers: {"Accept": "application/json"});
-  //   data = jsonDecode(response.body);
-  //   print(data[1]["title"]);
+  //   Map<String, dynamic> mData = json.decode(response.body);
+  //   List<dynamic> list = mData["results"];
+  //   for (var teamData in list) {
+  //     TeamClass team = new TeamClass(teamData['name']);
+  //     teamNames.add(team);
+  //   }
+  //   return teamNames;
+  // }
 
-  //   return "Success!";
-  // }
   // @override
-  // void initState()
-  // {
-  //   this.getData();
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   userToken1 = widget.userToken;
   // }
-  // new ListView.builder(
-  //               itemCount: data == null ? 0:data.length,
-  //               itemBuilder: (BuildContext context, int index){
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +94,15 @@ class Dwidget extends StatelessWidget {
             children: teams_data,
           ),
           new ListTile(
-            leading: const Icon(Icons.call_to_action),
+            leading: const Icon(Icons.settings),
             title: new Text("Settings"),
           ),
           new ListTile(
-            leading: const Icon(Icons.call_to_action),
+            leading: const Icon(Icons.person),
             title: new Text("User"),
           ),
           new ListTile(
-            leading: const Icon(Icons.call_to_action),
+            leading: const Icon(Icons.exit_to_app),
             title: new Text("Logout"),
             onTap: () async {
               utilities.removeToken().then((result) {
@@ -116,4 +115,18 @@ class Dwidget extends StatelessWidget {
       ),
     );
   }
+
+  // Widget _buildTeamNames(BuildContext context, int index) {
+  //   if(teamNames.length==0)
+  //     return Center(child: CircularProgressIndicator());
+  //   else{
+  //     return ExpansionTile(
+  //     title: Text("Teams"),
+  //      children: <Widget>[
+  //           Text(teamNames[index].name, style: TextStyle(color: Colors.black),)
+  //         ],
+  //     );
+  //   }
+    
+  // }
 }

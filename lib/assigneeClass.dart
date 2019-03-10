@@ -12,6 +12,6 @@ class AssigneeClass {
 
   @override
   String toString() {
-    return 'Assignee{id: $id, username: $username, first_name: $firstName, last_name: $lastName, email: $email, profile_picture: $profilePicture}';
+    return 'assignee{id: $id, username: $username, first_name: $firstName, last_name: $lastName, email: $email, profile_picture: $profilePicture}';
   }
 }

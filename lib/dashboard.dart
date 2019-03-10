@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:memob/Detail.dart';
 import 'package:memob/NotesClass.dart';
 import 'package:memob/meetingClass.dart';
 import 'package:memob/searchbar.dart';
@@ -17,11 +18,10 @@ class Dashboard extends StatefulWidget {
     // TODO: implement createState
     return _DashboardState();
   }
-
 }
-  
+
 class _DashboardState extends State<Dashboard> {
-     String userToken;
+  String userToken;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
@@ -48,8 +48,7 @@ class _DashboardState extends State<Dashboard> {
           _connectionStatus = true;
         }
       });
-    }
-    catch(PlatformException) {
+    } catch (PlatformException) {
       _connectionStatus = false;
     }
     if (!mounted) {
@@ -65,9 +64,8 @@ class _DashboardState extends State<Dashboard> {
         userToken = value;
         getMeetingData();
         getRecentNotes();
-           if (meetingDataLoaded && noteDataLoaded) return null;
-      }
-       else {
+        if (meetingDataLoaded && noteDataLoaded) return null;
+      } else {
         utilities.showLongToast(value);
         return null;
       }
@@ -119,7 +117,8 @@ class _DashboardState extends State<Dashboard> {
       return null;
     }
   }
- Future<Null> getRecentNotes() async {
+
+  Future<Null> getRecentNotes() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/recent-notes/'),
         headers: {
@@ -153,9 +152,9 @@ class _DashboardState extends State<Dashboard> {
       return null;
     }
   }
+
   @override
   initState() {
-    super.initState();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
@@ -164,6 +163,7 @@ class _DashboardState extends State<Dashboard> {
         noteDataLoaded = true;
       }
     });
+    super.initState();
   }
 
   @override
@@ -175,12 +175,18 @@ class _DashboardState extends State<Dashboard> {
             appBar: AppBar(
               title: Text('Dashboard'),
               actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
-                })
-          ],
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () async {
+                      NotesClass result = await showSearch(
+                          context: context, delegate: DataSearch(_notes));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Detail(result.meetingUuid,
+                                  result.meetingTitle, result.eventUuid)));
+                    })
+              ],
               bottom: TabBar(
                 indicatorColor: Colors.blue,
                 tabs: [

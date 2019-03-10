@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import './meetingClass.dart';
 import './meetings.dart';
 
-class AllMeetings extends StatefulWidget {
-  List<MeetingClass> meetings;
+import 'package:memob/meetingClass.dart';
 
-  AllMeetings([this.meetings]);
+class AllMeetings extends StatefulWidget {
+  final List<MeetingClass> meetings;
+
+  AllMeetings([this.meetings = const []]);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,12 +21,11 @@ class _AllMeetingsState extends State<AllMeetings> {
 
   @override
   void initState() {
-    if(widget.meetings != null){
-      _meetings = widget.meetings;
+    if(widget.meetings!=null){
+      _meetings=widget.meetings;
     }
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Column(

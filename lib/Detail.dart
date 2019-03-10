@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -14,6 +15,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 
 import './share.dart';
+import './dashboard.dart';
+import './attachmentListDialog.dart';
 
 class Detail extends StatefulWidget {
   final String meetingUuid;
@@ -248,10 +251,21 @@ class _DetailState extends State<Detail> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)),
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                        );
-                      },
+                        attachmentCount != 0 ? 
+                                      showDialog(
+                                          context: context,
+                                          child: new AttachmentDialog(
+                                              widget.meetingUuid))
+                                    
+                                  : Fluttertoast.showToast(
+        msg: "No Attachment",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    ); },
                       color: Colors.white,
                       child: Row(
                         children: <Widget>[
@@ -259,7 +273,7 @@ class _DetailState extends State<Detail> {
                             Icons.attach_file,
                             color: Colors.amber,
                           ),
-                          Text('2')
+                          Text(attachmentCount.toString())
                         ],
                       ),
                   ),
@@ -310,7 +324,13 @@ class _DetailState extends State<Detail> {
               ));
     }
     else
-    print("sign out");
+    {
+      Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => Dashboard(),
+              ));
+    }
 
   }
 }

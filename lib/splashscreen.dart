@@ -61,16 +61,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-Future<Null> initUniLink() async {
-  try {
-    String initialLink = await getInitialLink();
+// Future<Null> initUniLink() async {
+//   try {
+//     String initialLink = await getInitialLink();
 
-    if (initialLink != null) {
-      List<String> link = initialLink.split("=");
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', link[1]);
-    }
-  } on Exception {
-    utilities.showLongToast("exception");
-  }
-}
+//     if (initialLink != null) {
+//       List<String> link = initialLink.split("=");
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       prefs.setString('token', link[1]);
+//     }
+//   } on Exception {
+//     utilities.showLongToast("exception");
+//   }
+// }

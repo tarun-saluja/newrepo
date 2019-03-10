@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:memob/searchbar.dart';
 import './NotesClass.dart';
 import './notes.dart';
 
 class RecentlyUpdated extends StatefulWidget {
-  List<NotesClass> startingNote;
+   final List<NotesClass> notes;
 
-  RecentlyUpdated([this.startingNote]);
+  RecentlyUpdated([this.notes = const []]);
 
   @override
   State<StatefulWidget> createState() {
@@ -15,32 +16,21 @@ class RecentlyUpdated extends StatefulWidget {
 }
 
 class _RecentlyUpdatedState extends State<RecentlyUpdated> {
-
+List<NotesClass> _notes;
   @override
   void initState() {
-    if(widget.startingNote != null){
-      _notes = widget.startingNote;
+    if(widget.notes!=null){
+      _notes=widget.notes;
     }
     super.initState();
   }
-  List<NotesClass> _notes = [
-    new NotesClass(
-        1, "MeetNotes Scrum", true, "04-03-2019", "meeting_uuid", "event_uuid"),
-    new NotesClass(
-        1, "MeetNotes Scrum", true, "04-03-2019", "meeting_uuid", "event_uuid"),
-    new NotesClass(
-        1, "MeetNotes Scrum", true, "04-03-2019", "meeting_uuid", "event_uuid"),
-    new NotesClass(
-        1, "MeetNotes Scrum", true, "04-03-2019", "meeting_uuid", "event_uuid"),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Expanded(
           child: Notes(_notes),
-        )
+        ),
       ],
     );
   }

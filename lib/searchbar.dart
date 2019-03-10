@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memob/NotesClass.dart';
 
 class SearchBar  extends StatelessWidget {
   @override
@@ -18,10 +19,15 @@ class SearchBar  extends StatelessWidget {
     );
   }
 }
-class DataSearch extends SearchDelegate<String> {
-  final names = ["gaurav", "dipanshu", "yash","abcd","abcde","abcdef"];
+class DataSearch extends SearchDelegate<NotesClass> {
+  List<NotesClass> _notes;
+  DataSearch([this._notes]);
+  
+  List<String> names = new List();
 
   final recentNames = [];
+
+  
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -49,17 +55,31 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    final suggestionList = query.isEmpty ? recentNames : _notes.where((p)=>p.meetingTitle.toLowerCase().contains(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+            leading: Icon(Icons.title),
+            title: Text(suggestionList[index].meetingTitle),
+            onTap: (){
+              close(context,suggestionList[index]);
+            },
+          ),
+      itemCount: suggestionList.length,
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty ? recentNames : names.where((p)=>p.startsWith(query)).toList();
+    final suggestionList = query.isEmpty ? recentNames : _notes.where((p)=>p.meetingTitle.toLowerCase().contains(query)).toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.location_city),
-            title: Text(suggestionList[index]),
+            leading: Icon(Icons.title),
+            title: Text(suggestionList[index].meetingTitle),
+            onTap: (){
+              close(context,suggestionList[index]);
+            },
           ),
       itemCount: suggestionList.length,
     );

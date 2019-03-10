@@ -80,7 +80,7 @@ class Meetings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget meetingCard = Center(
-      child: Text('No available meetings'),
+      child: CircularProgressIndicator(),
     );
 
     if (meetings.length > 0) {
