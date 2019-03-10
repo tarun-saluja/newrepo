@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -65,7 +66,13 @@ class Share extends StatefulWidget {
 }
 
 class ShareWindow extends State<Share> with TickerProviderStateMixin {
-  final List<Msg> _messages = <Msg>[];
+  final List<Msg> _messages = List<Msg>();
+//   {
+//     @Override public String toString()
+//     {
+//         return super.toString();
+//     }
+// };
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
   String userToken;
@@ -103,18 +110,20 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                   onPressed: () async {
                     String _mail = '';
 
-                    for (Msg temp in _messages) {
+                    for (var temp in _messages) {
+                      if(temp.status)
                       _mail += temp.txt + ',';
                     }
+                    
                      postData(body);
                     
-                      final url =
-                          'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        throw 'Could not launch $url';
-                      }
+                      // final url =
+                      //     'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
+                      // if (await canLaunch(url)) {
+                      //   await launch(url);
+                      // } else {
+                      //   throw 'Could not launch $url';
+                      // }
                   },
                 ),
               ]),
@@ -207,9 +216,10 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     for (String temp in widget.asigneeEmail) _submitMsg(temp);
     print(widget.rawHtml);
     print(widget.delta);
+    print(widget.asigneeEmail.toString());
     body = {
       'type': "EMAIL",
-      'mailRecipients': ["athar.ejaz@hashedin.com"],
+      'mailRecipients': ['athar.ejaz@hashedin.com'],
       'rawHTML': "${widget.rawHtml}",
     };
   }
@@ -274,6 +284,18 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     },
     
       body: data);
+      if(response.statusCode==200){
+        Fluttertoast.showToast(
+        msg: "Email Sent",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+      }
+        
       print(data);
       print(response.statusCode);
     print("${response.body}");
@@ -307,7 +329,16 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
 class Msg extends StatelessWidget {
   Msg({this.txt, this.animationController});
   final String txt;
+  bool status=true;
   final AnimationController animationController;
+
+  void toggle()
+  {
+    if(status)
+    this.status=false;
+    else
+    this.status=true;
+  }
 
   @override
   Widget build(BuildContext ctx) {
