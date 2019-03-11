@@ -85,6 +85,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     super.initState();
     _initAdd();
   }
+
   @override
   Widget build(BuildContext ctx) {
     return new Scaffold(
@@ -108,22 +109,26 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                 ),
                 SendButton(
                   onPressed: () async {
-                    String _mail = '';
+                    String _mail = "";
 
                     for (var temp in _messages) {
-                      if(temp.status)
-                      _mail += temp.txt + ',';
+                      if (temp.status) _mail +=  temp.txt + ',';
                     }
-                    
-                     postData(body);
-                    
-                      // final url =
-                      //     'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
-                      // if (await canLaunch(url)) {
-                      //   await launch(url);
-                      // } else {
-                      //   throw 'Could not launch $url';
-                      // }
+                    print(_mail);
+                    body = {
+                      "type": "EMAIL",
+                      "mailRecipients": [_mail],
+                      "rawHTML": "${widget.rawHtml}",
+                    };
+                    postData(body);
+
+                    // final url =
+                    //     'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
+                    // if (await canLaunch(url)) {
+                    //   await launch(url);
+                    // } else {
+                    //   throw 'Could not launch $url';
+                    // }
                   },
                 ),
               ]),
@@ -217,11 +222,11 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     print(widget.rawHtml);
     print(widget.delta);
     print(widget.asigneeEmail.toString());
-    body = {
-      'type': "EMAIL",
-      'mailRecipients': ['athar.ejaz@hashedin.com'],
-      'rawHTML': "${widget.rawHtml}",
-    };
+    // body = {
+    //   'type': "EMAIL",
+    //   'mailRecipients': ['athar.ejaz@hashedin.com'],
+    //   'rawHTML': "${widget.rawHtml}",
+    // };
   }
 
   // Future postData() async {
@@ -248,14 +253,15 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   //   print("Response Upload:" + response.toString());
   // }
 
-  Future<Null> postData(Map body) async{
+  Future<Null> postData(Map body) async {
     print(body);
-    Future<String> token = getTokenData(); 
-    dynamic url ="https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
+    Future<String> token = getTokenData();
+    dynamic url =
+        "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
     token.then((value) {
       if (value != null) {
         userToken = value;
-        sendEmail(url,body);
+        sendEmail(url, body);
       } else {
         showLongToast(value);
         return null;
@@ -265,39 +271,37 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     return null;
   }
 
-  Future<Null> sendEmail(String url, Map body) async{
-    // print('Raw Body');
-    // print(body);
+  Future<Null> sendEmail(String url, Map body) async {
+    print('Raw Body');
+    print(body);
     //var data = json.encode(body);
     var data = jsonEncode(body);
     print('Encoded Body');
     print(data);
     print(url);
     print('$userToken');
-    var response = await http.post(url, 
-    headers: {
-      HttpHeaders.AUTHORIZATION: 'Token $userToken',
-      HttpHeaders.CONTENT_TYPE: 'application/json',
-      //HttpHeaders.ACCEPT: 'application/json, text/plain, */*',
-      //HttpHeaders.CACHE_CONTROL: 'no-cache',
-      //HttpHeaders.acceptCharsetHeader: 'charset=utf-8'
-    },
-    
-      body: data);
-      if(response.statusCode==200){
-        Fluttertoast.showToast(
-        msg: "Email Sent",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-      }
-        
-      print(data);
-      print(response.statusCode);
+    var response = await http.post(url,
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          //HttpHeaders.ACCEPT: 'application/json, text/plain, */*',
+          //HttpHeaders.CACHE_CONTROL: 'no-cache',
+          //HttpHeaders.acceptCharsetHeader: 'charset=utf-8'
+        },
+        body: data);
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Email Sent",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+
+    print(data);
+    print(response.statusCode);
     print("${response.body}");
   }
 
@@ -329,15 +333,14 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
 class Msg extends StatelessWidget {
   Msg({this.txt, this.animationController});
   final String txt;
-  bool status=true;
+  bool status = true;
   final AnimationController animationController;
 
-  void toggle()
-  {
-    if(status)
-    this.status=false;
+  void toggle() {
+    if (status)
+      this.status = false;
     else
-    this.status=true;
+      this.status = true;
   }
 
   @override
