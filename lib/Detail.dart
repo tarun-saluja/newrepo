@@ -17,6 +17,8 @@ import 'package:flutter/services.dart';
 import './share.dart';
 import './dashboard.dart';
 import './attachmentListDialog.dart';
+import './cameraPage.dart';
+import './speechDialog.dart';
 
 class Detail extends StatefulWidget {
   final String meetingUuid;

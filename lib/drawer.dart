@@ -1,34 +1,52 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
+import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:http/http.dart' as http;
 
-//import 'package:http/http.dart' as http;
+class Dwidget extends StatefulWidget {
+  final String userToken;
+  Dwidget([this.userToken]);
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _DwidgetState();
+  }
+}
 
-class Dwidget extends StatelessWidget {
-  List data;
-  List<Widget> teams_data = [Text('hello'),Text('hashedin')];
+class _DwidgetState extends State<Dwidget> {
+  String userToken1;
+  List<String> team = new List();
+  List<TeamClass> teamNames = new List();
+  Future<List<TeamClass>> getAllTeamsData() async {
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/teams/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken1',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
 
+    Map<String, dynamic> mData = json.decode(response.body);
+    List<dynamic> list = mData["results"];
+    for (var teamData in list) {
+      TeamClass team = new TeamClass(teamData['name']);
+      teamNames.add(team);
+    }
+    return teamNames;
+  }
 
-  //   Map<String, dynamic> mData = json.decode(response.body);
-  //   List<dynamic> list = mData["results"];
-  //   for (var teamData in list) {
-  //     TeamClass team = new TeamClass(teamData['name']);
-  //     teamNames.add(team);
-  //   }
-  //   return teamNames;
-  // }
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   userToken1 = widget.userToken;
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userToken1 = widget.userToken;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +104,12 @@ class Dwidget extends StatelessWidget {
             leading: const Icon(Icons.call_to_action),
             title: new Text("Action Items"),
           ),
-          new Divider(),
-          new ExpansionTile(
-            leading: const Icon(Icons.group),
-            title: new Text("Team"),
-            //children: <Widget>[Text("children 1"), Text("children 2")],
-            children: teams_data,
+          new Container(
+            child: ExpansionTile(
+              leading: Icon(Icons.group),
+              title: Text("Teams"),
+              children: <Widget>[_buildTeamNames()],
+            ),
           ),
           new ListTile(
             leading: const Icon(Icons.settings),
@@ -116,17 +134,20 @@ class Dwidget extends StatelessWidget {
     );
   }
 
-  // Widget _buildTeamNames(BuildContext context, int index) {
-  //   if(teamNames.length==0)
-  //     return Center(child: CircularProgressIndicator());
-  //   else{
-  //     return ExpansionTile(
-  //     title: Text("Teams"),
-  //      children: <Widget>[
-  //           Text(teamNames[index].name, style: TextStyle(color: Colors.black),)
-  //         ],
-  //     );
-  //   }
-    
-  // }
+  Widget _buildTeamNames() {
+    return Container(
+      child: new FutureBuilder(
+          future: getAllTeamsData(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<TeamClass>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              for (var i = 0; i < snapshot.data.length; i++) {
+                return Center(child: Text(snapshot.data[i].name));
+              }
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
+    );
+  }
 }

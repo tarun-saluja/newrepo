@@ -41,13 +41,15 @@ class _Actions extends State<Actions> {
 
   Widget _buildActionItem(BuildContext context, int index) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white70,
-        border: new Border.all(color: Colors.blue, width: 1.0),
-        borderRadius: new BorderRadius.circular(5.0),
-      ),
+      height: 100,
+      // decoration: BoxDecoration(
+      //   color: Colors.white70,
+      //   border: new Border.all(color: Colors.blue, width: 1.0),
+      //   borderRadius: new BorderRadius.circular(5.0),
+      // ),
       margin: EdgeInsets.all(10.0),
       child: Card(
+        elevation: 100.0,
         color: Colors.white,
         child: Column(
           children: <Widget>[
@@ -55,15 +57,16 @@ class _Actions extends State<Actions> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.all(10.0),                    
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                         allActions[index].profilePicture != null
                             ? (CircleAvatar(
                                 backgroundImage: NetworkImage(
                                     allActions[index].profilePicture),
                               ))
-                            : (Text('No assignee')),
+                            : (Text('No assignee',style: TextStyle(color: Colors.black),)),
                         Text('  '),
                         (assignees[index] != null)
                             ? Text(
@@ -83,6 +86,7 @@ class _Actions extends State<Actions> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
                           color: (allActions[index].status == 'pending')
                               ? Colors.blue
                               : (allActions[index].status == 'doing'
@@ -90,14 +94,18 @@ class _Actions extends State<Actions> {
                                   : Colors.green)),
                       child: Text(allActions[index].status),
                     ),
-                    PopupMenuButton<String>(
-                      onSelected: (choice) => choiceAction(choice, index),
-                      itemBuilder: (BuildContext context) {
-                        return Status.choices.map((String choice) {
-                          return PopupMenuItem<String>(
-                              value: choice, child: Text(choice));
-                        }).toList();
-                      },
+                    Container(
+                      child: PopupMenuButton<String>(
+                        onSelected: (choice) => choiceAction(choice, index),
+                        itemBuilder: (BuildContext context) {
+                          return Status.choices.map((String choice) {
+                            return 
+                            (choice !=allActions[index].status) ?
+                             PopupMenuItem<String>(
+                                value: choice, child: Text(choice)): (null);
+                          }).toList();
+                        },
+                      ),
                     ),
                   ])
                 ]),
@@ -142,10 +150,16 @@ class _Actions extends State<Actions> {
       setState(() {
         allActions[index].status = 'doing';
       });
-    } else {
+    } else if (choice == Status.Done){
       body = {'new_value': "done", 'field': "status"};
       setState(() {
         allActions[index].status = 'done';
+      });
+    }
+    else {
+      body = {'new_value': "pending", 'field': "status"};
+      setState(() {
+        allActions[index].status = 'pending';
       });
     }
     apiRequest(url, body);
@@ -181,10 +195,12 @@ class _Actions extends State<Actions> {
 }
 
 class Status {
-  static const String Doing = 'Mark as Doing';
-  static const String Done = 'Mark as Done';
+  static const String Pending = 'pending';
+  static const String Doing = 'doing';
+  static const String Done = 'done';
 
   static const List<String> choices = <String>[
+    Pending,
     Doing,
     Done,
   ];
