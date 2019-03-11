@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
@@ -105,32 +104,13 @@ class _DwidgetState extends State<Dwidget> {
             leading: const Icon(Icons.call_to_action),
             title: new Text("Action Items"),
           ),
-          new Divider(),
-          
-          // new Container(
-          //   child:  ListView.builder(
-          //               itemBuilder: _buildTeamNames,
-          //               itemCount: teamNames.length,
-          //             ),
-          // ),
-        //  new Expanded(
-        //               child: new FutureBuilder(
-        //       future: getAllTeamsData(),
-        //       builder: (BuildContext context,
-        //           AsyncSnapshot<List<TeamClass>> snapshot) {
-        //         if (snapshot.connectionState == ConnectionState.done) {
-        //             Widget actionCard = ListView.builder(
-        //               itemBuilder: _buildTeamNames,
-        //               itemCount: teamNames.length,
-        //             );
-        //             return actionCard;
-        //           }
-        //          else {
-        //           return Center(child: CircularProgressIndicator());
-        //         }
-        //       }
-        //     ),
-        //   ),
+          new Container(
+            child: ExpansionTile(
+              leading: Icon(Icons.group),
+              title: Text("Teams"),
+              children: <Widget>[_buildTeamNames()],
+            ),
+          ),
           new ListTile(
             leading: const Icon(Icons.settings),
             title: new Text("Settings"),
@@ -154,17 +134,20 @@ class _DwidgetState extends State<Dwidget> {
     );
   }
 
-  Widget _buildTeamNames(BuildContext context, int index) {
-    if(teamNames.length==0)
-      return Center(child: CircularProgressIndicator());
-    else{
-      return ExpansionTile(
-      title: Text("Teams"),
-       children: <Widget>[
-            Text(teamNames[index].name, style: TextStyle(color: Colors.black),)
-          ],
-      );
-    }
-    
+  Widget _buildTeamNames() {
+    return Container(
+      child: new FutureBuilder(
+          future: getAllTeamsData(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<TeamClass>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              for (var i = 0; i < snapshot.data.length; i++) {
+                return Center(child: Text(snapshot.data[i].name));
+              }
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
+    );
   }
 }

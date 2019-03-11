@@ -36,7 +36,7 @@ class Meetings extends StatelessWidget {
               ));
         },
         child: Card(
-          
+          elevation: 100.0,
           color: Colors.white,
           child: Column(
             children: <Widget>[

@@ -15,7 +15,6 @@ import './drawer.dart';
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _DashboardState();
   }
 }
@@ -201,7 +200,6 @@ class _DashboardState extends State<Dashboard> {
             ),
             drawer: Dwidget(userToken),
             body: Container(
-
               decoration: new BoxDecoration(
                 image: new DecorationImage(
                 image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
