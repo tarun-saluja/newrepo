@@ -40,11 +40,11 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
   initPlatformStateForStringUniLinks() async {
     // Attach a listener to the links stream
     _sub = getLinksStream().listen((String link) {
-
       if (!mounted) return;
       setState(() {
         Uri uriLink=  Uri.parse(link);
-
+        print("hello");
+        print(uriLink.userInfo);
         // Get token from query parameter
         token = uriLink?.queryParameters['user'];
 
