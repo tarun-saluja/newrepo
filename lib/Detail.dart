@@ -23,8 +23,7 @@ class Detail extends StatefulWidget {
   final String meetingTitle;
   final String meetingEventId;
 
-  Detail([this.meetingUuid,this.meetingTitle,this.meetingEventId]);
-
+  Detail([this.meetingUuid, this.meetingTitle, this.meetingEventId]);
 
   @override
   State<StatefulWidget> createState() {
@@ -45,8 +44,8 @@ class _DetailState extends State<Detail> {
 
   String noteText;
   List<String> attendeesEmail;
-  String rawHtml ;
-  String delta ;
+  String rawHtml;
+  String delta;
   bool recordPermission = false;
 
   bool _connectionStatus = false;
@@ -63,9 +62,9 @@ class _DetailState extends State<Detail> {
       connectionStatus = (await _connectivity.checkConnectivity());
 
       this.setState(() {
-        if(connectionStatus == ConnectivityResult.none){
+        if (connectionStatus == ConnectivityResult.none) {
           _connectionStatus = false;
-        }else{
+        } else {
           _connectionStatus = true;
         }
       });
@@ -105,7 +104,6 @@ class _DetailState extends State<Detail> {
   }
 
   Future<String> getRecentNotes(String token) async {
-
     final response = await http.get(
         Uri.encodeFull(
             'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
@@ -129,10 +127,7 @@ class _DetailState extends State<Detail> {
         print(delta);
         attendeesEmail = new List();
 
-        
-
-        for(int i = 0; i<attendees.length; i++)
-        {
+        for (int i = 0; i < attendees.length; i++) {
           attendeesEmail.add('${data['attendees'][i]['email']}');
           //print('${data['attendees'][i]['email']}');
         }
@@ -186,15 +181,16 @@ class _DetailState extends State<Detail> {
   void initState() {
     super.initState();
 
-    initConnectivity().then((result){
-      if(result){
+    initConnectivity().then((result) {
+      if (result) {
         this.fetchData();
-      }else{
+      } else {
         noteLoaded = true;
         attachmentCountLoaded = true;
       }
     });
   }
+
   // @override
   // void initState() {
   //   if (widget.uuid != null) {
@@ -212,8 +208,8 @@ class _DetailState extends State<Detail> {
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: choiceAction,
-            itemBuilder: (BuildContext context){
-              return Constants.choices.map((String choice){
+            itemBuilder: (BuildContext context) {
+              return Constants.choices.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -223,7 +219,7 @@ class _DetailState extends State<Detail> {
           )
         ],
       ),
-      body: Column(
+      body: (noteText != null) ? Column(
         children: <Widget>[
           new Container(
             padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -232,52 +228,47 @@ class _DetailState extends State<Detail> {
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  decoration: BoxDecoration(  
+                  decoration: BoxDecoration(
                       color: Colors.white70,
                       border: Border.all(color: Colors.blue, width: 1.0),
                       borderRadius: BorderRadius.circular(20.0)),
-                  child: Text(
-                    '$finalDateTime'
-                    ),
+                  child: Text('$finalDateTime'),
                 ),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white70,
-                    border: Border.all(
-                      color: Colors.blue, width: 1.0),
-                      borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(color: Colors.blue, width: 1.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0)),
-                      onPressed: () {
-                        attachmentCount != 0 ? 
-                                      showDialog(
-                                          context: context,
-                                          child: new AttachmentDialog(
-                                              widget.meetingUuid))
-                                    
-                                  : Fluttertoast.showToast(
-        msg: "No Attachment",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    ); },
-                      color: Colors.white,
-                      child: Row(
-                        children: <Widget>[
-                          new Icon(
-                            Icons.attach_file,
-                            color: Colors.amber,
-                          ),
-                          Text(attachmentCount.toString())
-                        ],
-                      ),
+                        borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      attachmentCount != 0
+                          ? showDialog(
+                              context: context,
+                              child: new AttachmentDialog(widget.meetingUuid))
+                          : Fluttertoast.showToast(
+                              msg: "No Attachment",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIos: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                    },
+                    color: Colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        new Icon(
+                          Icons.attach_file,
+                          color: Colors.amber,
+                        ),
+                        Text(attachmentCount.toString())
+                      ],
+                    ),
                   ),
-                  )
+                )
               ],
             ),
           ),
@@ -287,55 +278,77 @@ class _DetailState extends State<Detail> {
             height: height * 0.60,
             width: width,
             decoration: BoxDecoration(
-              color: Colors.white70,
-              border: Border.all(color: Colors.blue, width: 1.0),
-              borderRadius: BorderRadius.circular(5.0),
-              boxShadow: [
-                BoxShadow(color: Colors.white70,
-                blurRadius: 10.0,
-                spreadRadius: 1.0),
-              ]
-            ),
+                color: Colors.white70,
+                border: Border.all(color: Colors.blue, width: 1.0),
+                borderRadius: BorderRadius.circular(5.0),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.white70,
+                      blurRadius: 10.0,
+                      spreadRadius: 1.0),
+                ]),
             child: ListView(
               children: <Widget>[
-                Text('$noteText',style: TextStyle(fontSize: 18.0, color: Colors.black),),
+                Text(
+                  '$noteText',
+                  style: TextStyle(fontSize: 18.0, color: Colors.black),
+                ),
               ],
             ),
           )
         ],
+      )
+      :Center(child: CircularProgressIndicator()),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      new CameraPage(widget.meetingTitle, widget.meetingUuid)));
+              break;
+            case 1:
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => 
+                new Speech(widget.meetingUuid)
+            ));
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.camera_alt,
+                color: Colors.blue,
+                size: 30.0,
+              ),
+              title: Text('')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.mic_none, color: Colors.blue, size: 30.0),
+              title: Text('')),
+        ],
       ),
     );
   }
-  void choiceAction(String choice)
-  {
-    if (choice==Constants.Share)
-    {
-      Navigator.push(
-              context,
-              new MaterialPageRoute(
-                builder: (context) => new Share(
-                  widget.meetingTitle,
-                  '$noteText',
-                  attendeesEmail,
-                  rawHtml,
-                  delta,
-                  widget.meetingUuid
-                ),
-              ));
-    }
-    else
-    {
-      Navigator.push(
-              context,
-              new MaterialPageRoute(
-                builder: (context) => Dashboard(),
-              ));
-    }
 
+  void choiceAction(String choice) {
+    if (choice == Constants.Share) {
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+            builder: (context) => new Share(widget.meetingTitle, '$noteText',
+                attendeesEmail, rawHtml, delta, widget.meetingUuid),
+          ));
+    } else {
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+            builder: (context) => Dashboard(),
+          ));
+    }
   }
 }
 
-class Constants{
+class Constants {
   static const String Share = 'Share';
   static const String Leave = 'Leave';
 
