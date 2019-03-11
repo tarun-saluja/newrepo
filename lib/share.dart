@@ -110,16 +110,20 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                 SendButton(
                   onPressed: () async {
                     String _mail = "";
+                    List<String> mail = new List(); 
 
                     for (var temp in _messages) {
-                      if (temp.status) _mail +=  temp.txt + ',';
+                      //if (temp.status) _mail +=  temp.txt + ' , ';
+                      mail.add(temp.txt);
                     }
+
                     print(_mail);
                     body = {
                       "type": "EMAIL",
-                      "mailRecipients": [_mail],
+                      "mailRecipients": mail,
                       "rawHTML": "${widget.rawHtml}",
                     };
+                    
                     postData(body);
 
                     // final url =
@@ -276,10 +280,11 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     print(body);
     //var data = json.encode(body);
     var data = jsonEncode(body);
-    print('Encoded Body');
-    print(data);
+    
     print(url);
     print('$userToken');
+    print('Encoded Body');
+    print(data);
     var response = await http.post(url,
         headers: {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
