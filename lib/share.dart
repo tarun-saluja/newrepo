@@ -67,6 +67,7 @@ class Share extends StatefulWidget {
 
 class ShareWindow extends State<Share> with TickerProviderStateMixin {
   final List<Msg> _messages = List<Msg>();
+  var map = new Map<String, Msg>();
 //   {
 //     @Override public String toString()
 //     {
@@ -110,11 +111,10 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                 SendButton(
                   onPressed: () async {
                     String _mail = "";
-                    List<String> mail = new List(); 
+                    List<String> mail = new List();
 
                     for (var temp in _messages) {
-                      //if (temp.status) _mail +=  temp.txt + ' , ';
-                      mail.add(temp.txt);
+                      if (temp.status) mail.add(temp.txt);
                     }
 
                     print(_mail);
@@ -123,7 +123,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                       "mailRecipients": mail,
                       "rawHTML": "${widget.rawHtml}",
                     };
-                    
+
                     postData(body);
 
                     // final url =
@@ -280,7 +280,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     print(body);
     //var data = json.encode(body);
     var data = jsonEncode(body);
-    
+
     print(url);
     print('$userToken');
     print('Encoded Body');
@@ -310,6 +310,8 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     print("${response.body}");
   }
 
+
+
   void _submitMsg(String txt) {
     _textController.clear();
     setState(() {
@@ -322,6 +324,9 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     );
     setState(() {
       _messages.insert(0, msg);
+      map.putIfAbsent(msg.txt,() => msg);
+
+      //_messages.add(msg);
     });
     msg.animationController.forward();
   }
@@ -335,24 +340,45 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   }
 }
 
-class Msg extends StatelessWidget {
-  Msg({this.txt, this.animationController});
+class Msg extends StatefulWidget {
+
   final String txt;
   bool status = true;
   final AnimationController animationController;
+  Msg({this.txt, this.animationController});
+
+  @override
+  State<StatefulWidget> createState() {
+    return MsgState();
+  }
+
+}
+
+class MsgState extends State<Msg> 
+{
+
+  // final String txt;
+  // bool status = true;
+  // final AnimationController animationController;
+  bool checkboxValue = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void toggle() {
-    if (status)
-      this.status = false;
+    if (widget.status)
+      this.widget.status = false;
     else
-      this.status = true;
+      this.widget.status = true;
   }
 
   @override
   Widget build(BuildContext ctx) {
     return new SizeTransition(
       sizeFactor: new CurvedAnimation(
-          parent: animationController, curve: Curves.easeOut),
+          parent: widget.animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
       child: new Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -369,11 +395,28 @@ class Msg extends StatelessWidget {
                 children: <Widget>[
                   new Container(
                     margin: const EdgeInsets.only(top: 11.0),
-                    child: new Text(txt),
+                    child: new Text(widget.txt),
                   ),
                 ],
               ),
             ),
+            // new IconButton(
+            // icon: Icon(Icons.check_box),
+            //   color: Colors.black,
+            //   onPressed: () => {
+            //     this.toggle()
+            //   },
+            // ),
+            Checkbox(
+                  value: checkboxValue,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      this.toggle();
+                checkboxValue=this.widget.status;
+                    
+               });
+                    
+                  }),
           ],
         ),
       ),
