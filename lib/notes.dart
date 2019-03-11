@@ -38,7 +38,7 @@ class Notes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget noteCard = Center(child: Text('No available notes'));
+    Widget noteCard = Center(child: CircularProgressIndicator());
     if (notes.length > 0) {
       noteCard = ListView.builder(
         itemBuilder: _buildNoteItem,

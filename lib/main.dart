@@ -26,7 +26,8 @@ void main() {
 
   runApp(new MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.white
+        primaryColor: Colors.white,
+        //brightness: Brightness.dark
       ),
       home:  SplashScreen(), onGenerateRoute: router.generator));
 } 

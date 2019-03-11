@@ -41,11 +41,11 @@ class _Actions extends State<Actions> {
 
   Widget _buildActionItem(BuildContext context, int index) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white70,
-        border: new Border.all(color: Colors.blue, width: 1.0),
-        borderRadius: new BorderRadius.circular(5.0),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.white70,
+      //   border: new Border.all(color: Colors.blue, width: 1.0),
+      //   borderRadius: new BorderRadius.circular(5.0),
+      // ),
       margin: EdgeInsets.all(10.0),
       child: Card(
         color: Colors.white,
@@ -55,15 +55,16 @@ class _Actions extends State<Actions> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.all(10.0),                    
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                         allActions[index].profilePicture != null
                             ? (CircleAvatar(
                                 backgroundImage: NetworkImage(
                                     allActions[index].profilePicture),
                               ))
-                            : (Text('No assignee')),
+                            : (Text('No assignee',style: TextStyle(color: Colors.black),)),
                         Text('  '),
                         (assignees[index] != null)
                             ? Text(
@@ -90,14 +91,16 @@ class _Actions extends State<Actions> {
                                   : Colors.green)),
                       child: Text(allActions[index].status),
                     ),
-                    PopupMenuButton<String>(
-                      onSelected: (choice) => choiceAction(choice, index),
-                      itemBuilder: (BuildContext context) {
-                        return Status.choices.map((String choice) {
-                          return PopupMenuItem<String>(
-                              value: choice, child: Text(choice));
-                        }).toList();
-                      },
+                    Container(
+                      child: PopupMenuButton<String>(
+                        onSelected: (choice) => choiceAction(choice, index),
+                        itemBuilder: (BuildContext context) {
+                          return Status.choices.map((String choice) {
+                            return PopupMenuItem<String>(
+                                value: choice, child: Text(choice));
+                          }).toList();
+                        },
+                      ),
                     ),
                   ])
                 ]),

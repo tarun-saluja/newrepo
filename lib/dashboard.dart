@@ -201,9 +201,10 @@ class _DashboardState extends State<Dashboard> {
             ),
             drawer: Dwidget(userToken),
             body: Container(
+
               decoration: new BoxDecoration(
                 image: new DecorationImage(
-                    image: AssetImage('assets/art.jpg'), fit: BoxFit.cover),
+                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
               ),
               child: TabBarView(
                 children: <Widget>[
@@ -212,10 +213,7 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              child: Icon(Icons.add),
-            )),
+            ),
       ),
     );
   }

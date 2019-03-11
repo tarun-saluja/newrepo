@@ -179,7 +179,10 @@ class _ActionItems extends State<ActionItems> {
           ),
           drawer: Dwidget(),
           body: Container(
-            decoration: BoxDecoration(color: Colors.blue.withOpacity(0.2)),
+            decoration: BoxDecoration(
+              image: new DecorationImage(
+                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
+            ),
             child: TabBarView(
               children: <Widget>[
                 ActionManager(allActions,meetings,assignees),

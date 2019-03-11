@@ -27,6 +27,12 @@ dependencies:
   intl: ^0.15.7
   http: ^0.12.0+1
   connectivity: ^0.4.2
+  camera: ^0.4.2
+  path_provider:
+  video_player:
+  permission: ^0.1.1
+  speech_recognition:
+  simple_permissions:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -55,6 +61,7 @@ flutter:
     - assets/meetnotes_icon.png
     - assets/signup_bg.png
     - assets/art.jpg
+    - background.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
