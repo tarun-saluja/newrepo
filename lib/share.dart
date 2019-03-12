@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import './cancelbutton.dart';
 import './sendbutton.dart';
 import './drawer.dart';
+import './utilities.dart';
 
 final ThemeData iOSTheme = new ThemeData(
   primarySwatch: Colors.red,
@@ -37,8 +44,17 @@ class Share extends StatefulWidget {
   final String meetingTitle;
   final String meetingBody;
   final List<String> asigneeEmail;
+  final String rawHtml;
+  final String delta;
+  final String meetingUuid;
 
-  Share([this.meetingTitle, this.meetingBody, this.asigneeEmail]);
+  Share(
+      [this.meetingTitle,
+      this.meetingBody,
+      this.asigneeEmail,
+      this.rawHtml,
+      this.delta,
+      this.meetingUuid]);
 
   // @override
   // State createState() => ShareWindow();
@@ -50,17 +66,27 @@ class Share extends StatefulWidget {
 }
 
 class ShareWindow extends State<Share> with TickerProviderStateMixin {
-  final List<Msg> _messages = <Msg>[];
+  final List<Msg> _messages = List<Msg>();
+  var map = new Map<String, Msg>();
+//   {
+//     @Override public String toString()
+//     {
+//         return super.toString();
+//     }
+// };
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
+  String userToken;
+  Map body;
   // String _meetingTitle;
   // String _meetingBody;
 
-@override
+  @override
   void initState() {
     super.initState();
     _initAdd();
   }
+
   @override
   Widget build(BuildContext ctx) {
     return new Scaffold(
@@ -84,19 +110,29 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                 ),
                 SendButton(
                   onPressed: () async {
-                    String _mail='';
-                    
-                    for (Msg temp in _messages)
-                    {
-                       _mail+=temp.txt + ',';
+                    String _mail = "";
+                    List<String> mail = new List();
+
+                    for (var temp in _messages) {
+                      if (temp.status) mail.add(temp.txt);
                     }
-                    final url =
-                        'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
+
+                    print(_mail);
+                    body = {
+                      "type": "EMAIL",
+                      "mailRecipients": mail,
+                      "rawHTML": "${widget.rawHtml}",
+                    };
+
+                    postData(body);
+
+                    // final url =
+                    //     'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
+                    // if (await canLaunch(url)) {
+                    //   await launch(url);
+                    // } else {
+                    //   throw 'Could not launch $url';
+                    // }
                   },
                 ),
               ]),
@@ -147,8 +183,8 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                     });
                   },
                   onSubmitted: _submitMsg,
-                  decoration: new InputDecoration.collapsed(
-                      hintText: "Add email to invite"),
+                  decoration:
+                      new InputDecoration.collapsed(hintText: "Add email"),
                 ),
               ),
               new Container(
@@ -185,11 +221,96 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   //     throw 'Could not launch $url';
   //   }
   // }
-  void _initAdd()
-  {
-    for(String temp in widget.asigneeEmail)
-    _submitMsg(temp);
+  void _initAdd() {
+    for (String temp in widget.asigneeEmail) _submitMsg(temp);
+    print(widget.rawHtml);
+    print(widget.delta);
+    print(widget.asigneeEmail.toString());
+    // body = {
+    //   'type': "EMAIL",
+    //   'mailRecipients': ['athar.ejaz@hashedin.com'],
+    //   'rawHTML': "${widget.rawHtml}",
+    // };
   }
+
+  // Future postData() async {
+  //   Response response;
+  //   Dio dio = new Dio();
+  //   Future<String> userToken =getTokenData();
+  //   dynamic url =
+  //       "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
+  //   try {
+  //     response = await dio.post(url, data: {
+  //       "type": "EMAIL",
+  //       "mailRecipients": ["athar.ejaz@hashedin.com"],
+  //       "rawHTML": widget.rawHtml,
+  //       "delta": widget.delta
+  //     },
+  //     options: Options(headers: {
+  //       "Authorization" : 'Token $userToken',
+  //       "Content-Type": "multipart/form-data",
+
+  //     }));
+  //   } catch (e) {
+  //     print("Error Upload: " + e.toString());
+  //   }
+  //   print("Response Upload:" + response.toString());
+  // }
+
+  Future<Null> postData(Map body) async {
+    print(body);
+    Future<String> token = getTokenData();
+    dynamic url =
+        "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        sendEmail(url, body);
+      } else {
+        showLongToast(value);
+        return null;
+      }
+    });
+
+    return null;
+  }
+
+  Future<Null> sendEmail(String url, Map body) async {
+    print('Raw Body');
+    print(body);
+    //var data = json.encode(body);
+    var data = jsonEncode(body);
+
+    print(url);
+    print('$userToken');
+    print('Encoded Body');
+    print(data);
+    var response = await http.post(url,
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          //HttpHeaders.ACCEPT: 'application/json, text/plain, */*',
+          //HttpHeaders.CACHE_CONTROL: 'no-cache',
+          //HttpHeaders.acceptCharsetHeader: 'charset=utf-8'
+        },
+        body: data);
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Email Sent",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+
+    print(data);
+    print(response.statusCode);
+    print("${response.body}");
+  }
+
+
 
   void _submitMsg(String txt) {
     _textController.clear();
@@ -203,6 +324,9 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     );
     setState(() {
       _messages.insert(0, msg);
+      map.putIfAbsent(msg.txt,() => msg);
+
+      //_messages.add(msg);
     });
     msg.animationController.forward();
   }
@@ -216,16 +340,45 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   }
 }
 
-class Msg extends StatelessWidget {
-  Msg({this.txt, this.animationController});
+class Msg extends StatefulWidget {
+
   final String txt;
+  bool status = true;
   final AnimationController animationController;
+  Msg({this.txt, this.animationController});
+
+  @override
+  State<StatefulWidget> createState() {
+    return MsgState();
+  }
+
+}
+
+class MsgState extends State<Msg> 
+{
+
+  // final String txt;
+  // bool status = true;
+  // final AnimationController animationController;
+  bool checkboxValue = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void toggle() {
+    if (widget.status)
+      this.widget.status = false;
+    else
+      this.widget.status = true;
+  }
 
   @override
   Widget build(BuildContext ctx) {
     return new SizeTransition(
       sizeFactor: new CurvedAnimation(
-          parent: animationController, curve: Curves.easeOut),
+          parent: widget.animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
       child: new Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -242,11 +395,28 @@ class Msg extends StatelessWidget {
                 children: <Widget>[
                   new Container(
                     margin: const EdgeInsets.only(top: 11.0),
-                    child: new Text(txt),
+                    child: new Text(widget.txt),
                   ),
                 ],
               ),
             ),
+            // new IconButton(
+            // icon: Icon(Icons.check_box),
+            //   color: Colors.black,
+            //   onPressed: () => {
+            //     this.toggle()
+            //   },
+            // ),
+            Checkbox(
+                  value: checkboxValue,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      this.toggle();
+                checkboxValue=this.widget.status;
+                    
+               });
+                    
+                  }),
           ],
         ),
       ),

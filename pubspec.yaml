@@ -20,15 +20,17 @@ dependencies:
   flutter:
     sdk: flutter
   url_launcher: ^5.0.1
+  connectivity: ^0.4.2
+  http: ^0.12.0+1
   uni_links: ^0.1.4
   shared_preferences: ^0.4.3
   fluttertoast: ^2.0.0
   fluro: ^1.4.0
   intl: ^0.15.7
-  http: ^0.12.0+1
-  connectivity: ^0.4.2
+  # http: ^0.12.0+1
+  # connectivity: ^0.4.2
   camera: ^0.4.2
-  path_provider:
+  # path_provider:
   video_player:
   permission: ^0.1.1
   speech_recognition:
@@ -36,15 +38,19 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
   requests: 
 
   flutter_webview_plugin: ^0.2.1+2
+  # simple_permissions:
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+  path_provider: ^0.5.0+1
+  # simple_permissions: ^0.1.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

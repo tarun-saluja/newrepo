@@ -1,11 +1,10 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:memob/cameraPage.dart';
 import 'package:memob/utilities.dart' as utilities;
-import 'package:memob/speechDialog.dart';
 // import 'package:memob/speechDialog.dart';
 // import 'package:memob/attachmentListDialog.dart';
 // import 'package:memob/cameraPage.dart';
@@ -17,6 +16,10 @@ import 'package:flutter/services.dart';
 import 'package:memob/webView.dart';
 
 import './share.dart';
+import './dashboard.dart';
+import './attachmentListDialog.dart';
+import './cameraPage.dart';
+import './speechDialog.dart';
 
 class Detail extends StatefulWidget {
   final String meetingUuid;
@@ -45,6 +48,8 @@ class _DetailState extends State<Detail> {
 
   String noteText;
   List<String> attendeesEmail;
+  String rawHtml;
+  String delta;
   bool recordPermission = false;
 
   bool _connectionStatus = false;
@@ -120,6 +125,11 @@ class _DetailState extends State<Detail> {
 
         List<dynamic> rawNote = data['raw_note'];
         List<dynamic> attendees = data['attendees'];
+        rawHtml = data['raw_note'][0]['raw_html'];
+        delta = data['raw_note'][0]['delta'];
+
+        print(rawHtml);
+        print(delta);
         attendeesEmail = new List();
 
         for (int i = 0; i < attendees.length; i++) {
@@ -197,7 +207,6 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.meetingTitle),
@@ -215,79 +224,86 @@ class _DetailState extends State<Detail> {
           )
         ],
       ),
-       body:
-      //  new WebView(widget.meetingUuid,userToken),
-        (noteText != null)
-          ? Column(
+      body: (noteText != null) ? Column(
+        children: <Widget>[
+          new Container(
+            padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                new Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        padding:
-                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white70,
-                            border: Border.all(color: Colors.blue, width: 1.0),
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Text('$finalDateTime'),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          border: Border.all(color: Colors.blue, width: 1.0),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          onPressed: () {
-                            showDialog(context: context);
-                          },
-                          color: Colors.white,
-                          child: Row(
-                            children: <Widget>[
-                              new Icon(
-                                Icons.attach_file,
-                                color: Colors.amber,
-                              ),
-                              Text('2')
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: new EdgeInsets.all(10.0),
-                  height: height * 0.60,
-                  width: width,
                   decoration: BoxDecoration(
                       color: Colors.white70,
                       border: Border.all(color: Colors.blue, width: 1.0),
-                      borderRadius: BorderRadius.circular(5.0),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.white70,
-                            blurRadius: 10.0,
-                            spreadRadius: 1.0),
-                      ]),
-                  child: ListView(
-                    children: <Widget>[
-                      Text(
-                        '$noteText',
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
-                      ),
-                    ],
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Text('$finalDateTime'),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white70,
+                    border: Border.all(color: Colors.blue, width: 1.0),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      attachmentCount != 0
+                          ? showDialog(
+                              context: context,
+                              child: new AttachmentDialog(widget.meetingUuid))
+                          : Fluttertoast.showToast(
+                              msg: "No Attachment",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIos: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                    },
+                    color: Colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        new Icon(
+                          Icons.attach_file,
+                          color: Colors.amber,
+                        ),
+                        Text(attachmentCount.toString())
+                      ],
+                    ),
                   ),
                 )
               ],
-            )
-          : Center(child: CircularProgressIndicator()),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            margin: new EdgeInsets.all(10.0),
+            height: height * 0.60,
+            width: width,
+            decoration: BoxDecoration(
+                color: Colors.white70,
+                border: Border.all(color: Colors.blue, width: 1.0),
+                borderRadius: BorderRadius.circular(5.0),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.white70,
+                      blurRadius: 10.0,
+                      spreadRadius: 1.0),
+                ]),
+            child: ListView(
+              children: <Widget>[
+                Text(
+                  '$noteText',
+                  style: TextStyle(fontSize: 18.0, color: Colors.black),
+                ),
+              ],
+            ),
+          )
+        ],
+      )
+      :Center(child: CircularProgressIndicator()),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           switch (index) {
@@ -324,14 +340,16 @@ class _DetailState extends State<Detail> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-            builder: (context) => new Share(
-                  widget.meetingTitle,
-                  '$noteText',
-                  attendeesEmail,
-                ),
+            builder: (context) => new Share(widget.meetingTitle, '$noteText',
+                attendeesEmail, rawHtml, delta, widget.meetingUuid),
           ));
-    } else
-      print("sign out");
+    } else {
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+            builder: (context) => Dashboard(),
+          ));
+    }
   }
 }
 
