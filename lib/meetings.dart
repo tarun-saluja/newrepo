@@ -38,45 +38,48 @@ class Meetings extends StatelessWidget {
         child: Card(
           elevation: 100.0,
           color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(18),
-                  padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
-                  decoration: new BoxDecoration(
-                      color: (isToday == 0 || isUpcoming == true)
-                          ? (isUpcoming == true ? Colors.blue : Colors.green)
-                          : Colors.grey[400],
-                      border: Border.all(color: Colors.black12, width: 1.0),
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: (isToday == 0 || isUpcoming == true)
-                      ? (isUpcoming == true
-                          ? Text(
-                              'Upcoming',
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.white),
-                            )
-                          : Text(
-                              'Today',
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.white),
-                            ))
-                      : Text(
-                          '${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white),)),
-              Text(
-                meetings[index].title,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-              Text(
-                '${DateTimeFormatter.getTime(meetings[index].startTime)}',
-                style: TextStyle(fontSize: 12.0, color: Colors.grey),
-              )
-            ],
+          child: Container(
+            margin: EdgeInsets.all(18),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
+                    decoration: new BoxDecoration(
+                        color: (isToday == 0 || isUpcoming == true)
+                            ? (isUpcoming == true ? Colors.blue : Colors.green)
+                            : Colors.grey[400],
+                        border: Border.all(color: Colors.black12, width: 1.0),
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: (isToday == 0 || isUpcoming == true)
+                        ? (isUpcoming == true
+                            ? Text(
+                                'Upcoming',
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.white),
+                              )
+                            : Text(
+                                'Today',
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.white),
+                              ))
+                        : Text(
+                            '${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white),)),
+                Text(
+                  meetings[index].title,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Text(
+                  '${DateTimeFormatter.getTime(meetings[index].startTime)}',
+                  style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                )
+              ],
+            ),
           ),
         ),
       ),
