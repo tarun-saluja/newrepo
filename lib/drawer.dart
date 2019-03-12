@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
@@ -90,6 +90,19 @@ class _DwidgetState extends State<Dwidget> {
             title: new Text("Meetings"),
           ),
           new ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WebView(
+                          initialUrl: 'https://app.meetnotes.co/m/cac2faac-c04b-4c00-9373-fa1c50de72a6/',
+                          javascriptMode: JavascriptMode.unrestricted,
+                          onWebViewCreated: (WebViewController wvc){
+                            wvc.evaluateJavascript('_ga=GA1.2.1533643988.1551348935; __stripe_mid=a03694ae-9866-409a-add0-f178eaaccf0d; intercom-id-fvxq07yl=8125b2f6-73f2-4774-8e0e-2b2fbd49a335; csrftoken=fODVBsMCNtNrLSP5Cw7pnib5fkw0zi3K; sessionid=z25vciupmwdpkw44slia7ulxgzov9sfy; IS_GENUINE=true; REFERRER=; _gid=GA1.2.1999392027.1552367089; userId=e045d269b3384dfd8401fcb0f264c888; API_TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYXRoYXIuZWphekBoYXNoZWRpbi5jb20iLCJ1dWlkIjoiZTA0NWQyNjliMzM4NGRmZDg0MDFmY2IwZjI2NGM4ODgifQ.n1qfJYe73ehwOTZ1m59Fv2uR21GmVM6BdDFd3tZO6SCZ9HVL4jHxn78hJ3qRHhctcZS-mwekC7W9nS8oSTMnXo-OzddmAd6Y52kJGkydhwn0h8ZjHoyemDF8aj5V4yCer_PE7FxduR9VNk3r8sDOojG3oiBuSpqIrNqC-BRy1AYHTzCNPEgpDejLHQOcgz1yyQpKKNQHGN_M0uxdpBsjoGG5JSjiK_QUm7U4pp01Cz606ZodaeSJNz6-nh5mP1JKvQVmZimx4d3GB4yoW7WgRKHOBp0WN3lNLK_9aOBLHxm61m9zB2BLvmU_XCS5hKS_H3wRvQdlcxNjIhjsu7l-vA; __stripe_sid=c21ef2a3-84d7-446e-bcd0-b104009dad31; intercom-session-fvxq07yl=ZjRteE1tY2dmMDZRWjlrYVJ3N3FBVTFoN004TTlmNkJ3NnpySERiaS9UMDVxVURoVVRyWFJsNmU1MFZWRXJsKy0tVDhIT3V6NDU3NzBqSStjMHZrSkFodz09--12d13087a1dc00aa601fe93043baddb9aee274cf; _ga=GA1.2.1533643988.1551348935; __stripe_mid=a03694ae-9866-409a-add0-f178eaaccf0d; intercom-id-fvxq07yl=8125b2f6-73f2-4774-8e0e-2b2fbd49a335; csrftoken=fODVBsMCNtNrLSP5Cw7pnib5fkw0zi3K; sessionid=z25vciupmwdpkw44slia7ulxgzov9sfy; IS_GENUINE=true; REFERRER=; REFERRER=; _gid=GA1.2.1999392027.1552367089; userId=e045d269b3384dfd8401fcb0f264c888; API_TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYXRoYXIuZWphekBoYXNoZWRpbi5jb20iLCJ1dWlkIjoiZTA0NWQyNjliMzM4NGRmZDg0MDFmY2IwZjI2NGM4ODgifQ.n1qfJYe73ehwOTZ1m59Fv2uR21GmVM6BdDFd3tZO6SCZ9HVL4jHxn78hJ3qRHhctcZS-mwekC7W9nS8oSTMnXo-OzddmAd6Y52kJGkydhwn0h8ZjHoyemDF8aj5V4yCer_PE7FxduR9VNk3r8sDOojG3oiBuSpqIrNqC-BRy1AYHTzCNPEgpDejLHQOcgz1yyQpKKNQHGN_M0uxdpBsjoGG5JSjiK_QUm7U4pp01Cz606ZodaeSJNz6-nh5mP1JKvQVmZimx4d3GB4yoW7WgRKHOBp0WN3lNLK_9aOBLHxm61m9zB2BLvmU_XCS5hKS_H3wRvQdlcxNjIhjsu7l-vA; __stripe_sid=c21ef2a3-84d7-446e-bcd0-b104009dad31; intercom-session-fvxq07yl=RlVJbTNtb2xqUUptQ3dTR0l5OHJkSE1oM1VJdm5uMFRqMUtvZ21vTHVKc2czSDdJWWdMNk5YMnJQT3RON3FBdi0tODVCRytWcXNSTDJlRXQ1a0x6dityQT09--cc9dffce88fcc7873be357bde0bbc62e9c8ca041');
+                          },
+                        ),
+                  ));
+            },
             leading: const Icon(Icons.note),
             title: new Text("Notes"),
           ),
