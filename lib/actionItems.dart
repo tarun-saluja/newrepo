@@ -177,7 +177,7 @@ class _ActionItems extends State<ActionItems> {
               ],
             ),
           ),
-          drawer: Dwidget(),
+          drawer: Dwidget(userToken),
           body: Container(
             decoration: BoxDecoration(
               image: new DecorationImage(

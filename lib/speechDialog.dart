@@ -56,9 +56,29 @@ class _MyAppState extends State<Speech> {
     activateSpeechRecognizer();
     fetchData();
     checkPermission();
-   // requestPermission();
+    // requestPermission();
     getPermissionStatus();
   }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  /*initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await SimplePermissions.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }*/
 
   // Platform messages are asynchronous, so we initialize in an async method.
   void activateSpeechRecognizer() {
@@ -224,7 +244,7 @@ class _MyAppState extends State<Speech> {
 
 void requestPermission() async {
   final res = await SimplePermissions.requestPermission(Permission.RecordAudio);
-  // print("permission request result is " + res.toString());
+  print("permission request result is " + res.toString());
 }
 
 Future<bool> checkPermission() async {
