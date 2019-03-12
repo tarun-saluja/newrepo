@@ -62,7 +62,8 @@ class _DashboardState extends State<Dashboard> {
         userToken = value;
         getMeetingData();
         getRecentNotes();
-        //if (meetingDataLoaded && noteDataLoaded) return null;
+        //if (meetingDataLoaded && noteDataLoaded) 
+        return null;
       } else {
         utilities.showLongToast(value);
         return null;
