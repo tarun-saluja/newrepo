@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:requests/requests.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:memob/utilities.dart' as utilities;
@@ -40,11 +40,11 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
   initPlatformStateForStringUniLinks() async {
     // Attach a listener to the links stream
     _sub = getLinksStream().listen((String link) {
-
       if (!mounted) return;
       setState(() {
         Uri uriLink=  Uri.parse(link);
-
+        print("hello");
+        print(uriLink.userInfo);
         // Get token from query parameter
         token = uriLink?.queryParameters['user'];
 
@@ -161,6 +161,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     if (!mounted) return;
 
     setState(() {
+      
       _latestUri = initialUri;
       _latestLink = initialLink;
     });
@@ -173,6 +174,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     } else {
       throw 'Could not launch $url';
     }
+
   }
 
 

@@ -48,6 +48,24 @@ class _Actions extends State<Actions> {
       //   borderRadius: new BorderRadius.circular(5.0),
       // ),
       margin: EdgeInsets.all(10.0),
+      child:GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text(meetings[index]['title']),
+            content: Container(
+              child: 
+           //     children: <Widget>[
+                  
+                //  Text(''),
+                  Text(allActions[index].note)
+             //   ],
+           //   ),
+         //   ),
+            )
+         ) );
+          },
       child: Card(
         elevation: 100.0,
         color: Colors.white,
@@ -66,7 +84,10 @@ class _Actions extends State<Actions> {
                                 backgroundImage: NetworkImage(
                                     allActions[index].profilePicture),
                               ))
-                            : (Text('No assignee',style: TextStyle(color: Colors.black),)),
+                            : (CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/blank_user.jpeg'),
+                              )),
                         Text('  '),
                         (assignees[index] != null)
                             ? Text(
@@ -109,13 +130,22 @@ class _Actions extends State<Actions> {
                     ),
                   ])
                 ]),
-            Text(
-              allActions[index].note,
-              style: TextStyle(color: Colors.black),
-            ),
+            Container(
+              child: Column(children: <Widget>[    
+              Align(
+                alignment: Alignment.centerLeft,
+              child: Container(
+                child: Text(
+                  allActions[index].note,
+                  style: TextStyle(color: Colors.black),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),)
+              ],),
+            )
           ],
         ),
-      ),
+      ),)
     );
   }
 

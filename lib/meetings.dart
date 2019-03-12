@@ -84,12 +84,12 @@ class Meetings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     Widget meetingCard = Center(
       child: CircularProgressIndicator(),
     );
-
     if (meetings.length > 0) {
-      meetingCard = GridView.builder(
+       meetingCard = GridView.builder(
         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 2.0),

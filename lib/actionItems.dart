@@ -22,9 +22,12 @@ class _ActionItems extends State<ActionItems> {
   List assignees = new List();
   List meetings = new List();
 
+  List myAssignees =new List();
+  List myMeetings = new List();
   // ..................................................................
 
   String userToken;
+  int  userID;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
@@ -62,6 +65,7 @@ class _ActionItems extends State<ActionItems> {
     token.then((value) {
       if (value != null) {
         userToken = value;
+        //getUserId();
         getAllActionsData();
         if (meetingDataLoaded && noteDataLoaded) return null;
       } else {
@@ -132,8 +136,8 @@ class _ActionItems extends State<ActionItems> {
             allActions.add(action);
           }
         }
-
         meetingDataLoaded = true;
+        getUserId();
       });
       return null;
     } else {
@@ -142,7 +146,35 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
+  Future<Null> getUserId() async {
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
 
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+          userID= mData['user']['id'];
+
+        for(var i=0;i<allActions.length;i++){
+        if( assignees[i]!=null && assignees[i]['id']==userID){
+            myActions.add(allActions[i]);
+            myAssignees.add(assignees[i]);
+            myMeetings.add(meetings[i]);
+        }
+      }
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      return null;
+    }
+  }
   @override
   initState() {
     initConnectivity().then((result) {
@@ -177,7 +209,7 @@ class _ActionItems extends State<ActionItems> {
               ],
             ),
           ),
-          drawer: Dwidget(),
+          drawer: Dwidget(userToken),
           body: Container(
             decoration: BoxDecoration(
               image: new DecorationImage(
@@ -186,7 +218,7 @@ class _ActionItems extends State<ActionItems> {
             child: TabBarView(
               children: <Widget>[
                 ActionManager(allActions,meetings,assignees),
-                ActionManager(allActions,meetings,assignees)
+                ActionManager(myActions,myMeetings,myAssignees)
               ],
             ),
           ),

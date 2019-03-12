@@ -12,6 +12,7 @@ import './recentlyUpdated.dart';
 import './allMeetings.dart';
 import './drawer.dart';
 
+
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +21,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  String userToken;
+   String userToken;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
@@ -31,8 +32,6 @@ class _DashboardState extends State<Dashboard> {
   bool noteDataLoaded = false;
 
   var finalDateTime;
-
-  // Map<String, dynamic> data;
 
   Future<bool> initConnectivity() async {
     var connectionStatus;
@@ -63,7 +62,8 @@ class _DashboardState extends State<Dashboard> {
         userToken = value;
         getMeetingData();
         getRecentNotes();
-        if (meetingDataLoaded && noteDataLoaded) return null;
+        //if (meetingDataLoaded && noteDataLoaded) 
+        return null;
       } else {
         utilities.showLongToast(value);
         return null;
@@ -80,7 +80,6 @@ class _DashboardState extends State<Dashboard> {
           HttpHeaders.ACCEPT: 'application/json',
           HttpHeaders.CACHE_CONTROL: 'no-cache'
         });
-
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
@@ -154,6 +153,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   initState() {
+     super.initState();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
@@ -162,8 +162,10 @@ class _DashboardState extends State<Dashboard> {
         noteDataLoaded = true;
       }
     });
-    super.initState();
+   
+    
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -179,11 +181,13 @@ class _DashboardState extends State<Dashboard> {
                     onPressed: () async {
                       NotesClass result = await showSearch(
                           context: context, delegate: DataSearch(_notes));
+                          if(result!=null){
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => Detail(result.meetingUuid,
                                   result.meetingTitle, result.eventUuid)));
+                          }
                     })
               ],
               bottom: TabBar(

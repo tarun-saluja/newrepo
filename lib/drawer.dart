@@ -4,6 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
+import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:http/http.dart' as http;
@@ -125,6 +126,13 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           new ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Settings(),
+                  ));
+            },
             leading: const Icon(Icons.settings),
             title: new Text("Settings"),
           ),

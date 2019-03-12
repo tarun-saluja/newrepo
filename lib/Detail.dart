@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 // import 'package:simple_permissions/simple_permissions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
+import 'package:memob/webView.dart';
 
 import './share.dart';
 import './dashboard.dart';
@@ -38,6 +39,7 @@ class _DetailState extends State<Detail> {
   Map<String, dynamic> data;
   List<dynamic> attachmentCountData;
   List<dynamic> attachmentData;
+  String userToken;
 
   bool noteLoaded = false;
   bool attachmentCountLoaded = false;
@@ -97,6 +99,7 @@ class _DetailState extends State<Detail> {
     Future<String> token = utilities.getTokenData();
     token.then((value) {
       if (value != null) {
+        userToken = value;
         getRecentNotes(value);
         getRecentNotesCount(value);
       } else {
