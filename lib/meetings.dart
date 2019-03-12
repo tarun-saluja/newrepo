@@ -41,11 +41,12 @@ class Meetings extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
+                margin: EdgeInsets.all(18),
                   padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
                   decoration: new BoxDecoration(
                       color: (isToday == 0 || isUpcoming == true)
                           ? (isUpcoming == true ? Colors.blue : Colors.green)
-                          : Colors.grey,
+                          : Colors.grey[400],
                       border: Border.all(color: Colors.black12, width: 1.0),
                       borderRadius: BorderRadius.circular(20.0)),
                   child: (isToday == 0 || isUpcoming == true)
@@ -61,7 +62,7 @@ class Meetings extends StatelessWidget {
                                   fontSize: 12.0, color: Colors.white),
                             ))
                       : Text(
-                          '${DateTimeFormatter.getDate(meetings[index].startTime)}')),
+                          '${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white),)),
               Text(
                 meetings[index].title,
                 overflow: TextOverflow.ellipsis,
@@ -92,7 +93,7 @@ class Meetings extends StatelessWidget {
        meetingCard = GridView.builder(
         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 2.0),
+            childAspectRatio: 1.5),
         itemBuilder: _buildMeetingItem,
         itemCount: meetings.length,
       );

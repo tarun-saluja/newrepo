@@ -97,7 +97,7 @@ class _Actions extends State<Actions> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               )
-                            : Text('null',
+                            : Text('No Assignee',
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
@@ -131,6 +131,7 @@ class _Actions extends State<Actions> {
                   ])
                 ]),
             Container(
+              margin: EdgeInsets.fromLTRB(12, 0, 20, 0),
               child: Column(children: <Widget>[    
               Align(
                 alignment: Alignment.centerLeft,
