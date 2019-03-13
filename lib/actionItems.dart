@@ -76,6 +76,12 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getAllActionsData() async {
+    allActions = [];
+    myActions = [];
+    meetings = [];
+    assignees = [];
+    myAssignees = [];
+    myMeetings = [];
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/'),
         headers: {
@@ -197,6 +203,22 @@ class _ActionItems extends State<ActionItems> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('ACTION ITEMS'),
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                icon: Icon(
+                  Icons.filter
+                ),
+                onSelected: choiceAction,
+                itemBuilder: (BuildContext context) {
+                  return Filters.choices.map((String filter) {
+                    return PopupMenuItem<String>(
+                      value: filter,
+                      child: Text(filter),
+                    );
+                  }).toList();
+                },
+              )
+            ],
             bottom: TabBar(
               indicatorColor: Colors.blue,
               tabs: <Widget>[
@@ -226,4 +248,315 @@ class _ActionItems extends State<ActionItems> {
       ),
     );
   }
+
+Future<Null> fetchOpenActionData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        //getUserId();
+        getOpenActionsData();
+        if (meetingDataLoaded && noteDataLoaded) return null;
+      } else {
+        utilities.showLongToast(value);
+        return null;
+      }
+    });
+  }
+
+  Future<Null> getOpenActionsData() async {
+    allActions = [];
+    myActions = [];
+    meetings = [];
+    assignees = [];
+    myAssignees = [];
+    myMeetings = [];
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/?status__in=pending,doing'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+
+        List<dynamic> list = mData['results'];
+
+        for(int i=0; i<list.length;i++) {
+        assignees.add( mData['results'][i]['assignee']);
+        }
+
+        for(int i=0; i<list.length;i++) {
+        meetings.add( mData['results'][i]['meeting']);
+        }
+
+        for (var actionData in list) {
+          if (actionData['assignee'] != null) {
+            ActionClass action = new ActionClass(
+              actionData['uuid'],
+              actionData['event_uuid'],
+              //actionData['meeting'],
+              actionData['note'],
+              actionData['assignee']['profile_picture'],
+              actionData['assigned_to'],
+              actionData['status'],
+              actionData['is_deleted'],
+              actionData['created_at'],
+              actionData['due_date'],
+              // actionData['tags'],
+              actionData['isExternallyModified'],
+              //  actionData['comments'],
+            );
+            allActions.add(action);
+          } else {
+            ActionClass action = new ActionClass(
+              actionData['uuid'],
+              actionData['event_uuid'],
+              //actionData['meeting'],
+              actionData['note'],
+              actionData['assignee'],
+              actionData['assigned_to'],
+              actionData['status'],
+              actionData['is_deleted'],
+              actionData['created_at'],
+              actionData['due_date'],
+              // actionData['tags'],
+              actionData['isExternallyModified'],
+              //  actionData['comments'],
+            );
+            allActions.add(action);
+          }
+        }
+        meetingDataLoaded = true;
+        getUserId();
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      meetingDataLoaded = true;
+      return null;
+    }
+  }
+
+  Future<Null> fetchRecentlyUpdatedActionData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        //getUserId();
+        getRecentlyUpdatedActionsData();
+        if (meetingDataLoaded && noteDataLoaded) return null;
+      } else {
+        utilities.showLongToast(value);
+        return null;
+      }
+    });
+  }
+
+  Future<Null> getRecentlyUpdatedActionsData() async {
+    allActions = [];
+    myActions = [];
+    meetings = [];
+    assignees = [];
+    myAssignees = [];
+    myMeetings = [];
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+
+        List<dynamic> list = mData['results'];
+
+        for(int i=0; i<list.length;i++) {
+        assignees.add( mData['results'][i]['assignee']);
+        }
+
+        for(int i=0; i<list.length;i++) {
+        meetings.add( mData['results'][i]['meeting']);
+        }
+
+        for (var actionData in list) {
+          if (actionData['assignee'] != null) {
+            ActionClass action = new ActionClass(
+              actionData['uuid'],
+              actionData['event_uuid'],
+              //actionData['meeting'],
+              actionData['note'],
+              actionData['assignee']['profile_picture'],
+              actionData['assigned_to'],
+              actionData['status'],
+              actionData['is_deleted'],
+              actionData['created_at'],
+              actionData['due_date'],
+              // actionData['tags'],
+              actionData['isExternallyModified'],
+              //  actionData['comments'],
+            );
+            allActions.add(action);
+          } else {
+            ActionClass action = new ActionClass(
+              actionData['uuid'],
+              actionData['event_uuid'],
+              //actionData['meeting'],
+              actionData['note'],
+              actionData['assignee'],
+              actionData['assigned_to'],
+              actionData['status'],
+              actionData['is_deleted'],
+              actionData['created_at'],
+              actionData['due_date'],
+              // actionData['tags'],
+              actionData['isExternallyModified'],
+              //  actionData['comments'],
+            );
+            allActions.add(action);
+          }
+        }
+        meetingDataLoaded = true;
+        getUserId();
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      meetingDataLoaded = true;
+      return null;
+    }
+  }
+
+
+  Future<Null> fetchRecentlyClosedActionData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        //getUserId();
+        getRecentlyClosedActionsData();
+        if (meetingDataLoaded && noteDataLoaded) return null;
+      } else {
+        utilities.showLongToast(value);
+        return null;
+      }
+    });
+  }
+
+  Future<Null> getRecentlyClosedActionsData() async {
+    allActions = [];
+    myActions = [];
+    meetings = [];
+    assignees = [];
+    myAssignees = [];
+    myMeetings = [];
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at&status=done'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+
+        List<dynamic> list = mData['results'];
+
+        for(int i=0; i<list.length;i++) {
+        assignees.add( mData['results'][i]['assignee']);
+        }
+
+        for(int i=0; i<list.length;i++) {
+        meetings.add( mData['results'][i]['meeting']);
+        }
+
+        for (var actionData in list) {
+          if (actionData['assignee'] != null) {
+            ActionClass action = new ActionClass(
+              actionData['uuid'],
+              actionData['event_uuid'],
+              //actionData['meeting'],
+              actionData['note'],
+              actionData['assignee']['profile_picture'],
+              actionData['assigned_to'],
+              actionData['status'],
+              actionData['is_deleted'],
+              actionData['created_at'],
+              actionData['due_date'],
+              // actionData['tags'],
+              actionData['isExternallyModified'],
+              //  actionData['comments'],
+            );
+            allActions.add(action);
+          } else {
+            ActionClass action = new ActionClass(
+              actionData['uuid'],
+              actionData['event_uuid'],
+              //actionData['meeting'],
+              actionData['note'],
+              actionData['assignee'],
+              actionData['assigned_to'],
+              actionData['status'],
+              actionData['is_deleted'],
+              actionData['created_at'],
+              actionData['due_date'],
+              // actionData['tags'],
+              actionData['isExternallyModified'],
+              //  actionData['comments'],
+            );
+            allActions.add(action);
+          }
+        }
+        meetingDataLoaded = true;
+        getUserId();
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      meetingDataLoaded = true;
+      return null;
+    }
+  }
+
+
+  void choiceAction(String choice) {
+    if(choice == Filters.Everything) {
+      fetchData();
+    }
+    else if(choice == Filters.OpenActions) {
+      fetchOpenActionData();
+    }
+    else if(choice == Filters.RecentlyUpdated)
+    {
+      fetchRecentlyUpdatedActionData();
+    }
+    else if(choice == Filters.RecentlyClosed) {
+      fetchRecentlyClosedActionData();
+    }
+  }
+}
+
+class Filters {
+  static const String Everything = 'Everything';
+  static const String OpenActions = 'All Open Actions';
+  static const String RecentlyUpdated = 'Recently Updated';
+  static const String RecentlyClosed = 'Recently Closed';
+
+  static const List<String> choices = <String>[
+    Everything,
+    OpenActions,
+    RecentlyUpdated,
+    RecentlyClosed
+  ];
 }

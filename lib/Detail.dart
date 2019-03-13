@@ -141,7 +141,6 @@ class _DetailState extends State<Detail> {
 
         noteLoaded = true;
         noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
-        print(noteText);
         finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
       });
     } else {
@@ -224,7 +223,7 @@ class _DetailState extends State<Detail> {
           )
         ],
       ),
-      body: (noteText != null) ? Column(
+      body: (data != null) ? Column(
         children: <Widget>[
           new Container(
             padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
