@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:requests/requests.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:dio/dio.dart';
 import 'dart:async';
 
 
@@ -169,6 +169,8 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 
   _launchLoginUrl() async {
     const url = 'https://app.meetnotes.co/login/google-oauth2/?next=/mtoken/';
+    // Response response = await Dio().get("https://app.meetnotes.co/m/f1e5c5db-a8bb-422c-8427-90748be5e81a");
+    // print(response.headers);
     if (await canLaunch(url)) {
       await launch(url);
     } else {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:memob/Detail.dart';
@@ -8,10 +9,10 @@ import 'package:memob/NotesClass.dart';
 import 'package:memob/meetingClass.dart';
 import 'package:memob/searchbar.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:url_launcher/url_launcher.dart';
 import './recentlyUpdated.dart';
 import './allMeetings.dart';
 import './drawer.dart';
-
 
 class Dashboard extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-   String userToken;
+  String userToken;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
@@ -62,7 +63,6 @@ class _DashboardState extends State<Dashboard> {
         userToken = value;
         getMeetingData();
         getRecentNotes();
-        //if (meetingDataLoaded && noteDataLoaded) 
         return null;
       } else {
         utilities.showLongToast(value);
@@ -106,12 +106,10 @@ class _DashboardState extends State<Dashboard> {
             _meetings.add(meeting);
           }
         }
-        meetingDataLoaded = true;
       });
       return null;
     } else {
       // If that response was not OK, throw an error.
-      meetingDataLoaded = true;
       return null;
     }
   }
@@ -141,31 +139,23 @@ class _DashboardState extends State<Dashboard> {
               recentNote['event_uuid']);
           _notes.add(note);
         }
-        noteDataLoaded = true;
       });
       return null;
     } else {
       // If that response was not OK, throw an error.
-      noteDataLoaded = true;
       return null;
     }
   }
 
   @override
   initState() {
-     super.initState();
+    super.initState();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
-      } else {
-        meetingDataLoaded = true;
-        noteDataLoaded = true;
       }
     });
-   
-    
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -173,49 +163,51 @@ class _DashboardState extends State<Dashboard> {
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-            appBar: AppBar(
-              title: Text('Dashboard'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () async {
-                      NotesClass result = await showSearch(
-                          context: context, delegate: DataSearch(_notes));
-                          if(result!=null){
+          appBar: AppBar(
+            title: Text('Dashboard'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () async {
+                    NotesClass result = await showSearch(
+                        context: context, delegate: DataSearch(_notes));
+                    if (result != null) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => Detail(result.meetingUuid,
                                   result.meetingTitle, result.eventUuid)));
-                          }
-                    })
+                    }
+                    
+                  })
+            ],
+            bottom: TabBar(
+              indicatorColor: Colors.blue,
+              tabs: [
+                Tab(
+                  text: "Meetings",
+                ),
+                Tab(
+                  text: "Recent Notes",
+                )
               ],
-              bottom: TabBar(
-                indicatorColor: Colors.blue,
-                tabs: [
-                  Tab(
-                    text: "Meetings",
-                  ),
-                  Tab(
-                    text: "Recent Notes",
-                  )
-                ],
-              ),
             ),
-            drawer: Dwidget(userToken),
-            body: Container(
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
-              ),
-              child: TabBarView(
-                children: <Widget>[
-                  AllMeetings(_meetings),
-                  RecentlyUpdated(_notes),
-                ],
-              ),
+          ),
+          drawer: Dwidget(userToken),
+          body: Container(
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                  image: AssetImage('assets/background.jpeg'),
+                  fit: BoxFit.cover),
             ),
+            child: TabBarView(
+              children: <Widget>[
+                AllMeetings(_meetings),
+                RecentlyUpdated(_notes),
+              ],
             ),
+          ),
+        ),
       ),
     );
   }

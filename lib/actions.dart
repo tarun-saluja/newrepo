@@ -32,11 +32,12 @@ class _Actions extends State<Actions> {
 
   @override
   void initState() {
+    super.initState();
     allActions = widget.allActions;
     meetings = widget.meetings;
     assignees = widget.assignees;
 
-    super.initState();
+    
   }
 
   Widget _buildActionItem(BuildContext context, int index) {
