@@ -147,12 +147,13 @@ class _ActionItems extends State<ActionItems> {
             allActions.add(action);
           }
         }
+        getUserId();
         for(var i=0;i<allActions.length;i++){
             actions.add(allActions[i]);
             assignees.add(allAssignees[i]);
             meetings.add(allMeetings[i]);
         }
-        getUserId();
+        //getUserId();
       });
       return null;
     } else {
@@ -174,7 +175,6 @@ class _ActionItems extends State<ActionItems> {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
           userID= mData['user']['id'];
-
         for(var i=0;i<allActions.length;i++){
         if( allAssignees[i]!=null && allAssignees[i]['id']==userID){
             myActions.add(allActions[i]);

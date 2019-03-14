@@ -83,16 +83,9 @@ class _DashboardState extends State<Dashboard> {
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
-        List<String> list = mData.keys.toList();
-        list.sort();
-
-        Iterable<String> reversedList = list.reversed;
-
-        print(reversedList);
-
-        _meetings = new List();
-
-        for (String keys in reversedList) {
+        List<String> listMeetings = mData.keys.toList();
+        _meetings.clear();
+        for (String keys in listMeetings) {
           List list = mData[keys];
           for (var meetingData in list) {
             MeetingClass meeting = new MeetingClass(
@@ -128,7 +121,7 @@ class _DashboardState extends State<Dashboard> {
       this.setState(() {
         List<dynamic> mData = json.decode(response.body);
 
-        _notes = new List();
+        _notes.clear();
         for (var recentNote in mData) {
           NotesClass note = new NotesClass(
               recentNote['action_items'],
