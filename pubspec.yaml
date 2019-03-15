@@ -34,14 +34,17 @@ dependencies:
   video_player:
   permission: ^0.1.1
   speech_recognition:
-  webview_flutter: ^0.2.0
+  # webview_flutter:
   simple_permissions:
+  scoped_model: ^1.0.1
+  # flutter_webview_plugin: ^0.3.0+2
+  flutter_inappbrowser: ^0.6.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   requests: 
 
-  flutter_webview_plugin: ^0.2.1+2
+  # flutter_webview_plugin: ^0.2.1+2
   # simple_permissions:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

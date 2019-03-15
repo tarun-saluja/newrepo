@@ -14,13 +14,21 @@ import './drawer.dart';
 
 
 class Dashboard extends StatefulWidget {
+static final Dashboard _dashboard = new Dashboard._private();
+  
+  Dashboard._private();
+
+  factory Dashboard() {
+    return _dashboard;
+  }
+
   @override
   State<StatefulWidget> createState() {
     return _DashboardState();
   }
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard>  {
    String userToken;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();

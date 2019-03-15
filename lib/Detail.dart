@@ -1,3 +1,4 @@
+import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -36,10 +37,12 @@ class Detail extends StatefulWidget {
 
 class _DetailState extends State<Detail> {
   //String _uuid;
+  InAppWebViewController webView;
   Map<String, dynamic> data;
   List<dynamic> attachmentCountData;
   List<dynamic> attachmentData;
   String userToken;
+  String url = "";
 
   bool noteLoaded = false;
   bool attachmentCountLoaded = false;
@@ -277,30 +280,58 @@ class _DetailState extends State<Detail> {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            margin: new EdgeInsets.all(10.0),
-            height: height * 0.60,
-            width: width,
-            decoration: BoxDecoration(
-                color: Colors.white70,
-                border: Border.all(color: Colors.blue, width: 1.0),
-                borderRadius: BorderRadius.circular(5.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.white70,
-                      blurRadius: 10.0,
-                      spreadRadius: 1.0),
-                ]),
-            child: ListView(
-              children: <Widget>[
-                Text(
-                  '$noteText',
-                  style: TextStyle(fontSize: 18.0, color: Colors.black),
+          // Container(
+            // padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            // margin: new EdgeInsets.all(10.0),
+            // height: height * 0.60,
+            // width: width,
+            // decoration: BoxDecoration(
+            //     color: Colors.white70,
+            //     border: Border.all(color: Colors.blue, width: 1.0),
+            //     borderRadius: BorderRadius.circular(5.0),
+            //     boxShadow: [
+            //       BoxShadow(
+            //           color: Colors.white70,
+            //           blurRadius: 10.0,
+            //           spreadRadius: 1.0),
+            //     ]),
+            // child: ListView(
+            //   children: <Widget>[
+                Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueAccent)
+                  ),
+                  child: InAppWebView(
+                    //initialUrl: "https://flutter.io/",
+                    initialUrl: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+                    onWebViewCreated: (InAppWebViewController controller) {
+                      url = 'https://app.meetnotes.co/m/${widget.meetingUuid}/';
+                      CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
+                      webView = controller;
+                    },
+                    onLoadStart: (InAppWebViewController controller, String url) {
+                      print("started $url");
+                      setState(() {
+                        this.url = url;
+                      });
+                    },
+                    // onProgressChanged: (InAppWebViewController controller, int progress) {
+                    //   setState(() {
+                    //     this.progress = progress/100;
+                    //   });
+                    // },
+                  ),
                 ),
-              ],
-            ),
-          )
+              ),
+                // Text(
+                //   '$noteText',
+                //   style: TextStyle(fontSize: 18.0, color: Colors.black),
+                // ),
+              //],
+            //),
+          //)
         ],
       )
       :Center(child: CircularProgressIndicator()),

@@ -1,45 +1,132 @@
-import 'dart:io';
-
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 
-
-class WebView extends StatefulWidget {
-  String meetingUuid;
-  String userToken;
-  WebView([this.meetingUuid, this.userToken]);
-  @override
-  State<StatefulWidget> createState() {
-    return _WebView();
-  }
-
+Future main() async {
+  runApp(new WebViewTest());
 }
 
-class _WebView extends State<WebView> {
+class WebViewTest extends StatefulWidget {
+  @override
+  _WebViewTestState createState() => new _WebViewTestState();
+}
 
-  String _meetingUuid;
-  String _userToken;
+class _WebViewTestState extends State<WebViewTest> {
+
+  InAppWebViewController webView;
+  String url = "";
+  double progress = 0;
 
   @override
   void initState() {
-    _userToken = widget.userToken;
-    _meetingUuid = widget.meetingUuid;
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return WebviewScaffold(
-      url: "https://app.meetnotes.co/m/fdc0dcd2-e836-46d9-aefc-39798594486f/?suppress_webview_warning=true",
-      headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $_userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache',
-          HttpHeaders.COOKIE: '_ga=GA1.2.161743977.1551343962; __stripe_mid=c11cd2d7-3222-47f0-be30-5a60140b1673; _hjIncludedInSample=1; IS_GENUINE=true; REFERRER=; REFERRER=; csrftoken=GkypxP7JUrey4s4J9vTTKEVlXbwmzoN1; sessionid=py2uz2dbg4sgaz462yw31d7yivx9ncnz; userId=6999674ac8a14e5c874e6c72563153b9; API_TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGlwYW5zaHUua2Fwb29yQGhhc2hlZGluLmNvbSIsInV1aWQiOiI2OTk5Njc0YWM4YTE0ZTVjODc0ZTZjNzI1NjMxNTNiOSJ9.ZG1tNM1QMOgrf8JZfg6u5WhhBB68HuzPsVKRiHmvQGh-FaqCYbKPjXlx6JYsfJ7oweQ1dTsBWBR2GtD0xtu1oh0hRdutJJ9nSiwdJ5TlaLO2j5b54g1Y697PeSLaFUAa5yS61JY4lAlh1rmpDb4F6mIpiU69vucDt0FQAvjwNf2_shFRhnb_iaf6a1Zk4i7mRDXmIs4ZRYQNxXe-2_TAoBEvlot4XKRT-p0l_lZ67mPyx9TomnTKzu9xY5pZU6Q07FpfXU0SEaV16fivBov114fFtMel1l8jFfSVGWw-0oOkjzQ_UIS6nkcDNbNl0pwlwb1Q8IXpJQj49XGLJinLZw; _gid=GA1.2.392089721.1552277681; __stripe_sid=1b3f20fa-544c-402b-b56d-e1d85ec8b006; _gat_UA-85972959-1=1'
-        }
-    );
+  void dispose() {
+    super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Inline WebView example app'),
+        ),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: Text("CURRENT URL\n${ (url.length > 50) ? url.substring(0, 50) + "..." : url }"),
+              ),
+              (progress != 1.0) ? LinearProgressIndicator(value: progress) : null,
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueAccent)
+                  ),
+                  child: InAppWebView(
+                    //initialUrl: "https://flutter.io/",
+                    initialUrl: "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/",
+                    initialHeaders: {
+                      
+
+                    },
+                    initialOptions: {
+
+                    },
+                    onWebViewCreated: (InAppWebViewController controller) {
+                      url = 'https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/';
+                      CookieManager.setCookie(url, 'sessionid', 'sm9yh597cptfrkx4h3hl2ou4wzopc6eo;');
+                      webView = controller;
+                    },
+                    onLoadStart: (InAppWebViewController controller, String url) {
+                      print("started $url");
+                      setState(() {
+                        this.url = url;
+                      });
+                    },
+                    onProgressChanged: (InAppWebViewController controller, int progress) {
+                      setState(() {
+                        this.progress = progress/100;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      if (webView != null) {
+                        webView.goBack();
+                      }
+                    },
+                  ),
+                  RaisedButton(
+                    child: Icon(Icons.arrow_forward),
+                    onPressed: () {
+                      if (webView != null) {
+                        webView.goForward();
+                      }
+                    },
+                  ),
+                  RaisedButton(
+                    child: Icon(Icons.refresh),
+                    onPressed: () {
+                      if (webView != null) {
+                        webView.reload();
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ].where((Object o) => o != null).toList(),
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.mail),
+              title: Text('Item 2'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              title: Text('Item 3')
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
