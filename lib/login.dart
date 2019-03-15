@@ -183,11 +183,11 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(42, 42, 42, 1.0),
+        backgroundColor: Color.fromRGBO(31, 47, 79, 1.0),
         body: new Container(
           decoration: new BoxDecoration(
             image: new DecorationImage(
-              image: new AssetImage("assets/signup_bg.png"),
+               image: new AssetImage("assets/signup_bg.png",),
               fit: BoxFit.cover,
             ),
           ),
@@ -198,10 +198,10 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
               new Center(
                 child: new RaisedButton.icon(
                    onPressed: _launchLoginUrl,
-                    icon: new Image.asset('assets/google.png'),
+                    icon: new Image.asset('assets/google.png',height: 60,width: 60,),
                     label: new Text('Sign up with Google',
                         style: new TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                         )),
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0))),

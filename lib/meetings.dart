@@ -7,11 +7,20 @@ import './meetingClass.dart';
 import './Detail.dart';
 
 class Meetings extends StatelessWidget {
-  final List<MeetingClass> meetings;
+   List<MeetingClass> meetings;
 
-  Meetings([this.meetings = const []]);
+  Meetings([this.meetings]);
 
   Widget _buildMeetingItem(BuildContext context, int index) {
+    // List<String> date=[];
+    // for(var i=0;i<meetings.length;i++){
+    //   date.add(meetings[i].startTime);
+    // }
+    // date.sort();
+    // Iterable<String> reversedDate= date.reversed;
+    // for(String date in reversedDate){
+    //   print(date);
+    // }
     var today = DateFormat.yMd().format(new DateTime.now());
     var meetingDay =
         DateFormat.yMd().format(DateTime.parse(meetings[index].startTime));
@@ -19,6 +28,7 @@ class Meetings extends StatelessWidget {
 
     var isUpcoming =
         DateTimeFormatter.isUpcomingMeeting(meetings[index].startTime);
+
     return Container(
       // decoration: new BoxDecoration(
       //   color: Colors.white70,

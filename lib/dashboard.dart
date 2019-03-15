@@ -29,11 +29,6 @@ class _DashboardState extends State<Dashboard> {
   List<MeetingClass> _meetings = new List();
   List<NotesClass> _notes = new List();
 
-  bool meetingDataLoaded = false;
-  bool noteDataLoaded = false;
-
-  var finalDateTime;
-
   Future<bool> initConnectivity() async {
     var connectionStatus;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -78,7 +73,7 @@ class _DashboardState extends State<Dashboard> {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
           HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.CACHE_CONTROL: 'no-cache',
         });
     if (response.statusCode == 200) {
       this.setState(() {
