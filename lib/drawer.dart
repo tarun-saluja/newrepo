@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import './webView.dart';
-//import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
@@ -23,7 +21,6 @@ class _DwidgetState extends State<Dwidget> {
   String userToken1;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
-
 
   Future<List<TeamClass>> getAllTeamsData() async {
     final response = await http.get(
@@ -89,13 +86,6 @@ class _DwidgetState extends State<Dwidget> {
             title: new Text("Dashboard"),
           ),
           new ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WebViewTest(),
-                  ));
-            },
             leading: const Icon(Icons.group_work),
             title: new Text("Meetings"),
           ),
@@ -113,7 +103,7 @@ class _DwidgetState extends State<Dwidget> {
             //                 wvc.evaluateJavascript('document.cookie = "sessionid=sm9yh597cptfrkx4h3hl2ou4wzopc6eo;');
             //                 //wvc.evaluateJavascript('window.location.href="www.google.com"');
             //               },
-            //             ),  
+            //             ),
             //       ));
             // },
             leading: const Icon(Icons.note),
