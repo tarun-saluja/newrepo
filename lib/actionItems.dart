@@ -161,6 +161,7 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
+  
   Future<Null> getUserId() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
@@ -213,7 +214,7 @@ class _ActionItems extends State<ActionItems> {
               PopupMenuButton<String>(
                 icon: Icon(
                   Icons.filter
-                ),
+                ),  
                 onSelected: choiceAction,
                 itemBuilder: (BuildContext context) {
                   return Filters.choices.map((String filter) {
