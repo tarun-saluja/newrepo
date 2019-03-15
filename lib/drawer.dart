@@ -8,6 +8,7 @@ import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:http/http.dart' as http;
+import 'package:memob/webView.dart';
 
 class Dwidget extends StatefulWidget {
   final String userToken;
@@ -87,6 +88,13 @@ class _DwidgetState extends State<Dwidget> {
             title: new Text("Dashboard"),
           ),
           new ListTile(
+             onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WebView(),
+                  ));
+            },
             leading: const Icon(Icons.group_work),
             title: new Text("Meetings"),
             
