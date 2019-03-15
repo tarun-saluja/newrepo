@@ -83,16 +83,20 @@ class _DwidgetState extends State<Dwidget> {
                     builder: (context) => Dashboard(),
                   ));
             },
-            leading: const Icon(Icons.dashboard),
+            // leading: const Icon(Icons.dashboard),
+            leading: Image.asset('assets/dashboard.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Dashboard"),
           ),
           new ListTile(
-            leading: const Icon(Icons.group_work),
+            leading: Image.asset('assets/meetings.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Meetings"),
             
           ),
           new ListTile(
-            leading: const Icon(Icons.note),
+            leading:  Image.asset('assets/notes.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Notes"),
           ),
           new ListTile(
@@ -103,12 +107,14 @@ class _DwidgetState extends State<Dwidget> {
                     builder: (context) => ActionItems(),
                   ));
             },
-            leading: const Icon(Icons.call_to_action),
+            leading: Image.asset('assets/action_items.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Action Items"),
           ),
           new Container(
             child: ExpansionTile(
-              leading: Icon(Icons.group),
+              leading: Image.asset('assets/team.png',width: 30.0,
+                    height: 30.0,),
               title: Text("Teams"),
               children: <Widget>[_buildTeamNames()],
             ),
@@ -121,7 +127,8 @@ class _DwidgetState extends State<Dwidget> {
                     builder: (context) => Settings(),
                   ));
             },
-            leading: const Icon(Icons.settings),
+            leading:  Image.asset('assets/settings.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Settings"),
           ),
           new ListTile(
@@ -129,7 +136,8 @@ class _DwidgetState extends State<Dwidget> {
             title: new Text("User"),
           ),
           new ListTile(
-            leading: const Icon(Icons.exit_to_app),
+            leading: Image.asset('assets/logout.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Logout"),
             onTap: () async {
               utilities.removeToken().then((result) {

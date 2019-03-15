@@ -72,10 +72,14 @@ flutter:
     - assets/art.jpg
     - background.jpeg
     - blank_user.jpeg
-    - filter.svg
     - assets/meetn.png
-    - assets/login.png
-    - assets/login.jpg
+    - dashboard.png
+    - meetings.png
+    - notes.png
+    - settings.png
+    - team.png
+    - action_items.png
+    - logout.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
