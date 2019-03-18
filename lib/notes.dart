@@ -32,6 +32,7 @@ class Notes extends StatelessWidget {
         child: Container(
           margin: EdgeInsets.all(9),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(notes[index].meetingTitle, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.black),),
               Text('${DateTimeFormatter.getDate(notes[index].updatedAt)}', style: TextStyle(color: Colors.black),)

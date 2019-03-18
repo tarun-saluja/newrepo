@@ -39,8 +39,9 @@ class Meetings extends StatelessWidget {
           elevation: 100.0,
           color: Colors.white,
           child: Container(
-            margin: EdgeInsets.all(18),
+            margin: EdgeInsets.fromLTRB(25, 18, 18, 18),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(

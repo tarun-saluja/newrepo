@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:memob/utilities.dart' as utilities;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
+
 
 import 'package:flutter/material.dart';
 import 'package:memob/actionClass.dart';
@@ -41,6 +44,22 @@ class _Actions extends State<Actions> {
   }
 
   Widget _buildActionItem(BuildContext context, int index) {
+    var createdAt;
+     Duration diff = DateTime.now().difference(DateTime.parse(allActions[index].createdAt));
+ if (diff.inDays > 365)
+  createdAt = "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} ago";
+ else if (diff.inDays > 30)
+  createdAt =  "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} ago";
+ else if (diff.inDays > 7)
+  createdAt = "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} ago";
+ else if (diff.inDays > 0)
+  createdAt = "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} ago";
+ else if (diff.inHours > 0)
+  createdAt = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
+ else if (diff.inMinutes > 0)
+  createdAt = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+ else createdAt = "just now";
+
     return Container(
       height: 100,
       // decoration: BoxDecoration(
@@ -90,31 +109,38 @@ class _Actions extends State<Actions> {
                                     AssetImage('assets/blank_user.jpeg'),
                               )),
                         Text('  '),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
                         (assignees[index] != null)
-                            ? Text(
+                            ? Text( 
                                 assignees[index]['display_name'],
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                                    color: Colors.black45),
                               )
                             : Text('No Assignee',
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black))
-                      ])),
+                                    color: Colors.black45)),
+                            Text(createdAt, style: TextStyle(color: Colors.grey, fontSize: 10),)
+                            ],)
+                      ]
+                      )
+                      ),
                   Row(children: <Widget>[
                     Container(
                       padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
                           color: (allActions[index].status == 'pending')
-                              ? Colors.blue
+                              ? Colors.blue[400]
                               : (allActions[index].status == 'doing'
-                                  ? Colors.yellow
-                                  : Colors.green)),
-                      child: Text(allActions[index].status),
+                                  ? Colors.yellow[400]
+                                  : Colors.green[400])),
+                      child: Text(allActions[index].status, style: TextStyle(color: Colors.white),),
                     ),
                     Container(
                       child: PopupMenuButton<String>(
