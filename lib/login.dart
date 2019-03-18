@@ -43,11 +43,11 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
       if (!mounted) return;
       setState(() {
         Uri uriLink = Uri.parse(link);
+        print('------------------------------------------------------------------------');
         print("hello");
-        print(uriLink.userInfo);
+      //  print(uriLink.userInfo.getSessionId());
         // Get token from query parameter
         token = uriLink?.queryParameters['user'];
-
         // Store token data in shared preferences
         utilities.setTokenData(token).then((onValue) {
           Navigator.pushReplacementNamed(
@@ -165,7 +165,6 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
   }
 
   _launchLoginUrl() async {
-   // const url = 'https://app.meetnotes.co/login/google-oauth2/?next=/';
     const url = 'https://app.meetnotes.co/login/google-oauth2/?next=/mtoken/';
     if (await canLaunch(url)) {
       await launch(url);
