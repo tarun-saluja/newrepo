@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
 import 'package:memob/updatedAtFormatter.dart' as UpdateAtFormatter;
+import 'package:memob/webView.dart';
 
 import './meetingClass.dart';
 import './Detail.dart';
 
 class Meetings extends StatelessWidget {
   final List<MeetingClass> meetings;
+  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
 
   Meetings([this.meetings = const []]);
 
@@ -34,7 +36,15 @@ class Meetings extends StatelessWidget {
                 builder: (context) => Detail(meetings[index].uuid,
                     meetings[index].title, meetings[index].eventUuid),
               ));
-        },
+        //  onTap: () async {
+        //     String url = "https://app.meetnotes.co/m/${meetings[index].uuid}/";
+        //     //CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
+        //     await inAppBrowser.open(url: "https://app.meetnotes.co/m/${meetings[index].uuid}/", options: {
+        //       "useShouldOverrideUrlLoading": true,
+        //       "useOnLoadResource": true,
+        //       "hideTitleBar": false,
+        //     });
+           },
         child: Card(
           elevation: 100.0,
           color: Colors.white,

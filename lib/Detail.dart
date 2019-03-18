@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:memob/utilities.dart' as utilities;
+import './textEditorButton.dart';
 // import 'package:memob/speechDialog.dart';
 // import 'package:memob/attachmentListDialog.dart';
 // import 'package:memob/cameraPage.dart';
@@ -199,6 +200,21 @@ class _DetailState extends State<Detail> {
     });
   }
 
+  bool value4 = false;
+  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
+  void onChangedValue4() {
+        String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
+        CookieManager.setCookie(
+            url, 'sessionid', 'pknae9xtrn7rebtys57rkfzouz6wdpnv;');
+        inAppBrowser.open(
+            url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+            options: {
+              "useShouldOverrideUrlLoading": true,
+              "useOnLoadResource": true,
+              "hideTitleBar": false,
+            });
+  }
+
   // @override
   // void initState() {
   //   if (widget.uuid != null) {
@@ -227,114 +243,129 @@ class _DetailState extends State<Detail> {
           )
         ],
       ),
-      body: (noteText != null) ? Column(
-        children: <Widget>[
-          new Container(
-            padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: (noteText != null)
+          ? Column(
               children: <Widget>[
+                new Container(
+                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white70,
+                            border: Border.all(color: Colors.blue, width: 1.0),
+                            borderRadius: BorderRadius.circular(20.0)),
+                        child: Text('$finalDateTime'),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white70,
+                          border: Border.all(color: Colors.blue, width: 1.0),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          onPressed: () {
+                            attachmentCount != 0
+                                ? showDialog(
+                                    context: context,
+                                    child: new AttachmentDialog(
+                                        widget.meetingUuid))
+                                : Fluttertoast.showToast(
+                                    msg: "No Attachment",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIos: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                          },
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              new Icon(
+                                Icons.attach_file,
+                                color: Colors.amber,
+                              ),
+                              Text(attachmentCount.toString()),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                // new Switch(),
+
                 Container(
                   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  margin: new EdgeInsets.all(10.0),
+                  height: height * 0.58,
+                  width: width,
                   decoration: BoxDecoration(
                       color: Colors.white70,
                       border: Border.all(color: Colors.blue, width: 1.0),
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: Text('$finalDateTime'),
+                      borderRadius: BorderRadius.circular(5.0),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.white70,
+                            blurRadius: 10.0,
+                            spreadRadius: 1.0),
+                      ]),
+                  child: ListView(
+                    children: <Widget>[
+                      //   Expanded(
+                      //   child: Container(
+                      //     margin: const EdgeInsets.all(10.0),
+                      //     decoration: BoxDecoration(
+                      //       border: Border.all(color: Colors.blueAccent)
+                      //     ),
+                      //     child: InAppWebView(
+                      //       //initialUrl: "https://www.google.com/",
+                      //       initialUrl: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+                      //       onWebViewCreated: (InAppWebViewController controller) {
+                      //         url = 'https://app.meetnotes.co/m/${widget.meetingUuid}/';
+                      //         CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
+                      //         webView = controller;
+                      //       },
+                      //       onLoadStart: (InAppWebViewController controller, String url) {
+                      //         print("started $url");
+                      //         setState(() {
+                      //           this.url = url;
+                      //         });
+                      //       },
+                      //       // onProgressChanged: (InAppWebViewController controller, int progress) {
+                      //       //   setState(() {
+                      //       //     this.progress = progress/100;
+                      //       //   });
+                      //       // },
+                      //     ),
+                      //   ),
+                      // ),
+
+                      Text(
+                        '$noteText',
+                        style: TextStyle(fontSize: 18.0, color: Colors.black),
+                      ),
+                      
+                    ],
+                  ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white70,
-                    border: Border.all(color: Colors.blue, width: 1.0),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
-                    onPressed: () {
-                      attachmentCount != 0
-                          ? showDialog(
-                              context: context,
-                              child: new AttachmentDialog(widget.meetingUuid))
-                          : Fluttertoast.showToast(
-                              msg: "No Attachment",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIos: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                    },
-                    color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        new Icon(
-                          Icons.attach_file,
-                          color: Colors.amber,
-                        ),
-                        Text(attachmentCount.toString())
-                      ],
-                    ),
-                  ),
-                )
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: TextEditorButton(onPressed: onChangedValue4),)
+                  ],
+                ),
               ],
-            ),
-          ),
-          // Container(
-            // padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            // margin: new EdgeInsets.all(10.0),
-            // height: height * 0.60,
-            // width: width,
-            // decoration: BoxDecoration(
-            //     color: Colors.white70,
-            //     border: Border.all(color: Colors.blue, width: 1.0),
-            //     borderRadius: BorderRadius.circular(5.0),
-            //     boxShadow: [
-            //       BoxShadow(
-            //           color: Colors.white70,
-            //           blurRadius: 10.0,
-            //           spreadRadius: 1.0),
-            //     ]),
-            // child: ListView(
-            //   children: <Widget>[
-                Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent)
-                  ),
-                  child: InAppWebView(
-                    //initialUrl: "https://flutter.io/",
-                    initialUrl: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-                    onWebViewCreated: (InAppWebViewController controller) {
-                      url = 'https://app.meetnotes.co/m/${widget.meetingUuid}/';
-                      CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
-                      webView = controller;
-                    },
-                    onLoadStart: (InAppWebViewController controller, String url) {
-                      print("started $url");
-                      setState(() {
-                        this.url = url;
-                      });
-                    },
-                    // onProgressChanged: (InAppWebViewController controller, int progress) {
-                    //   setState(() {
-                    //     this.progress = progress/100;
-                    //   });
-                    // },
-                  ),
-                ),
-              ),
-                // Text(
-                //   '$noteText',
-                //   style: TextStyle(fontSize: 18.0, color: Colors.black),
-                // ),
-              //],
-            //),
-          //)
-        ],
-      )
-      :Center(child: CircularProgressIndicator()),
+              
+            )
+          : Center(child: CircularProgressIndicator()),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           switch (index) {
@@ -344,10 +375,9 @@ class _DetailState extends State<Detail> {
                       new CameraPage(widget.meetingTitle, widget.meetingUuid)));
               break;
             case 1:
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => 
-                new Speech(widget.meetingUuid)
-            ));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      new Speech(widget.meetingUuid)));
           }
         },
         items: [

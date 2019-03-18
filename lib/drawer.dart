@@ -7,6 +7,8 @@ import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:http/http.dart' as http;
+import './webView.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
 
 class Dwidget extends StatefulWidget {
   final String userToken;
@@ -21,6 +23,7 @@ class _DwidgetState extends State<Dwidget> {
   String userToken1;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
+  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
 
   Future<List<TeamClass>> getAllTeamsData() async {
     final response = await http.get(
@@ -86,6 +89,26 @@ class _DwidgetState extends State<Dwidget> {
             title: new Text("Dashboard"),
           ),
           new ListTile(
+            // onTap: () async {
+            //   String url =
+            //       "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/";
+            //   //CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
+            //   await inAppBrowser.open(
+            //       url:
+            //           "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/",
+            //       options: {
+            //         "useShouldOverrideUrlLoading": true,
+            //         "useOnLoadResource": true,
+            //         "hideTitleBar": false,
+            //       });
+            // },
+            // onTap: () {
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => WebviewTest(),
+            //       ));
+            // },
             leading: const Icon(Icons.group_work),
             title: new Text("Meetings"),
           ),
@@ -100,7 +123,7 @@ class _DwidgetState extends State<Dwidget> {
             //               javascriptMode: JavascriptMode.unrestricted,
             //               onWebViewCreated: (WebViewController wvc) {
             //                 //_onAddCookies(context);
-            //                 wvc.evaluateJavascript('document.cookie = "sessionid=sm9yh597cptfrkx4h3hl2ou4wzopc6eo;');
+            //                 wvc.evaluateJavascript('document.cookie = "sessionid=1etsh16q7x3hpl5en89nszcgsfnt00j6;');
             //                 //wvc.evaluateJavascript('window.location.href="www.google.com"');
             //               },
             //             ),

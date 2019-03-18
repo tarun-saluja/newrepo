@@ -44,7 +44,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
       setState(() {
         Uri uriLink=  Uri.parse(link);
         print("hello");
-        print(uriLink.userInfo);
+        print(uriLink);
         // Get token from query parameter
         token = uriLink?.queryParameters['user'];
 
