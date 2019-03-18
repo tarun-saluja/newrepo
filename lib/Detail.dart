@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import './textEditorButton.dart';
 // import 'package:memob/speechDialog.dart';
 // import 'package:memob/attachmentListDialog.dart';
@@ -211,7 +212,7 @@ class _DetailState extends State<Detail> {
             options: {
               "useShouldOverrideUrlLoading": true,
               "useOnLoadResource": true,
-              "hideTitleBar": false,
+              "toolbarTop": false,
             });
   }
 
@@ -227,7 +228,52 @@ class _DetailState extends State<Detail> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: SpeedDial(
+          // both default to 16
+          marginRight: 18,
+          marginBottom: 20,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          // child: Icon(Icons.add),
+          visible: true,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'),
+          onClose: () => print('DIAL CLOSED'),
+          tooltip: 'Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.camera),
+              backgroundColor: Colors.red,
+              label: 'Capture',
+              //labelStyle: TextTheme(fontSize: 18.0),
+              onTap: () => print('Capture')
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.edit),
+              backgroundColor: Colors.blue,
+              label: 'Editor',
+              //labelStyle: TextTheme(fontSize: 18.0),
+              onTap: onChangedValue4,
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.keyboard_voice),
+              backgroundColor: Colors.green,
+              label: 'Record',
+              //labelStyle: TextTheme(fontSize: 18.0),
+              onTap: () => print('Record'),
+            ),
+          ],
+        ),
       appBar: AppBar(
+        elevation: 0,
         title: Text(widget.meetingTitle),
         actions: <Widget>[
           PopupMenuButton<String>(
@@ -243,156 +289,176 @@ class _DetailState extends State<Detail> {
           )
         ],
       ),
-      body: (noteText != null)
-          ? Column(
-              children: <Widget>[
-                new Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        padding:
-                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white70,
-                            border: Border.all(color: Colors.blue, width: 1.0),
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Text('$finalDateTime'),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          border: Border.all(color: Colors.blue, width: 1.0),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          onPressed: () {
-                            attachmentCount != 0
-                                ? showDialog(
-                                    context: context,
-                                    child: new AttachmentDialog(
-                                        widget.meetingUuid))
-                                : Fluttertoast.showToast(
-                                    msg: "No Attachment",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIos: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                          },
-                          color: Colors.white,
-                          child: Row(
-                            children: <Widget>[
-                              new Icon(
-                                Icons.attach_file,
-                                color: Colors.amber,
-                              ),
-                              Text(attachmentCount.toString()),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                // new Switch(),
-
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: new EdgeInsets.all(10.0),
-                  height: height * 0.58,
-                  width: width,
-                  decoration: BoxDecoration(
-                      color: Colors.white70,
-                      border: Border.all(color: Colors.blue, width: 1.0),
-                      borderRadius: BorderRadius.circular(5.0),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.white70,
-                            blurRadius: 10.0,
-                            spreadRadius: 1.0),
-                      ]),
-                  child: ListView(
-                    children: <Widget>[
-                      //   Expanded(
-                      //   child: Container(
-                      //     margin: const EdgeInsets.all(10.0),
-                      //     decoration: BoxDecoration(
-                      //       border: Border.all(color: Colors.blueAccent)
-                      //     ),
-                      //     child: InAppWebView(
-                      //       //initialUrl: "https://www.google.com/",
-                      //       initialUrl: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-                      //       onWebViewCreated: (InAppWebViewController controller) {
-                      //         url = 'https://app.meetnotes.co/m/${widget.meetingUuid}/';
-                      //         CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
-                      //         webView = controller;
-                      //       },
-                      //       onLoadStart: (InAppWebViewController controller, String url) {
-                      //         print("started $url");
-                      //         setState(() {
-                      //           this.url = url;
-                      //         });
-                      //       },
-                      //       // onProgressChanged: (InAppWebViewController controller, int progress) {
-                      //       //   setState(() {
-                      //       //     this.progress = progress/100;
-                      //       //   });
-                      //       // },
-                      //     ),
-                      //   ),
-                      // ),
-
-                      Text(
-                        '$noteText',
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
-                      ),
-                      
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: TextEditorButton(onPressed: onChangedValue4),)
-                  ],
-                ),
-              ],
-              
-            )
-          : Center(child: CircularProgressIndicator()),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      new CameraPage(widget.meetingTitle, widget.meetingUuid)));
-              break;
-            case 1:
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      new Speech(widget.meetingUuid)));
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.camera_alt,
-                color: Colors.blue,
-                size: 30.0,
+      body: Container(decoration: new BoxDecoration(
+                image: new DecorationImage(
+                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
               ),
-              title: Text('')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.mic_none, color: Colors.blue, size: 30.0),
-              title: Text('')),
-        ],
+        child: (noteText != null)
+            ? Column(
+                children: <Widget>[
+                  new Container(
+                    padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.grey, width: 1.0),
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: Text('$finalDateTime'),
+                        ),
+                        Container(
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white70,
+                          //   border: Border.all(color: Colors.blue, width: 1.0),
+                          //   borderRadius: BorderRadius.circular(20.0),
+                          // ),
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            onPressed: () {
+                              attachmentCount != 0
+                                  ? showDialog(
+                                      context: context,
+                                      child: new AttachmentDialog(
+                                          widget.meetingUuid))
+                                  : Fluttertoast.showToast(
+                                      msg: "No Attachment",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIos: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                            },
+                            color: Colors.white,
+                            child: Row(
+                              children: <Widget>[
+                                new Icon(
+                                  Icons.attach_file,
+                                  color: Colors.amber,
+                                ),
+                                Text(attachmentCount.toString()),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  // new Switch(),
+
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    margin: new EdgeInsets.all(10.0),
+                    height: height * 0.60,
+                    width: width,
+                    decoration: BoxDecoration(
+                        color: Colors.white70,
+                        //border: Border.all(color: Colors.green, width: 1.0),
+                        borderRadius: BorderRadius.circular(5.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.white70,
+                              blurRadius: 10.0,
+                              spreadRadius: 1.0),
+                        ]),
+                    child: ListView(
+                      children: <Widget>[
+                        //   Expanded(
+                        //   child: Container(
+                        //     margin: const EdgeInsets.all(10.0),
+                        //     decoration: BoxDecoration(
+                        //       border: Border.all(color: Colors.blueAccent)
+                        //     ),
+                        //     child: InAppWebView(
+                        //       //initialUrl: "https://www.google.com/",
+                        //       initialUrl: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+                        //       onWebViewCreated: (InAppWebViewController controller) {
+                        //         url = 'https://app.meetnotes.co/m/${widget.meetingUuid}/';
+                        //         CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
+                        //         webView = controller;
+                        //       },
+                        //       onLoadStart: (InAppWebViewController controller, String url) {
+                        //         print("started $url");
+                        //         setState(() {
+                        //           this.url = url;
+                        //         });
+                        //       },
+                        //       // onProgressChanged: (InAppWebViewController controller, int progress) {
+                        //       //   setState(() {
+                        //       //     this.progress = progress/100;
+                        //       //   });
+                        //       // },
+                        //     ),
+                        //   ),
+                        // ),
+                        
+                        Text(
+                          '$noteText',
+                          style: TextStyle(fontSize: 15.0, color: Colors.black),
+                        ),
+                        
+                      ],
+                    ),
+                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: <Widget>[
+                  //     Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  //     child: TextEditorButton(onPressed: onChangedValue4),)
+                  //   ],
+                  // ),
+                  // Text(
+                  //         '$noteText',
+                  //         style: TextStyle(fontSize: 18.0, color: Colors.black),
+                  //       ),
+                ],
+                
+              )
+            : Center(child: CircularProgressIndicator()),
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   onTap: (index) {
+      //     switch (index) {
+      //       case 0:
+      //         Navigator.of(context).push(MaterialPageRoute(
+      //             builder: (BuildContext context) =>
+      //                 new CameraPage(widget.meetingTitle, widget.meetingUuid)));
+      //         break;
+      //       case 1:
+      //         onChangedValue4();
+      //         break;
+      //       case 2:
+      //         Navigator.of(context).push(MaterialPageRoute(
+      //             builder: (BuildContext context) =>
+      //                 new Speech(widget.meetingUuid)));
+      //     }
+      //   },
+      //   type: BottomNavigationBarType.fixed,
+      //   items: <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //         icon: Icon(
+      //           Icons.camera_alt,
+      //           color: Colors.blue,
+      //           size: 30.0,
+      //         ),
+      //         title: Text('Capture',style: TextStyle(color: Colors.grey,fontSize: 12),),),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(
+      //         Icons.mode_edit,
+      //         color: Colors.blue,
+      //           size: 30.0,
+      //       ),
+      //       title: Text('Editor',style: TextStyle(color: Colors.grey,))),   
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.mic_none, color: Colors.blue, size: 30.0),
+      //         title: Text('Record',style: TextStyle(color: Colors.grey,))),
+      //   ],
+      // ),
     );
   }
 

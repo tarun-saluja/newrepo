@@ -113,7 +113,8 @@ class _WebviewTestState extends State<WebviewTest> {
             await inAppBrowser.open(url: "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/", options: {
               "useShouldOverrideUrlLoading": true,
               "useOnLoadResource": true,
-              "hideTitleBar": false,
+              "hideUrlBar": true,
+              "toolbarTop": false,
             });
           },
               child: Text("Open InAppBrowser")

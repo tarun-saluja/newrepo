@@ -23,7 +23,7 @@ class _DwidgetState extends State<Dwidget> {
   String userToken1;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
-  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
+  //MyInAppBrowser inAppBrowser = new MyInAppBrowser();
 
   Future<List<TeamClass>> getAllTeamsData() async {
     final response = await http.get(

@@ -9,7 +9,7 @@ import './Detail.dart';
 
 class Meetings extends StatelessWidget {
   final List<MeetingClass> meetings;
-  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
+  //MyInAppBrowser inAppBrowser = new MyInAppBrowser();
 
   Meetings([this.meetings = const []]);
 
@@ -92,8 +92,8 @@ class Meetings extends StatelessWidget {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
+  @override 
     
     Widget meetingCard = Center(
       child: CircularProgressIndicator(),
