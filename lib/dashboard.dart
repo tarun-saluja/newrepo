@@ -25,6 +25,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   String userToken;
+  String _displayName;
+  String _profile_picture;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
@@ -60,6 +62,7 @@ class _DashboardState extends State<Dashboard> {
         userToken = value;
         getMeetingData();
         getRecentNotes();
+        getUserDetails();
         return null;
       } else {
         utilities.showLongToast(value);
@@ -104,7 +107,28 @@ class _DashboardState extends State<Dashboard> {
       return null;
     }
   }
+ Future<Null> getUserDetails() async {
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
 
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+          _displayName= mData['user']['display_name'];
+          _profile_picture=mData['user']['profile_picture'];
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      return null;
+    }
+  }
   Future<Null> getRecentNotes() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/recent-notes/'),
@@ -183,7 +207,7 @@ class _DashboardState extends State<Dashboard> {
               ],
             ),
           ),
-          drawer: Dwidget(userToken),
+          drawer: Dwidget(userToken,_displayName,_profile_picture),
           body: Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(

@@ -45,6 +45,8 @@ class _ActionItems extends State<ActionItems> {
 
   String userToken;
   int  userID;
+  String displayName;
+  String profile_picture;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
@@ -176,6 +178,8 @@ class _ActionItems extends State<ActionItems> {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
           userID= mData['user']['id'];
+          displayName= mData['user']['display_name'];
+          profile_picture=mData['user']['profile_picture'];
         for(var i=0;i<allActions.length;i++){
         if( allAssignees[i]!=null && allAssignees[i]['id']==userID){
             myActions.add(allActions[i]);
@@ -239,7 +243,7 @@ class _ActionItems extends State<ActionItems> {
               ],
             ),
           ),
-          drawer: Dwidget(userToken),
+          drawer: Dwidget(userToken,displayName,profile_picture),
           body: Container(
             decoration: BoxDecoration(
               image: new DecorationImage(

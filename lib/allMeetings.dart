@@ -17,9 +17,8 @@ class AllMeetings extends StatefulWidget {
 }
 
 class _AllMeetingsState extends State<AllMeetings> {
+  static var position=0;
   List<MeetingClass> _meetings;
- //static var initial = 0;
-  //static var low=0;
   @override
   void initState() {
     if (widget.meetings != null) {
@@ -56,5 +55,30 @@ class _AllMeetingsState extends State<AllMeetings> {
         );
   //     }
   //   }
-  }
+
+  //  if (_meetings == null || _meetings.length == 0) {
+  //     return Center(
+  //       child: CircularProgressIndicator(),
+  //     );}
+  //  return ListView.builder(
+  //         itemBuilder: _buildDateOnDashboard,
+  //         itemCount: _meetings.length,
+  //       );
+  //      }
+     
+  //      Widget _buildDateOnDashboard(BuildContext context, int index) {
+  //        if(index!=0&& DateTimeFormatter.getDate(_meetings[index].startTime) !=
+  //             DateTimeFormatter.getDate(_meetings[index - 1].startTime)){
+  //               return Container(
+  //                 child: Column(
+  //                   children: <Widget>[
+  //                     Text(DateTimeFormatter.getDate(_meetings[index-1].startTime))
+  //                     ,
+  //                     Meetings(_meetings.sublist(position,index))
+  //                   ],
+  //                 ),
+  //               );
+  //             }
+  //             return Text('');
+   }
 }

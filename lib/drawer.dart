@@ -11,7 +11,9 @@ import 'package:http/http.dart' as http;
 
 class Dwidget extends StatefulWidget {
   final String userToken;
-  Dwidget([this.userToken]);
+  String displayName;
+  String profile_picture;
+  Dwidget([this.userToken,this.displayName,this.profile_picture]);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -21,6 +23,8 @@ class Dwidget extends StatefulWidget {
 
 class _DwidgetState extends State<Dwidget> {
   String userToken1;
+  String displayName;
+  String profile_picture;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
   Future<List<TeamClass>> getAllTeamsData() async {
@@ -47,6 +51,8 @@ class _DwidgetState extends State<Dwidget> {
     // TODO: implement initState
     super.initState();
     userToken1 = widget.userToken;
+    displayName=widget.displayName;
+    profile_picture=widget.profile_picture;
   }
 
   @override
@@ -132,8 +138,23 @@ class _DwidgetState extends State<Dwidget> {
             title: new Text("Settings"),
           ),
           new ListTile(
-            leading: const Icon(Icons.person),
-            title: new Text("User"),
+            leading: (profile_picture != null)?
+            ( 
+                    CircleAvatar(
+                                backgroundImage:
+                                    AssetImage(profile_picture),
+                              )
+                    
+                    ):
+                    (
+                     CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/blank_user.jpeg'),
+                              )
+                    
+                    ),
+                    
+            title: new Text(displayName),
           ),
           new ListTile(
             leading: Image.asset('assets/logout.png',width: 30.0,
