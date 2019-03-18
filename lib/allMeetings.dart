@@ -18,8 +18,8 @@ class AllMeetings extends StatefulWidget {
 
 class _AllMeetingsState extends State<AllMeetings> {
   List<MeetingClass> _meetings;
- static var initial = 0;
-  static var low=0;
+ //static var initial = 0;
+  //static var low=0;
   @override
   void initState() {
     if (widget.meetings != null) {
@@ -30,31 +30,31 @@ class _AllMeetingsState extends State<AllMeetings> {
 
   @override
   Widget build(BuildContext context) {
-    if (_meetings == null || _meetings.length == 0) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    for (var i = initial; i < _meetings.length; i++) {
-      if (i != 0 &&
-          DateTimeFormatter.getDate(_meetings[i].startTime) !=
-              DateTimeFormatter.getDate(_meetings[i - 1].startTime)) {
-        low=initial;
-        initial = i;
+    // if (_meetings == null || _meetings.length == 0) {
+    //   return Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // }
+    // for (var i = initial; i < _meetings.length; i++) {
+    //   if (i != 0 &&
+    //       DateTimeFormatter.getDate(_meetings[i].startTime) !=
+    //           DateTimeFormatter.getDate(_meetings[i - 1].startTime)) {
+    //     low=initial;
+    //     initial = i;
         return Column(
           children: <Widget>[
-            Container(
-              child: Text(
-                'hello',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            // Container(
+            //   child: Text(
+            //     'hello',
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            // ),
             Expanded(
-              child: Meetings(_meetings.sublist(low, i)),
+              child: Meetings(_meetings),
             )
           ],
         );
-      }
-    }
+  //     }
+  //   }
   }
 }

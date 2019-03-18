@@ -161,6 +161,7 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
+  
   Future<Null> getUserId() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
@@ -189,6 +190,7 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
+  
   @override
   initState() {
     initConnectivity().then((result) {
