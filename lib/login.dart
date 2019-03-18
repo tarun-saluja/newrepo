@@ -165,6 +165,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
   }
 
   _launchLoginUrl() async {
+   // const url = 'https://app.meetnotes.co/login/google-oauth2/?next=/';
     const url = 'https://app.meetnotes.co/login/google-oauth2/?next=/mtoken/';
     if (await canLaunch(url)) {
       await launch(url);

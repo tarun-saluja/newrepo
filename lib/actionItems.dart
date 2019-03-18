@@ -210,9 +210,10 @@ class _ActionItems extends State<ActionItems> {
             title: Text('ACTION ITEMS'),
             actions: <Widget>[
               PopupMenuButton<String>(
-                icon: Icon(
-                  Icons.filter
-                ),
+                // icon: Icon(
+                //   Icons.filter
+                // ),
+                child: Image.asset('assets/filter.png',width: 30,height: 30,),
                 onSelected: choiceAction,
                 itemBuilder: (BuildContext context) {
                   return Filters.choices.map((String filter) {
