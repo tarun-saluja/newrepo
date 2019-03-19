@@ -18,7 +18,7 @@ class MyInAppBrowser extends InAppBrowser {
     print("\n\nStopped $url\n\n");
 
     // call a javascript message handler
-   // await this.webViewController.injectScriptCode("window.flutter_inappbrowser.callHandler('handlerNameTest', 1, 5,'string', {'key': 5}, [4,6,8]);");
+   await this.webViewController.injectScriptCode("window.flutter_inappbrowser.callHandler('handlerNameTest', 1, 5,'string', {'key': 5}, [4,6,8]);");
 
     // print body html
     print(await this.webViewController.injectScriptCode("document.body.innerHTML"));
@@ -29,7 +29,7 @@ class MyInAppBrowser extends InAppBrowser {
     await this.webViewController.injectScriptCode("console.error('testError', false);"); // the message will be: testError false
 
     // add jquery library and custom javascript
-    //await this.webViewController.injectScriptFile("https://code.jquery.com/jquery-3.3.1.min.js");
+    await this.webViewController.injectScriptFile("https://code.jquery.com/jquery-3.3.1.min.js");
     this.webViewController.injectScriptCode("""
       \$( "body" ).html( "Next Step..." )
     """);
@@ -111,7 +111,7 @@ class _WebviewTestState extends State<WebviewTest> {
             String url = "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/";
             //CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
             await inAppBrowser.open(url: "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/", options: {
-              "useShouldOverrideUrlLoading": true,
+              "ShouldOverrideUrlLoading": true,
               "useOnLoadResource": true,
               "hideUrlBar": true,
               "toolbarTop": false,
