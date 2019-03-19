@@ -204,16 +204,16 @@ class _DetailState extends State<Detail> {
   bool value4 = false;
   MyInAppBrowser inAppBrowser = new MyInAppBrowser();
   void onChangedValue4() {
-        String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
-        CookieManager.setCookie(
-            url, 'sessionid', 'pknae9xtrn7rebtys57rkfzouz6wdpnv;');
-        inAppBrowser.open(
-            url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-            options: {
-              "useShouldOverrideUrlLoading": true,
-              "useOnLoadResource": true,
-              "toolbarTop": false,
-            });
+    String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
+    CookieManager.setCookie(
+        url, 'sessionid', 'pknae9xtrn7rebtys57rkfzouz6wdpnv;');
+    inAppBrowser.open(
+        url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+        options: {
+          "useShouldOverrideUrlLoading": true,
+          "useOnLoadResource": true,
+          "toolbarTop": false,
+        });
   }
 
   // @override
@@ -229,49 +229,48 @@ class _DetailState extends State<Detail> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: SpeedDial(
-          // both default to 16
-          marginRight: 18,
-          marginBottom: 20,
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          // this is ignored if animatedIcon is non null
-          // child: Icon(Icons.add),
-          visible: true,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-          onOpen: () => print('OPENING DIAL'),
-          onClose: () => print('DIAL CLOSED'),
-          tooltip: 'Speed Dial',
-          heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
+        // both default to 16
+        marginRight: 18,
+        marginBottom: 20,
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        // this is ignored if animatedIcon is non null
+        // child: Icon(Icons.add),
+        visible: true,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        onOpen: () => print('OPENING DIAL'),
+        onClose: () => print('DIAL CLOSED'),
+        tooltip: 'Speed Dial',
+        heroTag: 'speed-dial-hero-tag',
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 8.0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
               child: Icon(Icons.camera),
               backgroundColor: Colors.red,
               label: 'Capture',
               //labelStyle: TextTheme(fontSize: 18.0),
-              onTap: () => print('Capture')
-            ),
-            SpeedDialChild(
-              child: Icon(Icons.edit),
-              backgroundColor: Colors.blue,
-              label: 'Editor',
-              //labelStyle: TextTheme(fontSize: 18.0),
-              onTap: onChangedValue4,
-            ),
-            SpeedDialChild(
-              child: Icon(Icons.keyboard_voice),
-              backgroundColor: Colors.green,
-              label: 'Record',
-              //labelStyle: TextTheme(fontSize: 18.0),
-              onTap: () => print('Record'),
-            ),
-          ],
-        ),
+              onTap: () => print('Capture')),
+          SpeedDialChild(
+            child: Icon(Icons.edit),
+            backgroundColor: Colors.blue,
+            label: 'Editor',
+            //labelStyle: TextTheme(fontSize: 18.0),
+            onTap: onChangedValue4,
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.keyboard_voice),
+            backgroundColor: Colors.green,
+            label: 'Record',
+            //labelStyle: TextTheme(fontSize: 18.0),
+            onTap: () => print('Record'),
+          ),
+        ],
+      ),
       appBar: AppBar(
         elevation: 0,
         title: Text(widget.meetingTitle),
@@ -289,136 +288,123 @@ class _DetailState extends State<Detail> {
           )
         ],
       ),
-      body: Container(decoration: new BoxDecoration(
-                image: new DecorationImage(
-                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
-              ),
+      body: Container(
+        color: Color.fromRGBO(214, 228, 238, 100),
+        padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
+        // decoration: new BoxDecoration(
+        //   // image: new DecorationImage(
+        //   //     image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
+        // ),
         child: (noteText != null)
-            ? Column(
-                children: <Widget>[
-                  new Container(
-                    padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey, width: 1.0),
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: Text('$finalDateTime'),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(
-                          //   color: Colors.white70,
-                          //   border: Border.all(color: Colors.blue, width: 1.0),
-                          //   borderRadius: BorderRadius.circular(20.0),
-                          // ),
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            onPressed: () {
-                              attachmentCount != 0
-                                  ? showDialog(
-                                      context: context,
-                                      child: new AttachmentDialog(
-                                          widget.meetingUuid))
-                                  : Fluttertoast.showToast(
-                                      msg: "No Attachment",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIos: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                            },
+            ? Column(mainAxisSize: MainAxisSize.max,crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                new Container(
+                  //padding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        decoration: BoxDecoration(
                             color: Colors.white,
-                            child: Row(
-                              children: <Widget>[
-                                new Icon(
-                                  Icons.attach_file,
-                                  color: Colors.amber,
-                                ),
-                                Text(attachmentCount.toString()),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  // new Switch(),
-
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    margin: new EdgeInsets.all(10.0),
-                    height: height * 0.60,
-                    width: width,
-                    decoration: BoxDecoration(
-                        color: Colors.white70,
-                        //border: Border.all(color: Colors.green, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.white70,
-                              blurRadius: 10.0,
-                              spreadRadius: 1.0),
-                        ]),
-                    child: ListView(
-                      children: <Widget>[
-                        //   Expanded(
-                        //   child: Container(
-                        //     margin: const EdgeInsets.all(10.0),
-                        //     decoration: BoxDecoration(
-                        //       border: Border.all(color: Colors.blueAccent)
-                        //     ),
-                        //     child: InAppWebView(
-                        //       //initialUrl: "https://www.google.com/",
-                        //       initialUrl: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-                        //       onWebViewCreated: (InAppWebViewController controller) {
-                        //         url = 'https://app.meetnotes.co/m/${widget.meetingUuid}/';
-                        //         CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
-                        //         webView = controller;
-                        //       },
-                        //       onLoadStart: (InAppWebViewController controller, String url) {
-                        //         print("started $url");
-                        //         setState(() {
-                        //           this.url = url;
-                        //         });
-                        //       },
-                        //       // onProgressChanged: (InAppWebViewController controller, int progress) {
-                        //       //   setState(() {
-                        //       //     this.progress = progress/100;
-                        //       //   });
-                        //       // },
-                        //     ),
-                        //   ),
+                            //border: Border.all(color: Colors.grey, width: 1.0),
+                            borderRadius: BorderRadius.circular(20.0)),
+                        child: Text('$finalDateTime'),
+                      ),
+                      Container(
+                        // decoration: BoxDecoration(
+                        //   color: Colors.white70,
+                        //   border: Border.all(color: Colors.blue, width: 1.0),
+                        //   borderRadius: BorderRadius.circular(20.0),
                         // ),
-                        
-                        Text(
-                          '$noteText',
-                          style: TextStyle(fontSize: 15.0, color: Colors.black),
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          onPressed: () {
+                            attachmentCount != 0
+                                ? showDialog(
+                                    context: context,
+                                    child: new AttachmentDialog(
+                                        widget.meetingUuid))
+                                : Fluttertoast.showToast(
+                                    msg: "No Attachment",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIos: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                          },
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              new Icon(
+                                Icons.attach_file,
+                                color: Colors.amber,
+                              ),
+                              Text(attachmentCount.toString()),
+                            ],
+                          ),
                         ),
-                        
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: <Widget>[
-                  //     Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  //     child: TextEditorButton(onPressed: onChangedValue4),)
-                  //   ],
-                  // ),
-                  // Text(
-                  //         '$noteText',
-                  //         style: TextStyle(fontSize: 18.0, color: Colors.black),
-                  //       ),
-                ],
-                
-              )
+                ),
+                // new Switch(),
+
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  margin: new EdgeInsets.all(10.0),
+                  height: height * 0.75,
+                  width: width,
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      //border: Border.all(color: Colors.green, width: 1.0),
+                      borderRadius: BorderRadius.circular(5.0),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.white70,
+                            blurRadius: 10.0,
+                            spreadRadius: 1.0),
+                      ]),
+                 child: ListView(children: <Widget>[
+
+                Text(
+                  '$noteText',
+                  style: TextStyle(fontSize: 15.0, color: Colors.black),
+                ),
+
+                    ],
+                  ),
+                ),
+
+                // Expanded(
+                //   child:
+                // new Expanded(
+                //     flex: 1,
+                //     child: new SingleChildScrollView(
+                //       child: Card(
+                //         child: Text(
+                //           '$noteText',
+                //           style: TextStyle(fontSize: 15.0, color: Colors.black),
+                //         ),
+                //       ),
+                //     )),
+
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: <Widget>[
+                //     Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                //     child: TextEditorButton(onPressed: onChangedValue4),)
+                //   ],
+                // ),
+                // Text(
+                //         '$noteText',
+                //         style: TextStyle(fontSize: 18.0, color: Colors.black),
+                //       ),
+                // ]))
+              ])
             : Center(child: CircularProgressIndicator()),
       ),
       // bottomNavigationBar: BottomNavigationBar(
@@ -453,7 +439,7 @@ class _DetailState extends State<Detail> {
       //         color: Colors.blue,
       //           size: 30.0,
       //       ),
-      //       title: Text('Editor',style: TextStyle(color: Colors.grey,))),   
+      //       title: Text('Editor',style: TextStyle(color: Colors.grey,))),
       //     BottomNavigationBarItem(
       //         icon: Icon(Icons.mic_none, color: Colors.blue, size: 30.0),
       //         title: Text('Record',style: TextStyle(color: Colors.grey,))),
