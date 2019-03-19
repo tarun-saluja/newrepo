@@ -87,12 +87,12 @@ class _DwidgetState extends State<Dwidget> {
             margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
             child: new ListTile(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Dashboard(),
-                //     ));
-                Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Dashboard(),
+                    ));
+                //Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
               // leading: const Icon(Icons.dashboard),
               leading: Image.asset(
@@ -196,7 +196,7 @@ class _DwidgetState extends State<Dwidget> {
               children: <Widget>[_buildTeamNames(),],
             ),
           ),
-
+          new Divider(color: Colors.white,height: 50,),
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
             child: new ListTile(
