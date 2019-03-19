@@ -216,7 +216,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             child: TabBarView(
               children: <Widget>[
-                AllMeetings(_meetings),
+                AllMeetings(_meetings,_connectionStatus),
                 RecentlyUpdated(_notes),
               ],
             ),

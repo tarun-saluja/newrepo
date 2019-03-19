@@ -8,7 +8,8 @@ import './Detail.dart';
 
 class Meetings extends StatelessWidget {
   List<MeetingClass> meetings;
-  Meetings([this.meetings]);
+  var connectionStatus;
+  Meetings([this.meetings,this.connectionStatus]);
   Widget _buildMeetingItem(BuildContext context, int index) {
     var today = DateFormat.yMd().format(new DateTime.now());
     var meetingDay =
@@ -87,6 +88,7 @@ class Meetings extends StatelessWidget {
     Widget meetingCard = Center(
       child: CircularProgressIndicator(),
     );
+   
     if (meetings.length > 0) {
        meetingCard = GridView.builder(
         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
@@ -96,6 +98,10 @@ class Meetings extends StatelessWidget {
         itemCount: meetings.length,
       );
     }
+    if(connectionStatus==true){
+      meetingCard=Center(child:new Text('No data',style:TextStyle(color:Colors.white),));
+    }
+
     return meetingCard;
   }
 }

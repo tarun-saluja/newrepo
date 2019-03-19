@@ -10,7 +10,7 @@ class Notes extends StatelessWidget {
 
   Widget _buildNoteItem(BuildContext context, int index) {
         return Container(
-          height: 60,
+          height: 90,
           // decoration: new BoxDecoration(
           //   color: Colors.white70,
           //   border: new Border.all(color: Colors.blue, width: 1.0),
@@ -31,11 +31,23 @@ class Notes extends StatelessWidget {
         color: Colors.white,
         child: Container(
           margin: EdgeInsets.all(9),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(notes[index].meetingTitle, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.black),),
-              Text('${DateTimeFormatter.getDate(notes[index].updatedAt)}', style: TextStyle(color: Colors.black),)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(notes[index].meetingTitle, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.black),),
+                  Text('${DateTimeFormatter.getDate(notes[index].updatedAt)}', style: TextStyle(color: Colors.black),)
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('arrow.png',height: 20,width: 20,)
+                ],
+              )
             ],
           ),
         ),

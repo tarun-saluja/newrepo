@@ -7,8 +7,8 @@ import 'package:memob/meetingClass.dart';
 
 class AllMeetings extends StatefulWidget {
   final List<MeetingClass> meetings;
-
-  AllMeetings([this.meetings = const []]);
+  var connectionStatus;
+  AllMeetings([this.meetings = const [],this.connectionStatus]);
 
   @override
   State<StatefulWidget> createState() {
@@ -49,7 +49,7 @@ class _AllMeetingsState extends State<AllMeetings> {
             //   ),
             // ),
             Expanded(
-              child: Meetings(_meetings),
+              child: Meetings(_meetings, widget.connectionStatus),
             )
           ],
         );

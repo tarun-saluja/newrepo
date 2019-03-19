@@ -149,7 +149,7 @@ class _ActionItems extends State<ActionItems> {
             allActions.add(action);
           }
         }
-        getUserId();
+        getUserDetails();
         for(var i=0;i<allActions.length;i++){
             actions.add(allActions[i]);
             assignees.add(allAssignees[i]);
@@ -164,7 +164,7 @@ class _ActionItems extends State<ActionItems> {
     }
   }
   
-  Future<Null> getUserId() async {
+  Future<Null> getUserDetails() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
         headers: {

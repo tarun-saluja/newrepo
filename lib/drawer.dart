@@ -61,111 +61,137 @@ class _DwidgetState extends State<Dwidget> {
       child: new ListView(
         children: <Widget>[
           new Container(
-            child: new DrawerHeader(
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Image.asset(
-                    'assets/meetnotes_icon.png',
-                    width: 50.0,
-                    height: 50.0,
-                  ),
-                  Text(
-                    "MEETNOTES",
-                    textAlign: TextAlign.center,
-                    textScaleFactor: 2.0,
-                    style: new TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(color: Colors.white70),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(30,50,50,50),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    new Image.asset(
+                      'assets/meetnotes_icon.png',
+                      width: 30.0,
+                      height: 30.0,
+                    ),
+                    Text(
+                      "MEETNOTES",
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.6,
+                      style: new TextStyle(color: Colors.black26),
+                    ),
+                  ],
+                ),
+              )
+              ,
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Dashboard(),
+                    ));
+              },
+              // leading: const Icon(Icons.dashboard),
+              leading: Image.asset('assets/dashboard.png',width: 25.0,
+                      height: 25.0,),
+              title: new Text("Dashboard",style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400),),
             ),
           ),
-          new ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Dashboard(),
-                  ));
-            },
-            // leading: const Icon(Icons.dashboard),
-            leading: Image.asset('assets/dashboard.png',width: 30.0,
-                    height: 30.0,),
-            title: new Text("Dashboard"),
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              leading: Image.asset('assets/meetings.png',width: 25.0,
+                      height: 25.0,),
+              title: new Text("Meetings",style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400)),
+              
+            ),
           ),
-          new ListTile(
-            leading: Image.asset('assets/meetings.png',width: 30.0,
-                    height: 30.0,),
-            title: new Text("Meetings"),
-            
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              leading:  Image.asset('assets/notes.png',width: 25.0,
+                      height: 25.0,),
+              title: new Text("Notes",style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400) ),
+            ),
           ),
-          new ListTile(
-            leading:  Image.asset('assets/notes.png',width: 30.0,
-                    height: 30.0,),
-            title: new Text("Notes"),
-          ),
-          new ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ActionItems(),
-                  ));
-            },
-            leading: Image.asset('assets/action_items.png',width: 30.0,
-                    height: 30.0,),
-            title: new Text("Action Items"),
-          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ActionItems(),
+                    ));
+              },
+              leading: Image.asset('assets/action_items.png',width: 25.0,
+                      height: 25.0,),
+              title: new Text("Action Items",style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400)),
+            ),
+          )
+          ,
           new Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
             child: ExpansionTile(
-              leading: Image.asset('assets/team.png',width: 30.0,
-                    height: 30.0,),
-              title: Text("Teams"),
+              leading: Image.asset('assets/team.png',width: 25.0,
+                    height: 25.0,),
+              title: Text("Team" ,style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400)),
               children: <Widget>[_buildTeamNames()],
             ),
           ),
-          new ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Settings(),
-                  ));
-            },
-            leading:  Image.asset('assets/settings.png',width: 30.0,
-                    height: 30.0,),
-            title: new Text("Settings"),
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Settings(),
+                    ));
+              },
+              leading:  Image.asset('assets/settings.png',width: 25.0,
+                      height: 25.0,),
+              title: new Text("Settings",style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400)),
+            ),
           ),
-          new ListTile(
-            leading: (profile_picture != null)?
-            ( 
-                    CircleAvatar(
-                                backgroundImage:
-                                    AssetImage(profile_picture),
-                              )
-                    
-                    ):
-                    (
-                     CircleAvatar(
-                                backgroundImage:
-                                    AssetImage('assets/blank_user.jpeg'),
-                              )
-                    
-                    ),
-                    
-            title: new Text(displayName),
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              leading: (profile_picture != null)?
+              ( 
+                      CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage(profile_picture),
+                                      maxRadius: 17,
+                                )
+                      
+                      ):
+                      (
+                       CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/blank_user.jpeg'),
+                                      maxRadius: 17,
+                                )
+                      
+                      ),
+                      
+              title: new Text(displayName,style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400)),
+            ),
           ),
-          new ListTile(
-            leading: Image.asset('assets/logout.png',width: 30.0,
-                    height: 30.0,),
-            title: new Text("Logout"),
-            onTap: () async {
-              utilities.removeToken().then((result) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/Login', (Route<dynamic> route) => false);
-              });
-            },
+          Container(
+            margin: EdgeInsets.fromLTRB(30,0,70,0),
+            child: new ListTile(
+              leading: Image.asset('assets/logout.png',width: 25.0,
+                      height: 25.0,),
+              title: new Text("Logout",style: TextStyle(fontSize: 18,color: Colors.black38,fontWeight: FontWeight.w400)),
+              onTap: () async {
+                utilities.removeToken().then((result) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/Login', (Route<dynamic> route) => false);
+                });
+              },
+            ),
           ),
         ],
       ),
