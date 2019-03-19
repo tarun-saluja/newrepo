@@ -18,6 +18,7 @@ class Meetings extends StatelessWidget {
         DateTimeFormatter.isUpcomingMeeting(meetings[index].startTime);
 
     return Container(
+      margin: EdgeInsets.all(5),
     //crossAxisAlignment: CrossAxisAlignment.stretch,  
     //  (index == 0) ? ((Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white,fontSize: 18),)))
     //  :(index!=0 && DateTimeFormatter.getDate(meetings[index].startTime) != DateTimeFormatter.getDate(meetings[index-1].startTime)) ?
@@ -50,7 +51,7 @@ class Meetings extends StatelessWidget {
             margin: EdgeInsets.fromLTRB(25, 18, 18, 18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
                     padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
@@ -107,7 +108,7 @@ class Meetings extends StatelessWidget {
         meetingCard = GridView.builder(
           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1.5),
+              childAspectRatio: 1.6),
           itemBuilder: _buildMeetingItem,
           itemCount: meetings.length,
         );

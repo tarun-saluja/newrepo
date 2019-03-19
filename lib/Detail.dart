@@ -210,7 +210,7 @@ class _DetailState extends State<Detail> {
   void onChangedValue4() {
     String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
     CookieManager.setCookie(
-        url, 'sessionid', 'pknae9xtrn7rebtys57rkfzouz6wdpnv;');
+        url, 'sessionid', 'vbi9r3skam36mc4c3z203wahmseygqee;');
     inAppBrowser.open(
         url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
         options: {
@@ -233,6 +233,7 @@ class _DetailState extends State<Detail> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: SpeedDial(
+
         // both default to 16
         marginRight: 18,
         marginBottom: 20,
@@ -484,6 +485,7 @@ class _DetailState extends State<Detail> {
       //         title: Text('Record',style: TextStyle(color: Colors.grey,))),
       //   ],
       // ),
+    //  onPullToRefresh:this.getRecentNotes
     );
   }
 
