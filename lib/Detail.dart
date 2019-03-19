@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -272,7 +273,7 @@ class _DetailState extends State<Detail> {
         ],
       ),
       appBar: AppBar(
-        elevation: 0,
+        elevation: defaultTargetPlatform == TargetPlatform.android ? 1.0 : 0.0,
         title: Text(widget.meetingTitle),
         actions: <Widget>[
           PopupMenuButton<String>(
