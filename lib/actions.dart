@@ -160,8 +160,7 @@ class _Actions extends State<Actions> {
                 ]),
             Container(
               margin: EdgeInsets.fromLTRB(12, 0, 20, 0),
-              child: Row(
-                children: <Widget>[
+              child:
                   Column(children: <Widget>[    
                   Align(
                     alignment: Alignment.centerLeft,
@@ -173,8 +172,8 @@ class _Actions extends State<Actions> {
                     ),
                   ),)
                   ],),
-                ],
-              ),
+                
+              
             )
           ],
         ),
