@@ -8,10 +8,12 @@ import 'package:memob/NotesClass.dart';
 import 'package:memob/meetingClass.dart';
 import 'package:memob/searchbar.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:requests/requests.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 import './recentlyUpdated.dart';
 import './allMeetings.dart';
 import './drawer.dart';
-
 
 class Dashboard extends StatefulWidget {
 static final Dashboard _dashboard = new Dashboard._private();
@@ -28,18 +30,15 @@ static final Dashboard _dashboard = new Dashboard._private();
   }
 }
 
-class _DashboardState extends State<Dashboard>  {
-   String userToken;
+class _DashboardState extends State<Dashboard> {
+  String userToken;
+  String _displayName;
+  String _profile_picture;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
 
   List<MeetingClass> _meetings = new List();
   List<NotesClass> _notes = new List();
-
-  bool meetingDataLoaded = false;
-  bool noteDataLoaded = false;
-
-  var finalDateTime;
 
   Future<bool> initConnectivity() async {
     var connectionStatus;
@@ -70,7 +69,7 @@ class _DashboardState extends State<Dashboard>  {
         userToken = value;
         getMeetingData();
         getRecentNotes();
-        //if (meetingDataLoaded && noteDataLoaded) 
+        getUserDetails();
         return null;
       } else {
         utilities.showLongToast(value);
@@ -86,21 +85,14 @@ class _DashboardState extends State<Dashboard>  {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
           HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.CACHE_CONTROL: 'no-cache',
         });
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
-        List<String> list = mData.keys.toList();
-        list.sort();
-
-        Iterable<String> reversedList = list.reversed;
-
-        print(reversedList);
-
-        _meetings = new List();
-
-        for (String keys in reversedList) {
+        List<String> listMeetings = mData.keys.toList();
+        _meetings.clear();
+        for (String keys in listMeetings) {
           List list = mData[keys];
           for (var meetingData in list) {
             MeetingClass meeting = new MeetingClass(
@@ -114,19 +106,17 @@ class _DashboardState extends State<Dashboard>  {
             _meetings.add(meeting);
           }
         }
-        meetingDataLoaded = true;
+        _meetings.sort((a,b)=>b.startTime.compareTo(a.startTime));
       });
       return null;
     } else {
       // If that response was not OK, throw an error.
-      meetingDataLoaded = true;
       return null;
     }
   }
-
-  Future<Null> getRecentNotes() async {
+ Future<Null> getUserDetails() async {
     final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/recent-notes/'),
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
         headers: {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
@@ -136,9 +126,30 @@ class _DashboardState extends State<Dashboard>  {
 
     if (response.statusCode == 200) {
       this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+          _displayName= mData['user']['display_name'];
+          _profile_picture=mData['user']['profile_picture'];
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      return null;
+    }
+  }
+  Future<Null> getRecentNotes() async {
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/recent-notes/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+    if (response.statusCode == 200) {
+      this.setState(() {
         List<dynamic> mData = json.decode(response.body);
 
-        _notes = new List();
+        _notes.clear();
         for (var recentNote in mData) {
           NotesClass note = new NotesClass(
               recentNote['action_items'],
@@ -149,31 +160,23 @@ class _DashboardState extends State<Dashboard>  {
               recentNote['event_uuid']);
           _notes.add(note);
         }
-        noteDataLoaded = true;
       });
       return null;
     } else {
       // If that response was not OK, throw an error.
-      noteDataLoaded = true;
       return null;
     }
   }
 
   @override
   initState() {
-     super.initState();
+    super.initState();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
-      } else {
-        meetingDataLoaded = true;
-        noteDataLoaded = true;
       }
     });
-   
-    
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,49 +184,51 @@ class _DashboardState extends State<Dashboard>  {
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-            appBar: AppBar(
-              title: Text('Dashboard'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () async {
-                      NotesClass result = await showSearch(
-                          context: context, delegate: DataSearch(_notes));
-                          if(result!=null){
+          appBar: AppBar(
+            title: Text('Dashboard'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () async {
+                    NotesClass result = await showSearch(
+                        context: context, delegate: DataSearch(_notes));
+                    if (result != null) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => Detail(result.meetingUuid,
                                   result.meetingTitle, result.eventUuid)));
-                          }
-                    })
+                    }
+                    
+                  })
+            ],
+            bottom: TabBar(
+              indicatorColor: Colors.blue,
+              tabs: [
+                Tab(
+                  text: "Meetings",
+                ),
+                Tab(
+                  text: "Recent Notes",
+                )
               ],
-              bottom: TabBar(
-                indicatorColor: Colors.blue,
-                tabs: [
-                  Tab(
-                    text: "Meetings",
-                  ),
-                  Tab(
-                    text: "Recent Notes",
-                  )
-                ],
-              ),
             ),
-            drawer: Dwidget(userToken),
-            body: Container(
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
-              ),
-              child: TabBarView(
-                children: <Widget>[
-                  AllMeetings(_meetings),
-                  RecentlyUpdated(_notes),
-                ],
-              ),
+          ),
+          drawer: Dwidget(userToken,_displayName,_profile_picture),
+          body: Container(
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                  image: AssetImage('assets/background.jpeg'),
+                  fit: BoxFit.cover),
             ),
+            child: TabBarView(
+              children: <Widget>[
+                AllMeetings(_meetings),
+                RecentlyUpdated(_notes),
+              ],
             ),
+          ),
+        ),
       ),
     );
   }

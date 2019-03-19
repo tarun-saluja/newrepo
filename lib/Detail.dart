@@ -17,11 +17,11 @@ import 'package:flutter/cupertino.dart';
 // import 'package:simple_permissions/simple_permissions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
-import 'package:memob/webView.dart';
 
 import './share.dart';
 import './dashboard.dart';
 import './attachmentListDialog.dart';
+import './webView.dart';
 import './cameraPage.dart';
 import './speechDialog.dart';
 
@@ -147,7 +147,6 @@ class _DetailState extends State<Detail> {
 
         noteLoaded = true;
         noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
-        print(noteText);
         finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
       });
     } else {
@@ -255,7 +254,11 @@ class _DetailState extends State<Detail> {
               backgroundColor: Colors.red,
               label: 'Capture',
               //labelStyle: TextTheme(fontSize: 18.0),
-              onTap: () => print('Capture')),
+              onTap: () => {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => new CameraPage(
+                            widget.meetingTitle, widget.meetingUuid)))
+                  }),
           SpeedDialChild(
             child: Icon(Icons.edit),
             backgroundColor: Colors.blue,
@@ -268,7 +271,11 @@ class _DetailState extends State<Detail> {
             backgroundColor: Colors.green,
             label: 'Record',
             //labelStyle: TextTheme(fontSize: 18.0),
-            onTap: () => print('Record'),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                   builder: (BuildContext context) =>
+                       new Speech(widget.meetingUuid)))
+            },
           ),
         ],
       ),
@@ -297,115 +304,119 @@ class _DetailState extends State<Detail> {
         //   //     image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
         // ),
         child: (noteText != null)
-            ? Column(mainAxisSize: MainAxisSize.max,crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                new Container(
-                  //padding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        padding:
-                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            //border: Border.all(color: Colors.grey, width: 1.0),
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Text('$finalDateTime'),
-                      ),
-                      Container(
-                        // decoration: BoxDecoration(
-                        //   color: Colors.white70,
-                        //   border: Border.all(color: Colors.blue, width: 1.0),
-                        //   borderRadius: BorderRadius.circular(20.0),
-                        // ),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                          onPressed: () {
-                            attachmentCount != 0
-                                ? showDialog(
-                                    context: context,
-                                    child: new AttachmentDialog(
-                                        widget.meetingUuid))
-                                : Fluttertoast.showToast(
-                                    msg: "No Attachment",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIos: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                          },
-                          color: Colors.white,
-                          child: Row(
-                            children: <Widget>[
-                              new Icon(
-                                Icons.attach_file,
-                                color: Colors.amber,
-                              ),
-                              Text(attachmentCount.toString()),
-                            ],
+            ? Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                    new Container(
+                      //padding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(
+                                20.0, 10.0, 20.0, 10.0),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                //border: Border.all(color: Colors.grey, width: 1.0),
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: Text('$finalDateTime'),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                // new Switch(),
+                          Container(
+                            // decoration: BoxDecoration(
+                            //   color: Colors.white70,
+                            //   border: Border.all(color: Colors.blue, width: 1.0),
+                            //   borderRadius: BorderRadius.circular(20.0),
+                            // ),
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              onPressed: () {
+                                attachmentCount != 0
+                                    ? showDialog(
+                                        context: context,
+                                        child: new AttachmentDialog(
+                                            widget.meetingUuid))
+                                    : Fluttertoast.showToast(
+                                        msg: "No Attachment",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIos: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                              },
+                              color: Colors.white,
+                              child: Row(
+                                children: <Widget>[
+                                  new Icon(
+                                    Icons.attach_file,
+                                    color: Colors.amber,
+                                  ),
+                                  Text(attachmentCount.toString()),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    // new Switch(),
 
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                  margin: new EdgeInsets.all(10.0),
-                  height: height * 0.75,
-                  width: width,
-                  decoration: BoxDecoration(
-                      color: Colors.white70,
-                      //border: Border.all(color: Colors.green, width: 1.0),
-                      borderRadius: BorderRadius.circular(5.0),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.white70,
-                            blurRadius: 10.0,
-                            spreadRadius: 1.0),
-                      ]),
-                 child: ListView(children: <Widget>[
+                    Container(
+                      padding:
+                          const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      margin: new EdgeInsets.all(10.0),
+                      height: height * 0.75,
+                      width: width,
+                      decoration: BoxDecoration(
+                          color: Colors.white70,
+                          //border: Border.all(color: Colors.green, width: 1.0),
+                          borderRadius: BorderRadius.circular(5.0),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.white70,
+                                blurRadius: 10.0,
+                                spreadRadius: 1.0),
+                          ]),
+                      child: ListView(
+                        children: <Widget>[
+                          Text(
+                            '$noteText',
+                            style:
+                                TextStyle(fontSize: 15.0, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                Text(
-                  '$noteText',
-                  style: TextStyle(fontSize: 15.0, color: Colors.black),
-                ),
+                    // Expanded(
+                    //   child:
+                    // new Expanded(
+                    //     flex: 1,
+                    //     child: new SingleChildScrollView(
+                    //       child: Card(
+                    //         child: Text(
+                    //           '$noteText',
+                    //           style: TextStyle(fontSize: 15.0, color: Colors.black),
+                    //         ),
+                    //       ),
+                    //     )),
 
-                    ],
-                  ),
-                ),
-
-                // Expanded(
-                //   child:
-                // new Expanded(
-                //     flex: 1,
-                //     child: new SingleChildScrollView(
-                //       child: Card(
-                //         child: Text(
-                //           '$noteText',
-                //           style: TextStyle(fontSize: 15.0, color: Colors.black),
-                //         ),
-                //       ),
-                //     )),
-
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: <Widget>[
-                //     Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                //     child: TextEditorButton(onPressed: onChangedValue4),)
-                //   ],
-                // ),
-                // Text(
-                //         '$noteText',
-                //         style: TextStyle(fontSize: 18.0, color: Colors.black),
-                //       ),
-                // ]))
-              ])
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: <Widget>[
+                    //     Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    //     child: TextEditorButton(onPressed: onChangedValue4),)
+                    //   ],
+                    // ),
+                    // Text(
+                    //         '$noteText',
+                    //         style: TextStyle(fontSize: 18.0, color: Colors.black),
+                    //       ),
+                    // ]))
+                  ])
             : Center(child: CircularProgressIndicator()),
       ),
       // bottomNavigationBar: BottomNavigationBar(

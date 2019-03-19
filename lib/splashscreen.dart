@@ -20,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   
   startTime() async {
-    var _duration = new Duration(seconds: 3);
+    var _duration = new Duration(seconds: 5);
     return new Timer(_duration, navigationPage);
   }
 
@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     bottom: 0.0,
                     left: 0.0,
                     right: 0.0,
-                    child: new Image.asset('assets/meetnotes_icon.png'),
+                    child: new Image.asset('assets/meetnotes_icon.png',),
                   ),
                 ],
               ),

@@ -12,7 +12,9 @@ import './webView.dart';
 
 class Dwidget extends StatefulWidget {
   final String userToken;
-  Dwidget([this.userToken]);
+  String displayName;
+  String profile_picture;
+  Dwidget([this.userToken,this.displayName,this.profile_picture]);
   @override
   State<StatefulWidget> createState() {
     return _DwidgetState();
@@ -21,6 +23,8 @@ class Dwidget extends StatefulWidget {
 
 class _DwidgetState extends State<Dwidget> {
   String userToken1;
+  String displayName;
+  String profile_picture;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
   //MyInAppBrowser inAppBrowser = new MyInAppBrowser();
@@ -49,6 +53,8 @@ class _DwidgetState extends State<Dwidget> {
   void initState() {
     super.initState();
     userToken1 = widget.userToken;
+    displayName=widget.displayName;
+    profile_picture=widget.profile_picture;
   }
 
   @override
@@ -85,51 +91,20 @@ class _DwidgetState extends State<Dwidget> {
                     builder: (context) => Dashboard(),
                   ));
             },
-            leading: const Icon(Icons.dashboard),
+            // leading: const Icon(Icons.dashboard),
+            leading: Image.asset('assets/dashboard.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Dashboard"),
           ),
           new ListTile(
-            // onTap: () async {
-            //   String url =
-            //       "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/";
-            //   //CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
-            //   await inAppBrowser.open(
-            //       url:
-            //           "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/",
-            //       options: {
-            //         "useShouldOverrideUrlLoading": true,
-            //         "useOnLoadResource": true,
-            //         "hideTitleBar": false,
-            //       });
-            // },
-            // onTap: () {
-            //   Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => WebviewTest(),
-            //       ));
-            // },
-            leading: const Icon(Icons.group_work),
+            leading: Image.asset('assets/meetings.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Meetings"),
+            
           ),
           new ListTile(
-            // onTap: () {
-            //   Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => WebView(
-            //               initialUrl:
-            //                   'https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/',
-            //               javascriptMode: JavascriptMode.unrestricted,
-            //               onWebViewCreated: (WebViewController wvc) {
-            //                 //_onAddCookies(context);
-            //                 wvc.evaluateJavascript('document.cookie = "sessionid=1etsh16q7x3hpl5en89nszcgsfnt00j6;');
-            //                 //wvc.evaluateJavascript('window.location.href="www.google.com"');
-            //               },
-            //             ),
-            //       ));
-            // },
-            leading: const Icon(Icons.note),
+            leading:  Image.asset('assets/notes.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Notes"),
           ),
           new ListTile(
@@ -140,12 +115,14 @@ class _DwidgetState extends State<Dwidget> {
                     builder: (context) => ActionItems(),
                   ));
             },
-            leading: const Icon(Icons.call_to_action),
+            leading: Image.asset('assets/action_items.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Action Items"),
           ),
           new Container(
             child: ExpansionTile(
-              leading: Icon(Icons.group),
+              leading: Image.asset('assets/team.png',width: 30.0,
+                    height: 30.0,),
               title: Text("Teams"),
               children: <Widget>[_buildTeamNames()],
             ),
@@ -158,15 +135,32 @@ class _DwidgetState extends State<Dwidget> {
                     builder: (context) => Settings(),
                   ));
             },
-            leading: const Icon(Icons.settings),
+            leading:  Image.asset('assets/settings.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Settings"),
           ),
           new ListTile(
-            leading: const Icon(Icons.person),
-            title: new Text("User"),
+            leading: (profile_picture != null)?
+            ( 
+                    CircleAvatar(
+                                backgroundImage:
+                                    AssetImage(profile_picture),
+                              )
+                    
+                    ):
+                    (
+                     CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/blank_user.jpeg'),
+                              )
+                    
+                    ),
+                    
+            title: new Text(displayName),
           ),
           new ListTile(
-            leading: const Icon(Icons.exit_to_app),
+            leading: Image.asset('assets/logout.png',width: 30.0,
+                    height: 30.0,),
             title: new Text("Logout"),
             onTap: () async {
               utilities.removeToken().then((result) {

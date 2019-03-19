@@ -72,12 +72,20 @@ flutter:
   assets:
     - assets/girl.jpeg
     - assets/google.png
-    - assets/people.jpg
     - assets/meetnotes_icon.png
     - assets/signup_bg.png
     - assets/art.jpg
     - background.jpeg
     - blank_user.jpeg
+    - assets/meetn.png
+    - dashboard.png
+    - meetings.png
+    - notes.png
+    - settings.png
+    - team.png
+    - action_items.png
+    - logout.png
+    - filter.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
