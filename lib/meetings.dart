@@ -105,6 +105,7 @@ class Meetings extends StatelessWidget {
     Widget meetingCard = Center(
       child: CircularProgressIndicator(),
     );
+   
     if (meetings.length > 0) {
 
         meetingCard = GridView.builder(
