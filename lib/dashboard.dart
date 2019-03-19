@@ -223,8 +223,8 @@ class _DashboardState extends State<Dashboard> {
             ),
             child: TabBarView(
               children: <Widget>[
-                AllMeetings(_meetings,_connectionStatus),
-                RecentlyUpdated(_notes),
+                new RefreshIndicator(child:AllMeetings(_meetings),onRefresh: getMeetingData),
+                new RefreshIndicator(child:RecentlyUpdated(_notes),onRefresh: getRecentNotes)
               ],
             ),
           ),

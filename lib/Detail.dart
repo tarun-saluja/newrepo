@@ -107,7 +107,7 @@ class _DetailState extends State<Detail> {
     token.then((value) {
       if (value != null) {
         userToken = value;
-        getRecentNotes(value);
+        getRecentNotes();
         getRecentNotesCount(value);
       } else {
         utilities.showLongToast(value);
@@ -115,12 +115,12 @@ class _DetailState extends State<Detail> {
     });
   }
 
-  Future<String> getRecentNotes(String token) async {
+  Future<String> getRecentNotes() async {
     final response = await http.get(
         Uri.encodeFull(
             'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
           HttpHeaders.ACCEPT: 'application/json',
           HttpHeaders.CACHE_CONTROL: 'no-cache'
@@ -386,7 +386,9 @@ class _DetailState extends State<Detail> {
                           ]),
                       child: ListView(
                         children: <Widget>[
-                          ((noteText != null)
+                          new RefreshIndicator(
+                            child:
+                            ((noteText != null)
                               ? Text(
                                   '$noteText',
                                   style: TextStyle(
@@ -414,6 +416,8 @@ class _DetailState extends State<Detail> {
                                       )
                                     ],
                                   )))),
+                            onRefresh: getRecentNotes)
+                          
                         ],
                       ),
                     ),
