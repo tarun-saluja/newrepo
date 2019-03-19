@@ -17,18 +17,16 @@ class Meetings extends StatelessWidget {
     var isUpcoming =
         DateTimeFormatter.isUpcomingMeeting(meetings[index].startTime);
 
-    return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,  
-    children: <Widget>[
-     (index == 0) ? ((Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white,fontSize: 18),)))
-     :(index!=0 && DateTimeFormatter.getDate(meetings[index].startTime) != DateTimeFormatter.getDate(meetings[index-1].startTime)) ?
-     (Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white, fontSize: 18),)
-     ) 
-     :(Text('',style: TextStyle(fontSize: 18))),
+    return Container(
+    //crossAxisAlignment: CrossAxisAlignment.stretch,  
+    //  (index == 0) ? ((Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white,fontSize: 18),)))
+    //  :(index!=0 && DateTimeFormatter.getDate(meetings[index].startTime) != DateTimeFormatter.getDate(meetings[index-1].startTime)) ?
+    //  (Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white, fontSize: 18),)
+    //  ) 
+    //  :(Text('',style: TextStyle(fontSize: 18))),
      
-     Container(
-      margin: new EdgeInsets.all(0.0),
-      child: GestureDetector(
+     
+      child :GestureDetector(
         onTap: () {
           Navigator.push(
               context,
@@ -93,9 +91,7 @@ class Meetings extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    )
-    ],
+      )
     );
   }
 
@@ -111,7 +107,7 @@ class Meetings extends StatelessWidget {
         meetingCard = GridView.builder(
           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1.35),
+              childAspectRatio: 1.5),
           itemBuilder: _buildMeetingItem,
           itemCount: meetings.length,
         );
