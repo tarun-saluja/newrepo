@@ -174,6 +174,8 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Color.fromRGBO(31, 47, 69, 1.0),
         body: new Container(
@@ -190,15 +192,15 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                   fit: StackFit.expand,
                   children: <Widget>[
                     Positioned(
-                      top: 560.0,
-                      bottom:110.0,
-                      left: 60.0,
-                      right: 50.0,
+                      top: height * 0.8,
+                      bottom:height*0.1,
+                      left: width* 0.1,
+                      right:width* 0.1,
                       child: new RaisedButton.icon(
                           onPressed: _launchLoginUrl,
                           icon: new Image.asset(
                             'assets/google.png',
-                            height: 60,
+                            height: 50,
                             width: 50,
                           ),
                           label: new Text('Sign up with Google',
