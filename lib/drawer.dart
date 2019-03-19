@@ -85,11 +85,10 @@ class _DwidgetState extends State<Dwidget> {
           ),
           new ListTile(
             onTap: () {
-              Navigator.push(
+              Navigator.popUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Dashboard(),
-                  ));
+                  ModalRoute.withName('Dashboard')
+                  );
             },
             // leading: const Icon(Icons.dashboard),
             leading: Image.asset('assets/dashboard.png',width: 30.0,
@@ -109,7 +108,7 @@ class _DwidgetState extends State<Dwidget> {
           ),
           new ListTile(
             onTap: () {
-              Navigator.push(
+             Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ActionItems(),

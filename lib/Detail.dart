@@ -53,6 +53,7 @@ class _DetailState extends State<Detail> {
   bool emptyAttachment = false;
 
   String noteText;
+  String title;
   List<String> attendeesEmail;
   String rawHtml;
   String delta;
@@ -131,11 +132,14 @@ class _DetailState extends State<Detail> {
 
         List<dynamic> rawNote = data['raw_note'];
         List<dynamic> attendees = data['attendees'];
-        rawHtml = data['raw_note'][0]['raw_html'];
-        delta = data['raw_note'][0]['delta'];
-
-        print(rawHtml);
-        print(delta);
+        title = data['title'];
+        if (data['raw_note'] != null && rawNote.length != 0) {
+          rawHtml = data['raw_note'][0]['raw_html'];
+          delta = data['raw_note'][0]['delta'];
+          noteText = data['raw_note'][0]['body'];
+        }
+        // print(rawHtml);
+        // print(delta);
         attendeesEmail = new List();
 
         for (int i = 0; i < attendees.length; i++) {
@@ -146,7 +150,7 @@ class _DetailState extends State<Detail> {
         print(attendeesEmail);
 
         noteLoaded = true;
-        noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
+        // noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
         finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
       });
     } else {
@@ -272,10 +276,10 @@ class _DetailState extends State<Detail> {
             label: 'Record',
             //labelStyle: TextTheme(fontSize: 18.0),
             onTap: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                       new Speech(widget.meetingUuid)))
-            },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          new Speech(widget.meetingUuid)))
+                },
           ),
         ],
       ),
@@ -303,8 +307,8 @@ class _DetailState extends State<Detail> {
         //   // image: new DecorationImage(
         //   //     image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
         // ),
-        child: (noteText != null)
-            ? Column(
+        child: (title != null)
+            ? (Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -381,11 +385,34 @@ class _DetailState extends State<Detail> {
                           ]),
                       child: ListView(
                         children: <Widget>[
-                          Text(
-                            '$noteText',
-                            style:
-                                TextStyle(fontSize: 15.0, color: Colors.black),
-                          ),
+                          ((noteText != null)
+                              ? Text(
+                                  '$noteText',
+                                  style: TextStyle(
+                                      fontSize: 15.0, color: Colors.black),
+                                )
+                              : (Container(
+                                  margin: EdgeInsets.fromLTRB(0,height* .180, 0, 0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/empty.png',
+                                        height: 200,
+                                        width: 200,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text('Start taking Notes',style: TextStyle(color: Colors.grey,fontSize: 15),),
+                                          IconButton(
+                                            icon: Icon(Icons.mode_edit),
+                                            color: Colors.blue,
+                                            onPressed: onChangedValue4,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  )))),
                         ],
                       ),
                     ),
@@ -416,7 +443,7 @@ class _DetailState extends State<Detail> {
                     //         style: TextStyle(fontSize: 18.0, color: Colors.black),
                     //       ),
                     // ]))
-                  ])
+                  ]))
             : Center(child: CircularProgressIndicator()),
       ),
       // bottomNavigationBar: BottomNavigationBar(
