@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
-import 'package:memob/updatedAtFormatter.dart' as UpdateAtFormatter;
-
 import './meetingClass.dart';
 import './Detail.dart';
 
 class Meetings extends StatelessWidget {
   List<MeetingClass> meetings;
   Meetings([this.meetings]);
+
   Widget _buildMeetingItem(BuildContext context, int index) {
     var today = DateFormat.yMd().format(new DateTime.now());
     var meetingDay =
@@ -18,7 +17,16 @@ class Meetings extends StatelessWidget {
     var isUpcoming =
         DateTimeFormatter.isUpcomingMeeting(meetings[index].startTime);
 
-    return Container(
+    return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,  
+    children: <Widget>[
+     (index == 0) ? ((Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white,fontSize: 18),)))
+     :(index!=0 && DateTimeFormatter.getDate(meetings[index].startTime) != DateTimeFormatter.getDate(meetings[index-1].startTime)) ?
+     (Text(' ${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white, fontSize: 18),)
+     ) 
+     :(Text('',style: TextStyle(fontSize: 18))),
+     
+     Container(
       margin: new EdgeInsets.all(0.0),
       child: GestureDetector(
         onTap: () {
@@ -59,7 +67,7 @@ class Meetings extends StatelessWidget {
                                     fontSize: 12.0, color: Colors.white),
                               ))
                         : Text(
-                            '${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white),)),
+                            '${DateTimeFormatter.getDate(meetings[index].startTime)}',style: TextStyle(color: Colors.white,fontSize: 12.0,),)),
                 Text(
                   meetings[index].title,
                   overflow: TextOverflow.ellipsis,
@@ -67,7 +75,7 @@ class Meetings extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                      color: Colors.black54),
                 ),
                 Text(
                   '${DateTimeFormatter.getTime(meetings[index].startTime)}',
@@ -78,6 +86,8 @@ class Meetings extends StatelessWidget {
           ),
         ),
       ),
+    )
+    ],
     );
   }
 
@@ -88,13 +98,16 @@ class Meetings extends StatelessWidget {
       child: CircularProgressIndicator(),
     );
     if (meetings.length > 0) {
-       meetingCard = GridView.builder(
-        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.5),
-        itemBuilder: _buildMeetingItem,
-        itemCount: meetings.length,
-      );
+
+        meetingCard = GridView.builder(
+          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.35),
+          itemBuilder: _buildMeetingItem,
+          itemCount: meetings.length,
+        );
+
+      
     }
     return meetingCard;
   }

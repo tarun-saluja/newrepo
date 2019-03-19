@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
 import 'package:memob/login.dart';
+import 'package:memob/settings.dart';
 import 'package:memob/splashscreen.dart';
 import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +25,16 @@ void main() {
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new Dashboard();
   }));
+
+  router.define('ActionItems', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new ActionItems();
+  }));
+
+  // router.define('Settings', handler: new Handler(
+  //     handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+  //   return new Settings();
+  // }));
 
   runApp(new MaterialApp(
       theme: ThemeData(

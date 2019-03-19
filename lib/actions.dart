@@ -101,11 +101,13 @@ class _Actions extends State<Actions> {
                         allActions[index].profilePicture != null
                             ? (CircleAvatar(
                                 backgroundImage: NetworkImage(
-                                    allActions[index].profilePicture),
+                                    allActions[index].profilePicture,),
+                                    maxRadius: 17,
                               ))
                             : (CircleAvatar(
                                 backgroundImage:
                                     AssetImage('assets/blank_user.jpeg'),
+                                    maxRadius: 17,
                               )),
                         Text('  '),
                         Column(
@@ -158,17 +160,21 @@ class _Actions extends State<Actions> {
                 ]),
             Container(
               margin: EdgeInsets.fromLTRB(12, 0, 20, 0),
-              child: Column(children: <Widget>[    
-              Align(
-                alignment: Alignment.centerLeft,
-              child: Container(
-                child: Text(
-                  allActions[index].note,
-                  style: TextStyle(color: Colors.black),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),)
-              ],),
+              child: Row(
+                children: <Widget>[
+                  Column(children: <Widget>[    
+                  Align(
+                    alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                      allActions[index].note,
+                      style: TextStyle(color: Colors.black54),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),)
+                  ],),
+                ],
+              ),
             )
           ],
         ),
