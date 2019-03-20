@@ -210,7 +210,7 @@ class _DetailState extends State<Detail> {
   void onChangedValue4() {
     String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
     CookieManager.setCookie(
-        url, 'sessionid', 'vbi9r3skam36mc4c3z203wahmseygqee;');
+        url, 'sessionid', 'vbi9r3skam36mc4c3z203wahmseygqee;'); 
     inAppBrowser.open(
         url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
         options: {
