@@ -109,17 +109,18 @@ class _Settings extends State<Settings> {
   Future<Null> inviteMember(Map body) async {
     var data = json.encode(body);
     print(data);
-    var response =
-        await http.post('',
-            headers: {
-              HttpHeaders.AUTHORIZATION: 'Token $userToken',
-              HttpHeaders.CONTENT_TYPE: 'application/json',
-              HttpHeaders.ACCEPT: 'application/json',
-              HttpHeaders.CACHE_CONTROL: 'no-cache',
-              HttpHeaders.COOKIE: 'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn; csrftoken=Rc56oTojXV1N3cKEdV1ImYXxOTfb4pVi;',
-              HttpHeaders.REFERER: 'https://app.meetnotes.co/settings/teams/members/'
-            },
-            body: data);
+    var response = await http.post('',
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache',
+          HttpHeaders.COOKIE:
+              'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn; csrftoken=Rc56oTojXV1N3cKEdV1ImYXxOTfb4pVi;',
+          HttpHeaders.REFERER:
+              'https://app.meetnotes.co/settings/teams/members/'
+        },
+        body: data);
     print(response.statusCode);
     print("jnnl");
   }
@@ -287,12 +288,10 @@ class _Settings extends State<Settings> {
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.black)
-                                    )
-                              ),
-                              onSaved: (String value) {
-                                  this.aliasEmail = value;
-                              },
+                                        BorderSide(color: Colors.black))),
+                            onSaved: (String value) {
+                              this.aliasEmail = value;
+                            },
                           ),
                           RaisedButton(
                             child: Text('+Add Another Aliases'),
@@ -305,34 +304,34 @@ class _Settings extends State<Settings> {
                           )
                         ])))))
                     : (Container(
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: InviteMembers(userToken),
-                          ),
-                          TextFormField(
-                            controller: inviteController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black)
-                                    )
-                              ),
-                          ),
-                          RaisedButton(
-                            child: Text('Invite Members'),
-                            color: Colors.blue,
-                            onPressed: () {
-                              //List<String> members= new List();
-                              //members.add(inviteController.text);
-                              String email = inviteController.text;
-                              Map body = {"email": [ email ]};
-                              inviteMember(body);
-                            },
-                          )
-                        ],
-                      ),
-                    )))
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: InviteMembers(userToken),
+                            ),
+                            TextFormField(
+                              controller: inviteController,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black))),
+                            ),
+                            RaisedButton(
+                              child: Text('Invite Members'),
+                              color: Colors.blue,
+                              onPressed: () {
+                                //List<String> members= new List();
+                                //members.add(inviteController.text);
+                                String email = inviteController.text;
+                                Map body = {
+                                  "email": [email]
+                                };
+                                inviteMember(body);
+                              },
+                            )
+                          ],
+                        ),
+                      )))
             : (Center(
                 child: CircularProgressIndicator(),
               )));
@@ -351,8 +350,7 @@ class _Settings extends State<Settings> {
         profileInformation = false;
         aliases = true;
       });
-    }
-    else if(choice ==SettingFilters.InviteMembers) {
+    } else if (choice == SettingFilters.InviteMembers) {
       setState(() {
         profileInformation = false;
         aliases = false;
@@ -364,11 +362,13 @@ class _Settings extends State<Settings> {
 class SettingFilters {
   static const String ProfileInformation = 'Profile Information';
   static const String Aliases = 'Aliases';
-   static const String InviteMembers = 'Invite Members';
+  static const String InviteMembers = 'Invite Members';
+
   // static const String RecentlyClosed = 'Recently Closed';
 
   static const List<String> choices = <String>[
     ProfileInformation,
     Aliases,
-    InviteMembers];
+    InviteMembers
+  ];
 }

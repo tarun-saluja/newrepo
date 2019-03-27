@@ -20,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   
   startTime() async {
-    var _duration = new Duration(seconds: 5);
+    var _duration = new Duration(seconds: 30);
     return new Timer(_duration, navigationPage);
   }
 
@@ -48,20 +48,28 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return new Scaffold(
         body:
-        LayoutBuilder(
-          builder: (context, constraints) =>
-              Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Positioned(
-                    top: 0.0,
-                    bottom: 0.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: new Image.asset('assets/meetnotes_icon.png',),
-                  ),
-                ],
-              ),
+        new Container(
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+              image: new AssetImage('assets/connectwork.png'),
+            ),
+          ),
+          child:
+          LayoutBuilder(
+            builder: (context, constraints) =>
+                Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Positioned(
+                      top: 0.0,
+                      bottom: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: new Image.asset('assets/meetnotes_icon.png',),
+                    ),
+                  ],
+                ),
+          ),
         ),
         );
   }
