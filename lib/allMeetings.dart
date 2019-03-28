@@ -42,15 +42,17 @@ class _AllMeetingsState extends State<AllMeetings> {
     //     initial = i;
         return Column(
           children: <Widget>[
-            // Container(
-            //   child: Text(
-            //     'hello',
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            // ),
-            Expanded(
-              child: Meetings(_meetings),
-            )
+//             Container(
+//               child: Text(
+//                 'hello',
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ),
+
+               Expanded(
+                child: Meetings(_meetings),
+              ),
+
           ],
         );
   //     }

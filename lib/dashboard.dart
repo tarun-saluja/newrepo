@@ -186,30 +186,22 @@ class _DashboardState extends State<Dashboard> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Dashboard'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () async {
-                    NotesClass result = await showSearch(
-                        context: context, delegate: DataSearch(_notes));
-                    if (result != null) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Detail(result.meetingUuid,
-                                  result.meetingTitle, result.eventUuid)));
-                    }
-                    
-                  })
-            ],
+
             bottom: TabBar(
               indicatorColor: Colors.blue,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 4.0,
+//              indicatorPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
               tabs: [
                 Tab(
-                  text: "Meetings",
+                  text: " All Meetings",
                 ),
+
                 Tab(
                   text: "Recent Notes",
+                ),
+                Tab(
+                  text: "",
                 )
               ],
             ),

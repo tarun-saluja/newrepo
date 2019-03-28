@@ -20,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   
   startTime() async {
-    var _duration = new Duration(seconds: 30);
+    var _duration = new Duration(seconds: 5);
     return new Timer(_duration, navigationPage);
   }
 
@@ -51,7 +51,8 @@ class _SplashScreenState extends State<SplashScreen> {
         new Container(
           decoration: new BoxDecoration(
             image: new DecorationImage(
-              image: new AssetImage('assets/connectwork.png'),
+              image: new AssetImage('assets/splash_background.png'),
+              fit: BoxFit.cover,
             ),
           ),
           child:
@@ -71,6 +72,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
           ),
         ),
+
+
         );
   }
 }

@@ -37,6 +37,7 @@ void main() {
   // }));
 
   runApp(new MaterialApp(
+    debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.white,
         //brightness: Brightness.dark

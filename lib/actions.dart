@@ -60,13 +60,13 @@ class _Actions extends State<Actions> {
  else createdAt = "just now";
 
     return Container(
-      height: 100,
+      height: 130,
       // decoration: BoxDecoration(
       //   color: Colors.white70,
       //   border: new Border.all(color: Colors.blue, width: 1.0),
       //   borderRadius: new BorderRadius.circular(5.0),
       // ),
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.fromLTRB(0.0,6.0,0.0,0.0),
       child:GestureDetector(
       onTap: () {
         showDialog(
@@ -94,7 +94,7 @@ class _Actions extends State<Actions> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.all(10.0),                    
+                    margin: EdgeInsets.fromLTRB(15.0,15.0,10.0,10.0),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -103,6 +103,7 @@ class _Actions extends State<Actions> {
                                 backgroundImage: NetworkImage(
                                     allActions[index].profilePicture,),
                                     maxRadius: 17,
+
                               ))
                             : (CircleAvatar(
                                 backgroundImage:
@@ -117,16 +118,16 @@ class _Actions extends State<Actions> {
                             ? Text( 
                                 assignees[index]['display_name'],
                                 style: TextStyle(
-                                    fontSize: 15.0,
+                                    fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black45),
+                                    color: Colors.black87),
                               )
                             : Text('No Assignee',
                                 style: TextStyle(
-                                    fontSize: 15.0,
+                                    fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black45)),
-                            Text(createdAt, style: TextStyle(color: Colors.grey, fontSize: 10),)
+                                    color: Colors.black54)),
+                            Text(createdAt, style: TextStyle(color: Colors.grey, fontSize: 12),)
                             ],)
                       ]
                       )
@@ -137,9 +138,9 @@ class _Actions extends State<Actions> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
                           color: (allActions[index].status == 'pending')
-                              ? Colors.blue[400]
+                              ? Colors.pink
                               : (allActions[index].status == 'doing'
-                                  ? Colors.yellow[400]
+                                  ? Colors.blue[400]
                                   : Colors.green[400])),
                       child: Text(allActions[index].status, style: TextStyle(color: Colors.white),),
                     ),
@@ -159,7 +160,7 @@ class _Actions extends State<Actions> {
                   ])
                 ]),
             Container(
-              margin: EdgeInsets.fromLTRB(12, 0, 20, 0),
+              margin: EdgeInsets.fromLTRB(18, 2.0, 30, 0),
               child:
                   Column(children: <Widget>[    
                   Align(
@@ -167,8 +168,8 @@ class _Actions extends State<Actions> {
                   child: Container(
                     child: Text(
                       allActions[index].note,
-                      style: TextStyle(color: Colors.black54),
-                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.black54,fontSize: 15),
+                      overflow: TextOverflow.visible,
                     ),
                   ),)
                   ],),

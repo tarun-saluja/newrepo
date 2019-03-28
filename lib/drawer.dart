@@ -60,11 +60,12 @@ class _DwidgetState extends State<Dwidget> {
   @override
   Widget build(BuildContext context) {
     return new Drawer(
+//      backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
       child: new ListView(
         children: <Widget>[
           new Container(
             child: Container(
-              margin: EdgeInsets.fromLTRB(30, 50, 50, 50),
+              margin: EdgeInsets.fromLTRB(10, 35, 50, 50),
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -109,21 +110,7 @@ class _DwidgetState extends State<Dwidget> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
-            child: new ListTile(
-              leading: Image.asset(
-                'assets/meetings.png',
-                width: 25.0,
-                height: 25.0,
-              ),
-              title: new Text("Meetings",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
+
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
             child: new ListTile(
@@ -173,7 +160,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("Action Items",
+              title: new Text("Action",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -181,13 +168,14 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           new Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(30, 30, 70, 0),
             child: ExpansionTile(
               leading: Image.asset(
                 'assets/team.png',
-                width: 25.0,
-                height: 25.0,
+                width: 30.0,
+                height: 30.0,
               ),
+
               title: Text("Team",
                   style: TextStyle(
                       fontSize: 18,
@@ -198,7 +186,7 @@ class _DwidgetState extends State<Dwidget> {
           ),
           new Divider(color: Colors.white,height: 50,),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(30, 120, 70, 0),
             child: new ListTile(
               onTap: () {
                 Navigator.push(
@@ -211,16 +199,17 @@ class _DwidgetState extends State<Dwidget> {
                 'assets/settings.png',
                 width: 25.0,
                 height: 25.0,
+                color: Colors.black12,
               ),
               title: new Text("Settings",
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black38,
+                      color: Colors.black12,
                       fontWeight: FontWeight.w400)),
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(30, 20, 70, 0),
             child: new ListTile(
                 leading: (profile_picture != null)
                     ? (CircleAvatar(
@@ -277,7 +266,12 @@ class _DwidgetState extends State<Dwidget> {
               (BuildContext context, AsyncSnapshot<List<TeamClass>> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               for (var i = 0; i < snapshot.data.length; i++) {
-                return Center(child: Text(snapshot.data[i].name));
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 6.0),
+                  child: Center(
+                      child: Text(snapshot.data[i].name)
+                  ),
+                );
               }
             } else {
               return Center(child: CircularProgressIndicator());

@@ -302,7 +302,7 @@ class _DetailState extends State<Detail> {
         ],
       ),
       body: Container(
-        color: Color.fromRGBO(214, 228, 238, 100),
+//        color: Color.fromRGBO(214, 228, 238, 100),
         padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
         // decoration: new BoxDecoration(
         //   // image: new DecorationImage(
@@ -326,6 +326,9 @@ class _DetailState extends State<Detail> {
                                 //border: Border.all(color: Colors.grey, width: 1.0),
                                 borderRadius: BorderRadius.circular(20.0)),
                             child: Text('$finalDateTime'),
+                          ),
+                          Container(
+
                           ),
                           Container(
                             // decoration: BoxDecoration(

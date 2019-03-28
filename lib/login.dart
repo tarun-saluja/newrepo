@@ -177,41 +177,95 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Color.fromRGBO(31, 47, 69, 1.0),
+        backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
         body: new Container(
+          transform: Matrix4.translationValues(0.0, -180.0, 0.0),
           decoration: new BoxDecoration(
             image: new DecorationImage(
               image: new AssetImage(
                 "assets/signup_bg.png",
               ),
-              fit: BoxFit.cover,
             ),
           ),
-          child: LayoutBuilder(
+          child:
+           LayoutBuilder(
             builder: (context, constraints) => Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    Positioned(
-                      top: height * 0.8,
-                      bottom:height*0.1,
-                      left: width* 0.1,
-                      right:width* 0.1,
-                      child: new RaisedButton.icon(
-                          onPressed: _launchLoginUrl,
-                          icon: new Image.asset(
-                            'assets/google.png',
-                            height: 50,
-                            width: 50,
-                          ),
-                          label: new Text('Sign up with Google',
-                              style: new TextStyle(
-                                fontSize: 20.0,
-                              )),
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0))),
+              fit: StackFit.expand,
+              children: <Widget>[Padding(
+                padding: const EdgeInsets.fromLTRB(30.0,480.0,150.0,00.0),
+                child: new Text("Make it Large",style: TextStyle(fontSize: 50.0,color: Colors.white)),
+              ),
+
+                Positioned(
+                  top: 630.0,
+                  bottom:85.0,
+                  left: width* 0.05,
+                  right:width* 0.22,
+                  child: new RaisedButton.icon(
+                        onPressed: _launchLoginUrl,
+                        icon: new Image.asset(
+                          'assets/google.png',
+                          height: 50,
+                          width: 50,
+                        ),
+                        label: new Text('Sign up with Google',
+                            style: new TextStyle(
+                              fontSize: 20.0,
+                            )),
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(40.0))),
+                  ),
+              Container(
+                padding: EdgeInsets.fromLTRB(20.0, 710.0, 250.0, 20.0),
+//                top: 710.0,
+//                bottom:20.0,
+//                left: 20.0,
+//                right: 250.0,
+
+                child: new RaisedButton.icon(
+                  color: Colors.red,
+                    onPressed: _launchLoginUrl,
+                    icon: new Image.asset(
+                      'assets/google.png',
+                      height: 50,
+                      width: 50,
                     ),
-                  ],
-                ),
+                    label: new Text('Slack',
+                        style: new TextStyle(
+                          fontSize: 20.0,
+                        )),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(40.0))),
+              ),
+
+              Positioned(
+                top: 710.0,
+                bottom:20.0,
+                left: 180.0,
+                right: 94.0,
+                child: new RaisedButton.icon(
+                    color: Colors.red,
+                    onPressed: _launchLoginUrl,
+                    icon: new Image.asset(
+                      'assets/google.png',
+                      height: 40,
+                      width: 30,
+                    ),
+                    label: new Text('Office 365',
+                        style: new TextStyle(
+                          fontSize: 15.0,
+                        )),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(40.0))),
+              ),
+
+
+
+
+
+
+              ],
+            ),
           ),
           //  Column(
           //   mainAxisAlignment: MainAxisAlignment.center,
