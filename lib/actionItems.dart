@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:memob/actionClass.dart';
 import 'package:memob/actionManager.dart';
+import './constants.dart';
 import 'package:memob/drawer.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:memob/utilities.dart' as utilities;
@@ -17,7 +18,6 @@ class ActionItems extends StatefulWidget {
 }
 
 class _ActionItems extends State<ActionItems> {
-
   List<ActionClass> actions = new List();
   List assignees = new List();
   List meetings = new List();
@@ -39,14 +39,77 @@ class _ActionItems extends State<ActionItems> {
   List updatedMeetings = new List();
 
   List<ActionClass> myActions = new List();
-  List myAssignees =new List();
+  List myAssignees = new List();
   List myMeetings = new List();
 
   String userToken;
-  int  userID;
+  int userID;
   String displayName;
   String profile_picture;
   bool _connectionStatus = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('ACTION ITEMS'),
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                // icon: Icon(
+                //   Icons.filter
+                // ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/filter.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+                onSelected: choiceAction,
+                itemBuilder: (BuildContext context) {
+                  return Filters.choices.map((String filter) {
+                    return PopupMenuItem<String>(
+                      value: filter,
+                      child: Text(filter),
+                    );
+                  }).toList();
+                },
+              )
+            ],
+            bottom: TabBar(
+              indicatorColor: Colors.blue,
+              tabs: <Widget>[
+                Tab(
+                  text: 'All $action',
+                ),
+                Tab(
+                  text: 'My $action',
+                )
+              ],
+            ),
+          ),
+          drawer: Dwidget(userToken, displayName, profile_picture),
+          body: Container(
+            decoration: BoxDecoration(
+              image: new DecorationImage(
+                  image: AssetImage('assets/bg.png'), fit: BoxFit.cover),
+            ),
+            child: TabBarView(
+              children: <Widget>[
+                ActionManager(actions, meetings, assignees),
+                ActionManager(myActions, myMeetings, myAssignees)
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   final Connectivity _connectivity = new Connectivity();
 
   Future<bool> initConnectivity() async {
@@ -103,12 +166,12 @@ class _ActionItems extends State<ActionItems> {
 
         List<dynamic> list = mData['results'];
 
-        for(int i=0; i<list.length;i++) {
-        allAssignees.add( mData['results'][i]['assignee']);
+        for (int i = 0; i < list.length; i++) {
+          allAssignees.add(mData['results'][i]['assignee']);
         }
 
-        for(int i=0; i<list.length;i++) {
-        allMeetings.add( mData['results'][i]['meeting']);
+        for (int i = 0; i < list.length; i++) {
+          allMeetings.add(mData['results'][i]['meeting']);
         }
 
         for (var actionData in list) {
@@ -149,10 +212,10 @@ class _ActionItems extends State<ActionItems> {
           }
         }
         getUserDetails();
-        for(var i=0;i<allActions.length;i++){
-            actions.add(allActions[i]);
-            assignees.add(allAssignees[i]);
-            meetings.add(allMeetings[i]);
+        for (var i = 0; i < allActions.length; i++) {
+          actions.add(allActions[i]);
+          assignees.add(allAssignees[i]);
+          meetings.add(allMeetings[i]);
         }
         //getUserId();
       });
@@ -162,7 +225,7 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
-  
+
   Future<Null> getUserDetails() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
@@ -176,16 +239,16 @@ class _ActionItems extends State<ActionItems> {
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
-          userID= mData['user']['id'];
-          displayName= mData['user']['display_name'];
-          profile_picture=mData['user']['profile_picture'];
-        for(var i=0;i<allActions.length;i++){
-        if( allAssignees[i]!=null && allAssignees[i]['id']==userID){
+        userID = mData['user']['id'];
+        displayName = mData['user']['display_name'];
+        profile_picture = mData['user']['profile_picture'];
+        for (var i = 0; i < allActions.length; i++) {
+          if (allAssignees[i] != null && allAssignees[i]['id'] == userID) {
             myActions.add(allActions[i]);
             myAssignees.add(allAssignees[i]);
             myMeetings.add(allMeetings[i]);
+          }
         }
-      }
       });
       return null;
     } else {
@@ -193,77 +256,23 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
-  
+
   @override
   initState() {
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
-      } 
+      }
     });
     super.initState();
   }
+
   // ....................................................................
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('ACTION ITEMS'),
-            actions: <Widget>[
-              PopupMenuButton<String>(
-                // icon: Icon(
-                //   Icons.filter
-                // ),
-                child: Image.asset('assets/filter.png',width: 30,height: 30,),
-                onSelected: choiceAction,
-                itemBuilder: (BuildContext context) {
-                  return Filters.choices.map((String filter) {
-                    return PopupMenuItem<String>(
-                      value: filter,
-                      child: Text(filter),
-                    );
-                  }).toList();
-                },
-              )
-            ],
-            bottom: TabBar(
-              indicatorColor: Colors.blue,
-              tabs: <Widget>[
-                Tab(
-                  text: 'All Actions',
-                ),
-                Tab(
-                  text: 'My Actions',
-                )
-              ],
-            ),
-          ),
-          drawer: Dwidget(userToken,displayName,profile_picture),
-          body: Container(
-            decoration: BoxDecoration(
-              image: new DecorationImage(
-                image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
-            ),
-            child: TabBarView(
-              children: <Widget>[
-                ActionManager(actions,meetings,assignees),
-                ActionManager(myActions,myMeetings,myAssignees)
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
 
   Future<Null> getOpenActionsData() async {
     final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/?status__in=pending,doing'),
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v1/action-items/?status__in=pending,doing'),
         headers: {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
@@ -277,12 +286,12 @@ class _ActionItems extends State<ActionItems> {
 
         List<dynamic> list = mData['results'];
 
-        for(int i=0; i<list.length;i++) {
-        openAssignees.add( mData['results'][i]['assignee']);
+        for (int i = 0; i < list.length; i++) {
+          openAssignees.add(mData['results'][i]['assignee']);
         }
 
-        for(int i=0; i<list.length;i++) {
-        openMeetings.add( mData['results'][i]['meeting']);
+        for (int i = 0; i < list.length; i++) {
+          openMeetings.add(mData['results'][i]['meeting']);
         }
 
         for (var actionData in list) {
@@ -329,9 +338,11 @@ class _ActionItems extends State<ActionItems> {
       return null;
     }
   }
+
   Future<Null> getRecentlyUpdatedActionsData() async {
     final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at'),
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at'),
         headers: {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
@@ -345,12 +356,12 @@ class _ActionItems extends State<ActionItems> {
 
         List<dynamic> list = mData['results'];
 
-        for(int i=0; i<list.length;i++) {
-        updatedAssignees.add( mData['results'][i]['assignee']);
+        for (int i = 0; i < list.length; i++) {
+          updatedAssignees.add(mData['results'][i]['assignee']);
         }
 
-        for(int i=0; i<list.length;i++) {
-        updatedMeetings.add( mData['results'][i]['meeting']);
+        for (int i = 0; i < list.length; i++) {
+          updatedMeetings.add(mData['results'][i]['meeting']);
         }
 
         for (var actionData in list) {
@@ -400,7 +411,8 @@ class _ActionItems extends State<ActionItems> {
 
   Future<Null> getRecentlyClosedActionsData() async {
     final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at&status=done'),
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at&status=done'),
         headers: {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
@@ -414,12 +426,12 @@ class _ActionItems extends State<ActionItems> {
 
         List<dynamic> list = mData['results'];
 
-        for(int i=0; i<list.length;i++) {
-        closedAssignees.add( mData['results'][i]['assignee']);
+        for (int i = 0; i < list.length; i++) {
+          closedAssignees.add(mData['results'][i]['assignee']);
         }
 
-        for(int i=0; i<list.length;i++) {
-        closedMeetings.add( mData['results'][i]['meeting']);
+        for (int i = 0; i < list.length; i++) {
+          closedMeetings.add(mData['results'][i]['meeting']);
         }
 
         for (var actionData in list) {
@@ -461,70 +473,64 @@ class _ActionItems extends State<ActionItems> {
     }
   }
 
-
   void choiceAction(String choice) async {
-
-       actions.clear();
-      assignees.clear();
-      meetings.clear();
-      myActions.clear();
-      myAssignees.clear();
-      myMeetings.clear();
-    if(choice == Filters.Everything) {
-      this.setState((){
-          for(var i=0;i<allActions.length;i++){
-            actions.add(allActions[i]);
-            assignees.add(allAssignees[i]);
-            meetings.add(allMeetings[i]);
-            if(allAssignees[i]!=null && allAssignees[i]['id']==userID){
-              myActions.add(actions[i]);
-              myAssignees.add(assignees[i]);
-              myMeetings.add(meetings[i]);
+    actions.clear();
+    assignees.clear();
+    meetings.clear();
+    myActions.clear();
+    myAssignees.clear();
+    myMeetings.clear();
+    if (choice == Filters.Everything) {
+      this.setState(() {
+        for (var i = 0; i < allActions.length; i++) {
+          actions.add(allActions[i]);
+          assignees.add(allAssignees[i]);
+          meetings.add(allMeetings[i]);
+          if (allAssignees[i] != null && allAssignees[i]['id'] == userID) {
+            myActions.add(actions[i]);
+            myAssignees.add(assignees[i]);
+            myMeetings.add(meetings[i]);
+          }
         }
-      }
       });
-    }
-    else if(choice == Filters.OpenActions) {
-      this.setState((){
-          for(var i=0;i<openAllActions.length;i++){
-            actions.add(openAllActions[i]);
-            assignees.add(openAssignees[i]);
-            meetings.add(openMeetings[i]);
-            if(assignees[i]!=null && assignees[i]['id']==userID){
-              myActions.add(actions[i]);
-              myAssignees.add(assignees[i]);
-              myMeetings.add(meetings[i]);
+    } else if (choice == Filters.OpenActions) {
+      this.setState(() {
+        for (var i = 0; i < openAllActions.length; i++) {
+          actions.add(openAllActions[i]);
+          assignees.add(openAssignees[i]);
+          meetings.add(openMeetings[i]);
+          if (assignees[i] != null && assignees[i]['id'] == userID) {
+            myActions.add(actions[i]);
+            myAssignees.add(assignees[i]);
+            myMeetings.add(meetings[i]);
+          }
         }
-      }
       });
-    }
-    else if(choice == Filters.RecentlyUpdated)
-    {
-      this.setState((){
-          for(var i=0;i<updatedAllActions.length;i++){
-            actions.add(updatedAllActions[i]);
-            assignees.add(updatedAssignees[i]);
-            meetings.add(updatedMeetings[i]);
-            if( assignees[i]!=null && assignees[i]['id']==userID){
-              myActions.add(actions[i]);
-              myAssignees.add(assignees[i]);
-              myMeetings.add(meetings[i]);
+    } else if (choice == Filters.RecentlyUpdated) {
+      this.setState(() {
+        for (var i = 0; i < updatedAllActions.length; i++) {
+          actions.add(updatedAllActions[i]);
+          assignees.add(updatedAssignees[i]);
+          meetings.add(updatedMeetings[i]);
+          if (assignees[i] != null && assignees[i]['id'] == userID) {
+            myActions.add(actions[i]);
+            myAssignees.add(assignees[i]);
+            myMeetings.add(meetings[i]);
+          }
         }
-      }
       });
-    }
-    else if(choice == Filters.RecentlyClosed) {
-      this.setState((){
-          for(var i=0;i<closedAllActions.length;i++){
-            actions.add(closedAllActions[i]);
-            assignees.add(closedAssignees[i]);
-            meetings.add(closedMeetings[i]);
-            if( assignees[i]!=null && assignees[i]['id']==userID){
-              myActions.add(actions[i]);
-              myAssignees.add(assignees[i]);
-              myMeetings.add(meetings[i]);
+    } else if (choice == Filters.RecentlyClosed) {
+      this.setState(() {
+        for (var i = 0; i < closedAllActions.length; i++) {
+          actions.add(closedAllActions[i]);
+          assignees.add(closedAssignees[i]);
+          meetings.add(closedMeetings[i]);
+          if (assignees[i] != null && assignees[i]['id'] == userID) {
+            myActions.add(actions[i]);
+            myAssignees.add(assignees[i]);
+            myMeetings.add(meetings[i]);
+          }
         }
-      }
       });
     }
   }

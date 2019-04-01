@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
@@ -6,12 +5,12 @@ import 'package:memob/login.dart';
 import 'package:memob/settings.dart';
 import 'package:memob/splashscreen.dart';
 import 'package:fluro/fluro.dart';
+import './constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:memob/utilities.dart' as utilities;
 
 void main() {
-
   Router router = new Router();
 
   // Define our splash page.
@@ -31,19 +30,16 @@ void main() {
     return new ActionItems();
   }));
 
-  // router.define('Settings', handler: new Handler(
-  //     handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-  //   return new Settings();
-  // }));
-
   runApp(new MaterialApp(
-    debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.white,
         //brightness: Brightness.dark
       ),
-      home:  SplashScreen(), onGenerateRoute: router.generator));
-} 
+      home: SplashScreen(),
+      onGenerateRoute: router.generator));
+}
+
 Future<Null> initUniLink() async {
   try {
     String initialLink = await getInitialLink();

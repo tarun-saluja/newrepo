@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:memob/NotesClass.dart';
 
-class SearchBar  extends StatelessWidget {
+class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Search App'),
-          // actions: <Widget>[
-          //   IconButton(
-          //       icon: Icon(Icons.search),
-          //       onPressed: () {
-          //         showSearch(context: context, delegate: DataSearch());
-          //       })
-          // ],
-        ),
-        drawer: Drawer(),
+      appBar: AppBar(
+        title: Text('Search App'),
+      ),
+      drawer: Drawer(),
     );
   }
 }
+
 class DataSearch extends SearchDelegate<NotesClass> {
   List<NotesClass> _notes;
+
   DataSearch([this._notes]);
-  
+
   List<String> names = new List();
 
   final recentNames = [];
 
-  
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
-          query="";
+          query = "";
         },
       )
     ];
@@ -55,14 +49,18 @@ class DataSearch extends SearchDelegate<NotesClass> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestionList = query.isEmpty ? recentNames : _notes.where((p)=>p.meetingTitle.toLowerCase().contains(query)).toList();
+    final suggestionList = query.isEmpty
+        ? recentNames
+        : _notes
+            .where((p) => p.meetingTitle.toLowerCase().contains(query))
+            .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
             leading: Icon(Icons.title),
             title: Text(suggestionList[index].meetingTitle),
-            onTap: (){
-              close(context,suggestionList[index]);
+            onTap: () {
+              close(context, suggestionList[index]);
             },
           ),
       itemCount: suggestionList.length,
@@ -71,14 +69,18 @@ class DataSearch extends SearchDelegate<NotesClass> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty ? recentNames : _notes.where((p)=>p.meetingTitle.toLowerCase().contains(query)).toList();
+    final suggestionList = query.isEmpty
+        ? recentNames
+        : _notes
+            .where((p) => p.meetingTitle.toLowerCase().contains(query))
+            .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
             leading: Icon(Icons.title),
             title: Text(suggestionList[index].meetingTitle),
-            onTap: (){
-              close(context,suggestionList[index]);
+            onTap: () {
+              close(context, suggestionList[index]);
             },
           ),
       itemCount: suggestionList.length,

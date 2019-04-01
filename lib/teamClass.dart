@@ -1,9 +1,7 @@
-class TeamClass{
+class TeamClass {
   String name;
 
-  TeamClass(
-    this.name
-  );
+  TeamClass(this.name);
 
   @override
   String toString() {

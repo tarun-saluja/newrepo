@@ -1,0 +1,12 @@
+var name = "Meetings that get things done";
+var google = "Sign up with google";
+var slack = "Slack";
+var office = "Office 365";
+var allmeetings = "All meetings";
+var recentnotes = "Recent Notes";
+var dashboard = "Dashboard";
+var notes = "Notes";
+var action = "Action";
+var settings = "Settings";
+var logout = "Logout";
+var logoname = "MEETNOTES";

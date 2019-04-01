@@ -8,13 +8,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import './textEditorButton.dart';
-// import 'package:memob/speechDialog.dart';
-// import 'package:memob/attachmentListDialog.dart';
-// import 'package:memob/cameraPage.dart';
+
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
 import 'package:flutter/cupertino.dart';
-// import 'package:simple_permissions/simple_permissions.dart';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 
@@ -66,174 +63,12 @@ class _DetailState extends State<Detail> {
 
   var finalDateTime;
 
-  Future<bool> initConnectivity() async {
-    var connectionStatus;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      connectionStatus = (await _connectivity.checkConnectivity());
-
-      this.setState(() {
-        if (connectionStatus == ConnectivityResult.none) {
-          _connectionStatus = false;
-        } else {
-          _connectionStatus = true;
-        }
-      });
-    } on PlatformException catch (e) {
-      _connectionStatus = false;
-    }
-
-    if (!mounted) {
-      return false;
-    }
-    return _connectionStatus;
-  }
-
-  // Future<Null> checkRecordPermission() async {
-  //   bool res = await SimplePermissions.checkPermission(Permission.RecordAudio);
-  //   if (res.toString() == 'true') {
-  //     recordPermission = true;
-  //   } else {
-  //     bool res =
-  //         await SimplePermissions.requestPermission(Permission.RecordAudio);
-  //     if (res.toString() == 'true') {
-  //       recordPermission = true;
-  //     }
-  //   }
-  // }
-
-  Future<Null> fetchData() async {
-    Future<String> token = utilities.getTokenData();
-    token.then((value) {
-      if (value != null) {
-        userToken = value;
-        getRecentNotes();
-        getRecentNotesCount(value);
-      } else {
-        utilities.showLongToast(value);
-      }
-    });
-  }
-
-  Future<String> getRecentNotes() async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
-
-    if (response.statusCode == 200) {
-      this.setState(() {
-        data = json.decode(response.body);
-
-        List<dynamic> rawNote = data['raw_note'];
-        List<dynamic> attendees = data['attendees'];
-        title = data['title'];
-        if (data['raw_note'] != null && rawNote.length != 0) {
-          rawHtml = data['raw_note'][0]['raw_html'];
-          delta = data['raw_note'][0]['delta'];
-          noteText = data['raw_note'][0]['body'];
-        }
-        // print(rawHtml);
-        // print(delta);
-        attendeesEmail = new List();
-
-        for (int i = 0; i < attendees.length; i++) {
-          attendeesEmail.add('${data['attendees'][i]['email']}');
-          //print('${data['attendees'][i]['email']}');
-        }
-
-        print(attendeesEmail);
-
-        noteLoaded = true;
-        // noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
-        finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
-      });
-    } else {
-      // If that response was not OK, throw an error.
-      noteLoaded = true;
-      throw Exception('Failed to load post');
-    }
-    return 'Success';
-  }
-
-  Future<String> getRecentNotesCount(String token) async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v2/attachments/?event=${widget.meetingEventId}'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
-
-    if (response.statusCode == 200) {
-      this.setState(() {
-        attachmentCountData = json.decode(response.body);
-
-        if (attachmentCountData.isNotEmpty) {
-          attachmentCount = attachmentCountData[0]['count'];
-        } else {
-          attachmentCount = 0;
-        }
-        attachmentCountLoaded = true;
-      });
-    } else {
-      // If that response was not OK, throw an error.
-      attachmentCountLoaded = true;
-      throw Exception('Failed to load post');
-    }
-    return 'Success';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    initConnectivity().then((result) {
-      if (result) {
-        this.fetchData();
-      } else {
-        noteLoaded = true;
-        attachmentCountLoaded = true;
-      }
-    });
-  }
-
-  bool value4 = false;
-  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
-  void onChangedValue4() {
-    String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
-    CookieManager.setCookie(
-        url, 'sessionid', 'vbi9r3skam36mc4c3z203wahmseygqee;'); 
-    inAppBrowser.open(
-        url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-        options: {
-          "useShouldOverrideUrlLoading": true,
-          "useOnLoadResource": true,
-          "toolbarTop": false,
-        });
-  }
-
-  // @override
-  // void initState() {
-  //   if (widget.uuid != null) {
-  //     _uuid = widget.uuid;
-  //   }
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: SpeedDial(
-
         // both default to 16
         marginRight: 18,
         marginBottom: 20,
@@ -302,19 +137,13 @@ class _DetailState extends State<Detail> {
         ],
       ),
       body: Container(
-//        color: Color.fromRGBO(214, 228, 238, 100),
         padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
-        // decoration: new BoxDecoration(
-        //   // image: new DecorationImage(
-        //   //     image: AssetImage('assets/background.jpeg'), fit: BoxFit.cover),
-        // ),
         child: (title != null)
             ? (Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                     new Container(
-                      //padding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                       child: new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
@@ -323,19 +152,10 @@ class _DetailState extends State<Detail> {
                                 20.0, 10.0, 20.0, 10.0),
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                //border: Border.all(color: Colors.grey, width: 1.0),
                                 borderRadius: BorderRadius.circular(20.0)),
                             child: Text('$finalDateTime'),
                           ),
                           Container(
-
-                          ),
-                          Container(
-                            // decoration: BoxDecoration(
-                            //   color: Colors.white70,
-                            //   border: Border.all(color: Colors.blue, width: 1.0),
-                            //   borderRadius: BorderRadius.circular(20.0),
-                            // ),
                             child: FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0)),
@@ -379,7 +199,6 @@ class _DetailState extends State<Detail> {
                       width: width,
                       decoration: BoxDecoration(
                           color: Colors.white70,
-                          //border: Border.all(color: Colors.green, width: 1.0),
                           borderRadius: BorderRadius.circular(5.0),
                           boxShadow: [
                             BoxShadow(
@@ -390,110 +209,186 @@ class _DetailState extends State<Detail> {
                       child: ListView(
                         children: <Widget>[
                           new RefreshIndicator(
-                            child:
-                            ((noteText != null)
-                              ? Text(
-                                  '$noteText',
-                                  style: TextStyle(
-                                      fontSize: 15.0, color: Colors.black),
-                                )
-                              : (Container(
-                                  margin: EdgeInsets.fromLTRB(0,height* .180, 0, 0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/empty.png',
-                                        height: 200,
-                                        width: 200,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                              child: ((noteText != null)
+                                  ? Text(
+                                      '$noteText',
+                                      style: TextStyle(
+                                          fontSize: 15.0, color: Colors.black),
+                                    )
+                                  : (Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0, height * .180, 0, 0),
+                                      child: Column(
                                         children: <Widget>[
-                                          Text('Start taking Notes',style: TextStyle(color: Colors.grey,fontSize: 15),),
-                                          IconButton(
-                                            icon: Icon(Icons.mode_edit),
-                                            color: Colors.blue,
-                                            onPressed: onChangedValue4,
+                                          Image.asset(
+                                            'assets/empty.png',
+                                            height: 200,
+                                            width: 200,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                'Start taking Notes',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 15),
+                                              ),
+                                              IconButton(
+                                                icon: Icon(Icons.mode_edit),
+                                                color: Colors.blue,
+                                                onPressed: onChangedValue4,
+                                              )
+                                            ],
                                           )
                                         ],
-                                      )
-                                    ],
-                                  )))),
-                            onRefresh: getRecentNotes)
-                          
+                                      )))),
+                              onRefresh: getRecentNotes)
                         ],
                       ),
                     ),
-
-                    // Expanded(
-                    //   child:
-                    // new Expanded(
-                    //     flex: 1,
-                    //     child: new SingleChildScrollView(
-                    //       child: Card(
-                    //         child: Text(
-                    //           '$noteText',
-                    //           style: TextStyle(fontSize: 15.0, color: Colors.black),
-                    //         ),
-                    //       ),
-                    //     )),
-
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: <Widget>[
-                    //     Container(padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    //     child: TextEditorButton(onPressed: onChangedValue4),)
-                    //   ],
-                    // ),
-                    // Text(
-                    //         '$noteText',
-                    //         style: TextStyle(fontSize: 18.0, color: Colors.black),
-                    //       ),
-                    // ]))
                   ]))
             : Center(child: CircularProgressIndicator()),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   onTap: (index) {
-      //     switch (index) {
-      //       case 0:
-      //         Navigator.of(context).push(MaterialPageRoute(
-      //             builder: (BuildContext context) =>
-      //                 new CameraPage(widget.meetingTitle, widget.meetingUuid)));
-      //         break;
-      //       case 1:
-      //         onChangedValue4();
-      //         break;
-      //       case 2:
-      //         Navigator.of(context).push(MaterialPageRoute(
-      //             builder: (BuildContext context) =>
-      //                 new Speech(widget.meetingUuid)));
-      //     }
-      //   },
-      //   type: BottomNavigationBarType.fixed,
-      //   items: <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //         icon: Icon(
-      //           Icons.camera_alt,
-      //           color: Colors.blue,
-      //           size: 30.0,
-      //         ),
-      //         title: Text('Capture',style: TextStyle(color: Colors.grey,fontSize: 12),),),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.mode_edit,
-      //         color: Colors.blue,
-      //           size: 30.0,
-      //       ),
-      //       title: Text('Editor',style: TextStyle(color: Colors.grey,))),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.mic_none, color: Colors.blue, size: 30.0),
-      //         title: Text('Record',style: TextStyle(color: Colors.grey,))),
-      //   ],
-      // ),
-    //  onPullToRefresh:this.getRecentNotes
     );
+  }
+
+  Future<bool> initConnectivity() async {
+    var connectionStatus;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      connectionStatus = (await _connectivity.checkConnectivity());
+
+      this.setState(() {
+        if (connectionStatus == ConnectivityResult.none) {
+          _connectionStatus = false;
+        } else {
+          _connectionStatus = true;
+        }
+      });
+    } on PlatformException catch (e) {
+      _connectionStatus = false;
+    }
+
+    if (!mounted) {
+      return false;
+    }
+    return _connectionStatus;
+  }
+
+  Future<Null> fetchData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        getRecentNotes();
+        getRecentNotesCount(value);
+      } else {
+        utilities.showLongToast(value);
+      }
+    });
+  }
+
+  Future<String> getRecentNotes() async {
+    final response = await http.get(
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        data = json.decode(response.body);
+
+        List<dynamic> rawNote = data['raw_note'];
+        List<dynamic> attendees = data['attendees'];
+        title = data['title'];
+        if (data['raw_note'] != null && rawNote.length != 0) {
+          rawHtml = data['raw_note'][0]['raw_html'];
+          delta = data['raw_note'][0]['delta'];
+          noteText = data['raw_note'][0]['body'];
+        }
+        attendeesEmail = new List();
+
+        for (int i = 0; i < attendees.length; i++) {
+          attendeesEmail.add('${data['attendees'][i]['email']}');
+        }
+
+        noteLoaded = true;
+        // noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
+        finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
+      });
+    } else {
+      // If that response was not OK, throw an error.
+      noteLoaded = true;
+      throw Exception('Failed to load post');
+    }
+    return 'Success';
+  }
+
+  Future<String> getRecentNotesCount(String token) async {
+    final response = await http.get(
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v2/attachments/?event=${widget.meetingEventId}'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $token',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        attachmentCountData = json.decode(response.body);
+
+        if (attachmentCountData.isNotEmpty) {
+          attachmentCount = attachmentCountData[0]['count'];
+        } else {
+          attachmentCount = 0;
+        }
+        attachmentCountLoaded = true;
+      });
+    } else {
+      // If that response was not OK, throw an error.
+      attachmentCountLoaded = true;
+      throw Exception('Failed to load post');
+    }
+    return 'Success';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    initConnectivity().then((result) {
+      if (result) {
+        this.fetchData();
+      } else {
+        noteLoaded = true;
+        attachmentCountLoaded = true;
+      }
+    });
+  }
+
+  bool value4 = false;
+  MyInAppBrowser inAppBrowser = new MyInAppBrowser();
+
+  void onChangedValue4() {
+    String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
+    CookieManager.setCookie(
+        url, 'sessionid', 'vbi9r3skam36mc4c3z203wahmseygqee;');
+    inAppBrowser.open(
+        url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+        options: {
+          "useShouldOverrideUrlLoading": true,
+          "useOnLoadResource": true,
+          "toolbarTop": false,
+        });
   }
 
   void choiceAction(String choice) {
@@ -523,43 +418,3 @@ class Constants {
     Leave,
   ];
 }
-
-// class Choice {
-//   const Choice({this.title, this.icon});
-
-//   final String title;
-//   final IconData icon;
-// }
-
-// const List<Choice> choices = const <Choice>[
-//   const Choice(title: 'Car', icon: Icons.directions_car),
-//   const Choice(title: 'Bicycle', icon: Icons.directions_bike),
-//   const Choice(title: 'Boat', icon: Icons.directions_boat),
-//   const Choice(title: 'Bus', icon: Icons.directions_bus),
-//   const Choice(title: 'Train', icon: Icons.directions_railway),
-//   const Choice(title: 'Walk', icon: Icons.directions_walk),
-// ];
-
-// class ChoiceCard extends StatelessWidget {
-//   const ChoiceCard({Key key, this.choice}) : super(key: key);
-
-//   final Choice choice;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final TextStyle textStyle = Theme.of(context).textTheme.display1;
-//     return Card(
-//       color: Colors.white,
-//       child: Center(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: <Widget>[
-//             Icon(choice.icon, size: 128.0, color: textStyle.color),
-//             Text(choice.title, style: textStyle),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

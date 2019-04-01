@@ -34,97 +34,6 @@ class _Settings extends State<Settings> {
     super.initState();
   }
 
-  Future<Null> fetchData() async {
-    Future<String> token = utilities.getTokenData();
-    token.then((value) {
-      if (value != null) {
-        userToken = value;
-        fetchUserData();
-      } else {
-        utilities.showLongToast(value);
-        return null;
-      }
-    });
-  }
-
-  Future<Null> fetchUserData() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
-
-    if (response.statusCode == 200) {
-      this.setState(() {
-        Map<String, dynamic> mData = json.decode(response.body);
-        name = mData['user']['username'];
-        email = mData['user']['email'];
-        dailyEmail = mData["notification_settings"]["DAILY_SUMMARY"];
-        dailySlack =
-            mData["notification_settings"]["DAILY_SUMMARY_SLACK_REMINDER"];
-        meetingReminder = mData["notification_settings"]["MEETING_REMINDER"];
-        meetingAgenda =
-            mData["notification_settings"]["MEETING_AGENDA_REMINDER"];
-        meetingsFeedback =
-            mData["notification_settings"]["DAILY_FEEDBACK_REMINDER"];
-      });
-      return null;
-    } else {
-      // If that response was not OK, throw an error.
-      return null;
-    }
-  }
-
-  Future<Null> settingsUpdate(Map body) async {
-    var data = json.encode(body);
-    var response =
-        await http.post('https://app.meetnotes.co/api/v2/settings/account/',
-            headers: {
-              HttpHeaders.AUTHORIZATION: 'Token $userToken',
-              HttpHeaders.CONTENT_TYPE: 'application/json',
-              HttpHeaders.ACCEPT: 'application/json',
-              HttpHeaders.CACHE_CONTROL: 'no-cache'
-            },
-            body: data);
-    print("${response.body}");
-  }
-
-  Future<Null> addAliases(Map body) async {
-    var data = json.encode(body);
-    var response =
-        await http.post('https://app.meetnotes.co/api/v2/user/alias/',
-            headers: {
-              HttpHeaders.AUTHORIZATION: 'Token $userToken',
-              HttpHeaders.CONTENT_TYPE: 'application/json',
-              HttpHeaders.ACCEPT: 'application/json',
-              HttpHeaders.CACHE_CONTROL: 'no-cache'
-            },
-            body: data);
-    print("${response.body}");
-  }
-
-  Future<Null> inviteMember(Map body) async {
-    var data = json.encode(body);
-    print(data);
-    var response = await http.post('',
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache',
-          HttpHeaders.COOKIE:
-              'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn; csrftoken=Rc56oTojXV1N3cKEdV1ImYXxOTfb4pVi;',
-          HttpHeaders.REFERER:
-              'https://app.meetnotes.co/settings/teams/members/'
-        },
-        body: data);
-    print(response.statusCode);
-    print("jnnl");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -298,7 +207,6 @@ class _Settings extends State<Settings> {
                             color: Colors.blue,
                             onPressed: () {
                               Map body = {"email": aliasController.text};
-                              print(body);
                               addAliases(body);
                             },
                           )
@@ -335,6 +243,92 @@ class _Settings extends State<Settings> {
             : (Center(
                 child: CircularProgressIndicator(),
               )));
+  }
+
+  Future<Null> fetchData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        fetchUserData();
+      } else {
+        utilities.showLongToast(value);
+        return null;
+      }
+    });
+  }
+
+  Future<Null> fetchUserData() async {
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+        name = mData['user']['username'];
+        email = mData['user']['email'];
+        dailyEmail = mData["notification_settings"]["DAILY_SUMMARY"];
+        dailySlack =
+            mData["notification_settings"]["DAILY_SUMMARY_SLACK_REMINDER"];
+        meetingReminder = mData["notification_settings"]["MEETING_REMINDER"];
+        meetingAgenda =
+            mData["notification_settings"]["MEETING_AGENDA_REMINDER"];
+        meetingsFeedback =
+            mData["notification_settings"]["DAILY_FEEDBACK_REMINDER"];
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      return null;
+    }
+  }
+
+  Future<Null> settingsUpdate(Map body) async {
+    var data = json.encode(body);
+    var response =
+        await http.post('https://app.meetnotes.co/api/v2/settings/account/',
+            headers: {
+              HttpHeaders.AUTHORIZATION: 'Token $userToken',
+              HttpHeaders.CONTENT_TYPE: 'application/json',
+              HttpHeaders.ACCEPT: 'application/json',
+              HttpHeaders.CACHE_CONTROL: 'no-cache'
+            },
+            body: data);
+  }
+
+  Future<Null> addAliases(Map body) async {
+    var data = json.encode(body);
+    var response =
+        await http.post('https://app.meetnotes.co/api/v2/user/alias/',
+            headers: {
+              HttpHeaders.AUTHORIZATION: 'Token $userToken',
+              HttpHeaders.CONTENT_TYPE: 'application/json',
+              HttpHeaders.ACCEPT: 'application/json',
+              HttpHeaders.CACHE_CONTROL: 'no-cache'
+            },
+            body: data);
+  }
+
+  Future<Null> inviteMember(Map body) async {
+    var data = json.encode(body);
+    var response = await http.post('',
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache',
+          HttpHeaders.COOKIE:
+              'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn; csrftoken=Rc56oTojXV1N3cKEdV1ImYXxOTfb4pVi;',
+          HttpHeaders.REFERER:
+              'https://app.meetnotes.co/settings/teams/members/'
+        },
+        body: data);
   }
 
   void choiceAction(String choice) async {

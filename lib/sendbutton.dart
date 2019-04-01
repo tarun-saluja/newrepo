@@ -12,13 +12,13 @@ class SendButton extends StatelessWidget {
       splashColor: Colors.orange,
       fillColor: Colors.blue,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8.0,
-          horizontal: 20.0
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
         child: Row(
           children: <Widget>[
-            const Icon(Icons.send,color: Colors.white,),
+            const Icon(
+              Icons.send,
+              color: Colors.white,
+            ),
             const Text("Send", style: TextStyle(color: Colors.white)),
           ],
         ),

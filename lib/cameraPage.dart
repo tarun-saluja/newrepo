@@ -57,8 +57,6 @@ class _CameraPageState extends State<CameraPage> {
       await availableCameras().then((onValue) {
         onNewCameraSelected(cameras[0]);
       });
-
-      print("Cameras $cameras");
     } on CameraException catch (e) {
       logError(e.code, e.description);
     }
@@ -91,11 +89,10 @@ class _CameraPageState extends State<CameraPage> {
     return new MaterialApp(
         home: new Scaffold(
             key: _scaffoldKey,
-
             body: new Container(
               child: pictureClicked == false
                   ? new Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         _cameraPreviewWidget(),
                         _captureControlRowWidget(),
@@ -136,10 +133,14 @@ class _CameraPageState extends State<CameraPage> {
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         new RaisedButton(
-            child: new Icon(Icons.check, color: Colors.green,),
+            child: new Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
             onPressed: () {
               //Save Pic
-              UploadAttachment.uploadAttachment(userToken, imagePath, widget.meetingUuid);
+              UploadAttachment.uploadAttachment(
+                  userToken, imagePath, widget.meetingUuid);
 
               Navigator.pop(context);
             }),
@@ -147,7 +148,6 @@ class _CameraPageState extends State<CameraPage> {
             child: new Icon(Icons.close, color: Colors.red),
             onPressed: () {
               Navigator.pop(context);
-
             })
       ],
     );
@@ -181,19 +181,18 @@ class _CameraPageState extends State<CameraPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        new Center(child:
-        new IconButton(
-          icon: const Icon(Icons.camera_alt),
-          color: Colors.blue,
-          onPressed: controller != null &&
-                  controller.value.isInitialized &&
-                  !controller.value.isRecordingVideo
-              ? onTakePictureButtonPressed
-              : null,
-        ),
+        new Center(
+          child: new IconButton(
+            icon: const Icon(Icons.camera_alt),
+            color: Colors.blue,
+            onPressed: controller != null &&
+                    controller.value.isInitialized &&
+                    !controller.value.isRecordingVideo
+                ? onTakePictureButtonPressed
+                : null,
+          ),
         ),
       ],
-
     );
   }
 
@@ -236,7 +235,7 @@ class _CameraPageState extends State<CameraPage> {
           imagePath = filePath;
           pictureClicked = true;
         });
-        if (filePath != null);
+        if (filePath != null) ;
       }
     });
   }

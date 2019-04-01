@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as Path;
 
-Future<dynamic> uploadAttachment(String token, String filepath, String meetingId) async {
+Future<dynamic> uploadAttachment(
+    String token, String filepath, String meetingId) async {
   File file = new File(filepath);
   String fileName = Path.basename(file.path);
 
@@ -18,15 +19,13 @@ Future<dynamic> uploadAttachment(String token, String filepath, String meetingId
     url,
     body: body,
     headers: {
-      HttpHeaders.AUTHORIZATION:
-          "Token $token",
+      HttpHeaders.AUTHORIZATION: "Token $token",
       HttpHeaders.ACCEPT: "application/json, text/plain, */*"
     },
   ).then((http.Response response) {
     final String res = response.body;
     final int statusCode = response.statusCode;
 
-    print(res);
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while fetching data");
     } else {
@@ -46,7 +45,6 @@ _postRequest(response, bytes) async {
       HttpHeaders.ACCEPT: "application/json, text/plain, */*"
     },
   ).then((http.Response responsePost) {
-    print("Upload File Response  ${responsePost.statusCode}");
     if (responsePost.statusCode == 200) {
       _changeStatus(response);
     }
@@ -56,7 +54,6 @@ _postRequest(response, bytes) async {
 _changeStatus(responsePost) async {
   String url =
       "https://app.meetnotes.co/api/v2/attachments/${json.decode(responsePost.body)['attachment_uuid']}/";
-  print("URL STATUS " + url);
   return http.patch(
     url,
     body: json.encode({

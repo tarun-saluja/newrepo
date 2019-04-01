@@ -15,16 +15,22 @@ class InviteMembers extends StatefulWidget {
   }
 }
 
-
 class _InviteMembers extends State<InviteMembers> {
-
   String _userToken;
-  List<dynamic> teamMembers = new List(); 
+  List<dynamic> teamMembers = new List();
+
   @override
   void initState() {
     _userToken = widget.userToken;
     getTeamMembers();
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: MemberCard(teamMembers),
+    );
   }
 
   Future<Null> getTeamMembers() async {
@@ -37,7 +43,6 @@ class _InviteMembers extends State<InviteMembers> {
           HttpHeaders.CACHE_CONTROL: 'no-cache',
           HttpHeaders.COOKIE: 'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn;'
         });
-        print(response.statusCode);
     if (response.statusCode == 200) {
       this.setState(() {
         teamMembers.clear();
@@ -45,24 +50,14 @@ class _InviteMembers extends State<InviteMembers> {
 
         List<dynamic> list = mData['members'];
 
-        for(int i=0;i< list.length;i++) {
+        for (int i = 0; i < list.length; i++) {
           teamMembers.add(list[i]);
         }
-        });
+      });
       return null;
     } else {
       // If that response was not OK, throw an error.
       return null;
     }
   }
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: MemberCard(teamMembers),
-    );
-  }
-  
 }

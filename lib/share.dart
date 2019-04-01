@@ -27,19 +27,6 @@ final ThemeData androidTheme = new ThemeData(
 
 const String defaultUserName = "User";
 
-// class MyChat extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext ctx) {
-//     return new MaterialApp(
-//       title: "",
-//       theme: defaultTargetPlatform == TargetPlatform.iOS
-//         ? iOSTheme
-//         : androidTheme,
-//       home: new Chat(),
-//     );
-//   }
-// }
-
 class Share extends StatefulWidget {
   final String meetingTitle;
   final String meetingBody;
@@ -56,9 +43,6 @@ class Share extends StatefulWidget {
       this.delta,
       this.meetingUuid]);
 
-  // @override
-  // State createState() => ShareWindow();
-
   @override
   State<StatefulWidget> createState() {
     return ShareWindow();
@@ -68,18 +52,11 @@ class Share extends StatefulWidget {
 class ShareWindow extends State<Share> with TickerProviderStateMixin {
   final List<Msg> _messages = List<Msg>();
   var map = new Map<String, Msg>();
-//   {
-//     @Override public String toString()
-//     {
-//         return super.toString();
-//     }
-// };
+
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
   String userToken;
   Map body;
-  // String _meetingTitle;
-  // String _meetingBody;
 
   @override
   void initState() {
@@ -117,7 +94,6 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                       if (temp.status) mail.add(temp.txt);
                     }
 
-                    print(_mail);
                     body = {
                       "type": "EMAIL",
                       "mailRecipients": mail,
@@ -125,14 +101,6 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                     };
 
                     postData(body);
-
-                    // final url =
-                    //     'mailto:$_mail?subject=${widget.meetingTitle}&body=${widget.meetingBody}%20plugin';
-                    // if (await canLaunch(url)) {
-                    //   await launch(url);
-                    // } else {
-                    //   throw 'Could not launch $url';
-                    // }
                   },
                 ),
               ]),
@@ -209,56 +177,12 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
               : null),
     );
   }
-  //  _sendEmail(String meetingTitle,String meetingBody)
-  // {
 
-  // }
-  // _launchEmailApp() async {
-  //   const url = 'mailto:smith@example.org?subject=News&body=New%20plugin';
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
   void _initAdd() {
     for (String temp in widget.asigneeEmail) _submitMsg(temp);
-    print(widget.rawHtml);
-    print(widget.delta);
-    print(widget.asigneeEmail.toString());
-    // body = {
-    //   'type': "EMAIL",
-    //   'mailRecipients': ['athar.ejaz@hashedin.com'],
-    //   'rawHTML': "${widget.rawHtml}",
-    // };
   }
 
-  // Future postData() async {
-  //   Response response;
-  //   Dio dio = new Dio();
-  //   Future<String> userToken =getTokenData();
-  //   dynamic url =
-  //       "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
-  //   try {
-  //     response = await dio.post(url, data: {
-  //       "type": "EMAIL",
-  //       "mailRecipients": ["athar.ejaz@hashedin.com"],
-  //       "rawHTML": widget.rawHtml,
-  //       "delta": widget.delta
-  //     },
-  //     options: Options(headers: {
-  //       "Authorization" : 'Token $userToken',
-  //       "Content-Type": "multipart/form-data",
-
-  //     }));
-  //   } catch (e) {
-  //     print("Error Upload: " + e.toString());
-  //   }
-  //   print("Response Upload:" + response.toString());
-  // }
-
   Future<Null> postData(Map body) async {
-    print(body);
     Future<String> token = getTokenData();
     dynamic url =
         "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
@@ -276,22 +200,13 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   }
 
   Future<Null> sendEmail(String url, Map body) async {
-    print('Raw Body');
-    print(body);
     //var data = json.encode(body);
     var data = jsonEncode(body);
 
-    print(url);
-    print('$userToken');
-    print('Encoded Body');
-    print(data);
     var response = await http.post(url,
         headers: {
           HttpHeaders.AUTHORIZATION: 'Token $userToken',
           HttpHeaders.CONTENT_TYPE: 'application/json',
-          //HttpHeaders.ACCEPT: 'application/json, text/plain, */*',
-          //HttpHeaders.CACHE_CONTROL: 'no-cache',
-          //HttpHeaders.acceptCharsetHeader: 'charset=utf-8'
         },
         body: data);
     if (response.statusCode == 200) {
@@ -304,13 +219,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
           textColor: Colors.white,
           fontSize: 16.0);
     }
-
-    print(data);
-    print(response.statusCode);
-    print("${response.body}");
   }
-
-
 
   void _submitMsg(String txt) {
     _textController.clear();
@@ -324,9 +233,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
     );
     setState(() {
       _messages.insert(0, msg);
-      map.putIfAbsent(msg.txt,() => msg);
-
-      //_messages.add(msg);
+      map.putIfAbsent(msg.txt, () => msg);
     });
     msg.animationController.forward();
   }
@@ -341,25 +248,19 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
 }
 
 class Msg extends StatefulWidget {
-
   final String txt;
   bool status = true;
   final AnimationController animationController;
+
   Msg({this.txt, this.animationController});
 
   @override
   State<StatefulWidget> createState() {
     return MsgState();
   }
-
 }
 
-class MsgState extends State<Msg> 
-{
-
-  // final String txt;
-  // bool status = true;
-  // final AnimationController animationController;
+class MsgState extends State<Msg> {
   bool checkboxValue = true;
 
   @override
@@ -400,23 +301,14 @@ class MsgState extends State<Msg>
                 ],
               ),
             ),
-            // new IconButton(
-            // icon: Icon(Icons.check_box),
-            //   color: Colors.black,
-            //   onPressed: () => {
-            //     this.toggle()
-            //   },
-            // ),
             Checkbox(
-                  value: checkboxValue,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      this.toggle();
-                checkboxValue=this.widget.status;
-                    
-               });
-                    
-                  }),
+                value: checkboxValue,
+                onChanged: (bool newValue) {
+                  setState(() {
+                    this.toggle();
+                    checkboxValue = this.widget.status;
+                  });
+                }),
           ],
         ),
       ),

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 
 class MyInAppBrowser extends InAppBrowser {
-  
   @override
   void onBrowserCreated() async {
     print("\n\nBrowser Ready!\n\n");
   }
-  
+
   @override
   void onLoadStart(String url) {
     print("\n\nStarted $url\n\n");
@@ -18,29 +17,29 @@ class MyInAppBrowser extends InAppBrowser {
     print("\n\nStopped $url\n\n");
 
     // call a javascript message handler
-   await this.webViewController.injectScriptCode("window.flutter_inappbrowser.callHandler('handlerNameTest', 1, 5,'string', {'key': 5}, [4,6,8]);");
+    await this.webViewController.injectScriptCode(
+        "window.flutter_inappbrowser.callHandler('handlerNameTest', 1, 5,'string', {'key': 5}, [4,6,8]);");
 
     // print body html
-    print(await this.webViewController.injectScriptCode("document.body.innerHTML"));
+    print(await this
+        .webViewController
+        .injectScriptCode("document.body.innerHTML"));
 
     // console messages
-    await this.webViewController.injectScriptCode("console.log({'testObject': 5});"); // the message will be: [object Object]
-    await this.webViewController.injectScriptCode("console.log('testObjectStringify', JSON.stringify({'testObject': 5}));"); // the message will be: testObjectStringify {"testObject": 5}
-    await this.webViewController.injectScriptCode("console.error('testError', false);"); // the message will be: testError false
+    await this.webViewController.injectScriptCode(
+        "console.log({'testObject': 5});"); // the message will be: [object Object]
+    await this.webViewController.injectScriptCode(
+        "console.log('testObjectStringify', JSON.stringify({'testObject': 5}));"); // the message will be: testObjectStringify {"testObject": 5}
+    await this.webViewController.injectScriptCode(
+        "console.error('testError', false);"); // the message will be: testError false
 
     // add jquery library and custom javascript
-    await this.webViewController.injectScriptFile("https://code.jquery.com/jquery-3.3.1.min.js");
+    await this
+        .webViewController
+        .injectScriptFile("https://code.jquery.com/jquery-3.3.1.min.js");
     this.webViewController.injectScriptCode("""
       \$( "body" ).html( "Next Step..." )
     """);
-
-    // add custom css
-  //   this.webViewController.injectStyleCode("""
-  //   body {
-  //     background-color: #3c3c3c !important;
-  //   }
-  //   """);
-  //   this.webViewController.injectStyleFile("https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css");
   }
 
   @override
@@ -60,8 +59,14 @@ class MyInAppBrowser extends InAppBrowser {
   }
 
   @override
-  void onLoadResource(WebResourceResponse response, WebResourceRequest request) {
-    print("Started at: " + response.startTime.toString() + "ms ---> duration: " + response.duration.toString() + "ms " + response.url);
+  void onLoadResource(
+      WebResourceResponse response, WebResourceRequest request) {
+    print("Started at: " +
+        response.startTime.toString() +
+        "ms ---> duration: " +
+        response.duration.toString() +
+        "ms " +
+        response.url);
   }
 
   @override
@@ -74,7 +79,6 @@ class MyInAppBrowser extends InAppBrowser {
       messageLevel: ${consoleMessage.messageLevel}
     """);
   }
-
 }
 
 MyInAppBrowser inAppBrowser = new MyInAppBrowser();
@@ -87,13 +91,13 @@ class WebviewTest extends StatefulWidget {
 }
 
 class _WebviewTestState extends State<WebviewTest> {
-
   @override
   void initState() {
     super.initState();
 
     // listen for post messages coming from the JavaScript side
-    int indexTest = inAppBrowser.webViewController.addJavaScriptHandler("handlerNameTest", (arguments) async {
+    int indexTest = inAppBrowser.webViewController
+        .addJavaScriptHandler("handlerNameTest", (arguments) async {
       print("handlerNameTest arguments");
       print(arguments); // it prints: [1, 5, string, {key: 5}, [4, 6, 8]]
     });
@@ -107,18 +111,21 @@ class _WebviewTestState extends State<WebviewTest> {
           title: const Text('Flutter InAppBrowser Plugin example app'),
         ),
         body: new Center(
-          child: new RaisedButton(onPressed: () async {
-            String url = "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/";
-            //CookieManager.setCookie(url, 'sessionid', '1etsh16q7x3hpl5en89nszcgsfnt00j6;');
-            await inAppBrowser.open(url: "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/", options: {
-              "ShouldOverrideUrlLoading": true,
-              "useOnLoadResource": true,
-              "hideUrlBar": true,
-              "toolbarTop": false,
-            });
-          },
-              child: Text("Open InAppBrowser")
-          ),
+          child: new RaisedButton(
+              onPressed: () async {
+                String url =
+                    "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/";
+                await inAppBrowser.open(
+                    url:
+                        "https://app.meetnotes.co/m/59a915a5-a63a-4a96-9a38-a845eb560b2a/",
+                    options: {
+                      "ShouldOverrideUrlLoading": true,
+                      "useOnLoadResource": true,
+                      "hideUrlBar": true,
+                      "toolbarTop": false,
+                    });
+              },
+              child: Text("Open InAppBrowser")),
         ),
       ),
     );

@@ -33,136 +33,6 @@ class AttachmentDialogState extends State<AttachmentDialog> {
 
   static var httpClient = new HttpClient();
 
-  Future<File> _downloadFile(String url, String filename) async {
-    var request = await httpClient.getUrl(Uri.parse(url));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    String dir = (await getExternalStorageDirectory()).path;
-    print(dir);
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    utilities.showLongToast('Downloaded Successfully..!');
-    return file;
-  }
-
-  Future<bool> initConnectivity() async {
-    var connectionStatus;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      connectionStatus = (await _connectivity.checkConnectivity());
-
-      this.setState(() {
-        if(connectionStatus == ConnectivityResult.none){
-          _connectionStatus = false;
-        }else{
-          _connectionStatus = true;
-        }
-      });
-    } on PlatformException catch (e) {
-      _connectionStatus = false;
-    }
-
-    if (!mounted) {
-      return false;
-    }
-    return _connectionStatus;
-  }
-
-  Future<Null> checkStoragePermission() async {
-    bool res = await SimplePermissions
-        .checkPermission(Permission.WriteExternalStorage);
-    if (res.toString() == 'true') {
-      storagePermission = true;
-    } else {
-      final res = await SimplePermissions
-      .requestPermission(Permission.WriteExternalStorage);
-      if (res.toString() == 'true') {
-        storagePermission = true;
-      }
-    }
-  }
-
-  Future<String> getAttachments(String token) async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v2/attachments/?meeting=${widget.meetingUuid}'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
-    if (response.statusCode == 200) {
-      this.setState(() {
-        attachmentData = json.decode(response.body);
-
-        if (attachmentData.isEmpty) {
-          // emptyAttachment = true;
-        }
-        attachmentLoaded = true;
-      });
-    } else {
-      // If that response was not OK, throw an error.
-      attachmentLoaded = true;
-      throw Exception('Failed to load attachments');
-    }
-    return 'Success';
-  }
-
-  Future<String> downloadAttachment(String token, String attachmentId) async {
-    var attachmentData;
-
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v2/attachments/$attachmentId/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
-
-    if (response.statusCode == 200) {
-      this.setState(() {
-        attachmentData = json.decode(response.body);
-
-        if (attachmentData.isEmpty) {
-          // emptyAttachment = true;
-        }
-        //attachmentLoaded = true;
-      });
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load attachments');
-    }
-    return attachmentData['url'].toString();
-  }
-
-  Future<Null> fetchData() async {
-    Future<String> token = utilities.getTokenData();
-    token.then((value) {
-      if (value != null) {
-        userToken = value;
-        getAttachments(value);
-      } else {
-        utilities.showLongToast(value);
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    initConnectivity().then((result){
-      if(result){
-        this.fetchData();
-      }else{
-        attachmentLoaded = true;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -253,5 +123,134 @@ class AttachmentDialogState extends State<AttachmentDialog> {
             ))
       ],
     );
+  }
+
+  Future<File> _downloadFile(String url, String filename) async {
+    var request = await httpClient.getUrl(Uri.parse(url));
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    String dir = (await getExternalStorageDirectory()).path;
+    File file = new File('$dir/$filename');
+    await file.writeAsBytes(bytes);
+    utilities.showLongToast('Downloaded Successfully..!');
+    return file;
+  }
+
+  Future<bool> initConnectivity() async {
+    var connectionStatus;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      connectionStatus = (await _connectivity.checkConnectivity());
+
+      this.setState(() {
+        if (connectionStatus == ConnectivityResult.none) {
+          _connectionStatus = false;
+        } else {
+          _connectionStatus = true;
+        }
+      });
+    } on PlatformException catch (e) {
+      _connectionStatus = false;
+    }
+
+    if (!mounted) {
+      return false;
+    }
+    return _connectionStatus;
+  }
+
+  Future<Null> checkStoragePermission() async {
+    bool res = await SimplePermissions.checkPermission(
+        Permission.WriteExternalStorage);
+    if (res.toString() == 'true') {
+      storagePermission = true;
+    } else {
+      final res = await SimplePermissions.requestPermission(
+          Permission.WriteExternalStorage);
+      if (res.toString() == 'true') {
+        storagePermission = true;
+      }
+    }
+  }
+
+  Future<String> getAttachments(String token) async {
+    final response = await http.get(
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v2/attachments/?meeting=${widget.meetingUuid}'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $token',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+    if (response.statusCode == 200) {
+      this.setState(() {
+        attachmentData = json.decode(response.body);
+
+        if (attachmentData.isEmpty) {
+          // emptyAttachment = true;
+        }
+        attachmentLoaded = true;
+      });
+    } else {
+      // If that response was not OK, throw an error.
+      attachmentLoaded = true;
+      throw Exception('Failed to load attachments');
+    }
+    return 'Success';
+  }
+
+  Future<String> downloadAttachment(String token, String attachmentId) async {
+    var attachmentData;
+
+    final response = await http.get(
+        Uri.encodeFull(
+            'https://app.meetnotes.co/api/v2/attachments/$attachmentId/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $token',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        attachmentData = json.decode(response.body);
+
+        if (attachmentData.isEmpty) {
+          // emptyAttachment = true;
+        }
+        //attachmentLoaded = true;
+      });
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load attachments');
+    }
+    return attachmentData['url'].toString();
+  }
+
+  Future<Null> fetchData() async {
+    Future<String> token = utilities.getTokenData();
+    token.then((value) {
+      if (value != null) {
+        userToken = value;
+        getAttachments(value);
+      } else {
+        utilities.showLongToast(value);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    initConnectivity().then((result) {
+      if (result) {
+        this.fetchData();
+      } else {
+        attachmentLoaded = true;
+      }
+    });
   }
 }

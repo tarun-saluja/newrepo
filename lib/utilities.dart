@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
-Future<String> getTokenData() async{
+Future<String> getTokenData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token') ?? null;
   return token;
@@ -15,14 +15,14 @@ void showLongToast(String text) {
   );
 }
 
-Future<Null> setTokenData(String token) async{
+Future<Null> setTokenData(String token) async {
   if (token != null) {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
   }
 }
 
-Future<Null> removeToken() async{
+Future<Null> removeToken() async {
   final prefs = await SharedPreferences.getInstance();
   prefs.remove('token');
 }

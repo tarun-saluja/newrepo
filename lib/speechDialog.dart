@@ -11,20 +11,6 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:memob/uploadAttachment.dart' as UploadAttachment;
 
-/*
-void main() async {
-  bool res = await SimplePermissions.checkPermission(Permission.RecordAudio);
-  if (res.toString() == 'true') {
-    runApp(new Speech());
-  } else {
-    bool res =
-        await SimplePermissions.requestPermission(Permission.RecordAudio);
-    if (res.toString() == 'true') {
-      runApp(new Speech());
-    }
-  }
-}*/
-
 class Speech extends StatefulWidget {
   final String meetingUuid;
 
@@ -36,6 +22,7 @@ class Speech extends StatefulWidget {
 
 class _MyAppState extends State<Speech> {
   String _platformVersion = 'Unknown';
+
   //Permission permission;
   String userToken;
   SpeechRecognition _speech;
@@ -61,28 +48,7 @@ class _MyAppState extends State<Speech> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  /*initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await SimplePermissions.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }*/
-
-  // Platform messages are asynchronous, so we initialize in an async method.
   void activateSpeechRecognizer() {
-    print('_MyAppState.activateSpeechRecognizer... ');
     _speech = new SpeechRecognition();
     _speech.setAvailabilityHandler(onSpeechAvailability);
     _speech.setCurrentLocaleHandler(onCurrentLocale);
@@ -95,7 +61,6 @@ class _MyAppState extends State<Speech> {
   }
 
   Future<String> get _localPath async {
-
     String timestamp() => new DateTime.now().millisecondsSinceEpoch.toString();
     final Directory extDir = await getApplicationDocumentsDirectory();
     final String dirPath = '${extDir.path}/Text/flutter_test';
@@ -160,11 +125,6 @@ class _MyAppState extends State<Speech> {
                             ),
                             minWidth: double.infinity,
                           ),
-
-                          /* _buildButton(
-                  onPressed: _isListening ? () => cancel() : null,
-                  label: 'Cancel',
-                ),*/
                           new ButtonTheme(
                             child: _buildButton(
                               onPressed: _isListening ? () => stop() : null,
@@ -187,7 +147,8 @@ class _MyAppState extends State<Speech> {
               Navigator.of(context, rootNavigator: true).pop();
 
               writeToFile().then((file) {
-                UploadAttachment.uploadAttachment(userToken, file.path, widget.meetingUuid);
+                UploadAttachment.uploadAttachment(
+                    userToken, file.path, widget.meetingUuid);
 
                 utilities.showLongToast('Transcription saved successfully..!');
               });
@@ -244,17 +205,14 @@ class _MyAppState extends State<Speech> {
 
 void requestPermission() async {
   final res = await SimplePermissions.requestPermission(Permission.RecordAudio);
-  print("permission request result is " + res.toString());
 }
 
 Future<bool> checkPermission() async {
   bool res = await SimplePermissions.checkPermission(Permission.RecordAudio);
-  print("permission is " + res.toString());
   return res;
 }
 
 void getPermissionStatus() async {
   final res =
       await SimplePermissions.getPermissionStatus(Permission.RecordAudio);
-  print("permission status is " + res.toString());
 }

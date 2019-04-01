@@ -12,20 +12,17 @@ class TextEditorButton extends StatelessWidget {
       splashColor: Colors.orange,
       fillColor: Colors.blue,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8.0,
-          horizontal: 20.0
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            //const Icon(Icons.send,color: Colors.white,),
             Icon(
-                Icons.subdirectory_arrow_right,
-                color: Colors.white,
-                size: 30.0,
-              ),
-            const Text("Switch to Editor", style: TextStyle(color: Colors.white)),
+              Icons.subdirectory_arrow_right,
+              color: Colors.white,
+              size: 30.0,
+            ),
+            const Text("Switch to Editor",
+                style: TextStyle(color: Colors.white)),
           ],
         ),
       ),

@@ -1,20 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:memob/actionItems.dart';
-import 'package:memob/dashboard.dart';
 import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:http/http.dart' as http;
-import './webView.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
+import './constants.dart';
 
 class Dwidget extends StatefulWidget {
   final String userToken;
   String displayName;
   String profile_picture;
+
   Dwidget([this.userToken, this.displayName, this.profile_picture]);
+
   @override
   State<StatefulWidget> createState() {
     return _DwidgetState();
@@ -27,27 +26,8 @@ class _DwidgetState extends State<Dwidget> {
   String profile_picture;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
+
   //MyInAppBrowser inAppBrowser = new MyInAppBrowser();
-
-  Future<List<TeamClass>> getAllTeamsData() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/teams/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken1',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
-
-    print(response.body);
-    Map<String, dynamic> mData = json.decode(response.body);
-    List<dynamic> list = mData["results"];
-    for (var teamData in list) {
-      TeamClass team = new TeamClass(teamData['name']);
-      teamNames.add(team);
-    }
-    return teamNames;
-  }
 
   @override
   void initState() {
@@ -60,7 +40,6 @@ class _DwidgetState extends State<Dwidget> {
   @override
   Widget build(BuildContext context) {
     return new Drawer(
-//      backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
       child: new ListView(
         children: <Widget>[
           new Container(
@@ -75,7 +54,7 @@ class _DwidgetState extends State<Dwidget> {
                     height: 30.0,
                   ),
                   Text(
-                    "MEETNOTES",
+                    "$logoname",
                     textAlign: TextAlign.center,
                     textScaleFactor: 1.6,
                     style: new TextStyle(color: Colors.black26),
@@ -88,11 +67,6 @@ class _DwidgetState extends State<Dwidget> {
             margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
             child: new ListTile(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Dashboard(),
-                //     ));
                 Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
               // leading: const Icon(Icons.dashboard),
@@ -102,7 +76,7 @@ class _DwidgetState extends State<Dwidget> {
                 height: 25.0,
               ),
               title: new Text(
-                "Dashboard",
+                "$dashboard",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.black38,
@@ -110,7 +84,6 @@ class _DwidgetState extends State<Dwidget> {
               ),
             ),
           ),
-
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
             child: new ListTile(
@@ -119,7 +92,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("Notes",
+              title: new Text("$notes",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -130,29 +103,17 @@ class _DwidgetState extends State<Dwidget> {
             margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
             child: new ListTile(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => ActionItems(),
-                //     ));
                 bool isNewRouteSameAsCurrent = false;
                 Navigator.popUntil(context, (route) {
-                  print('-------------------------');
-                  print(route);
-                  print(route.settings.name);
                   if (route.settings.name == "ActionItems") {
                     isNewRouteSameAsCurrent = true;
-                    print('inside something----------------------------------------');
                   }
                   return true;
                 });
                 if (!isNewRouteSameAsCurrent) {
-                  Navigator.pushNamed(
-                      context,'ActionItems');
-                }
-                else
-                {
-                   Navigator.pop(context, 'ActionItems');
+                  Navigator.pushNamed(context, 'ActionItems');
+                } else {
+                  Navigator.pop(context, 'ActionItems');
                 }
               },
               leading: Image.asset(
@@ -160,7 +121,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("Action",
+              title: new Text("$action",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -175,16 +136,20 @@ class _DwidgetState extends State<Dwidget> {
                 width: 30.0,
                 height: 30.0,
               ),
-
               title: Text("Team",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
                       fontWeight: FontWeight.w400)),
-              children: <Widget>[_buildTeamNames(),],
+              children: <Widget>[
+                _buildTeamNames(),
+              ],
             ),
           ),
-          new Divider(color: Colors.white,height: 50,),
+          new Divider(
+            color: Colors.white,
+            height: 50,
+          ),
           Container(
             margin: EdgeInsets.fromLTRB(30, 120, 70, 0),
             child: new ListTile(
@@ -201,7 +166,7 @@ class _DwidgetState extends State<Dwidget> {
                 height: 25.0,
                 color: Colors.black12,
               ),
-              title: new Text("Settings",
+              title: new Text("$settings",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black12,
@@ -240,7 +205,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("Logout",
+              title: new Text("$logout",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -268,9 +233,7 @@ class _DwidgetState extends State<Dwidget> {
               for (var i = 0; i < snapshot.data.length; i++) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 6.0),
-                  child: Center(
-                      child: Text(snapshot.data[i].name)
-                  ),
+                  child: Center(child: Text(snapshot.data[i].name)),
                 );
               }
             } else {
@@ -278,5 +241,24 @@ class _DwidgetState extends State<Dwidget> {
             }
           }),
     );
+  }
+
+  Future<List<TeamClass>> getAllTeamsData() async {
+    final response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/teams/'),
+        headers: {
+          HttpHeaders.AUTHORIZATION: 'Token $userToken1',
+          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.ACCEPT: 'application/json',
+          HttpHeaders.CACHE_CONTROL: 'no-cache'
+        });
+
+    Map<String, dynamic> mData = json.decode(response.body);
+    List<dynamic> list = mData["results"];
+    for (var teamData in list) {
+      TeamClass team = new TeamClass(teamData['name']);
+      teamNames.add(team);
+    }
+    return teamNames;
   }
 }

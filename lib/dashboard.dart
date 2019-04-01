@@ -3,21 +3,17 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:memob/Detail.dart';
 import 'package:memob/NotesClass.dart';
 import 'package:memob/meetingClass.dart';
-import 'package:memob/searchbar.dart';
 import 'package:memob/utilities.dart' as utilities;
-import 'package:requests/requests.dart';
-
-import 'package:url_launcher/url_launcher.dart';
+import './constants.dart';
 import './recentlyUpdated.dart';
 import './allMeetings.dart';
 import './drawer.dart';
 
 class Dashboard extends StatefulWidget {
-static final Dashboard _dashboard = new Dashboard._private();
-  
+  static final Dashboard _dashboard = new Dashboard._private();
+
   Dashboard._private();
 
   factory Dashboard() {
@@ -39,6 +35,51 @@ class _DashboardState extends State<Dashboard> {
 
   List<MeetingClass> _meetings = new List();
   List<NotesClass> _notes = new List();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('$dashboard'),
+            bottom: TabBar(
+              indicatorColor: Colors.blue,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 4.0,
+              tabs: [
+                Tab(
+                  text: "$allmeetings",
+                ),
+                Tab(
+                  text: "$recentnotes",
+                ),
+                Tab(
+                  text: "",
+                )
+              ],
+            ),
+          ),
+          drawer: Dwidget(userToken, _displayName, _profile_picture),
+          body: Container(
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                  image: AssetImage('assets/bg.png'), fit: BoxFit.cover),
+            ),
+            child: TabBarView(
+              children: <Widget>[
+                new RefreshIndicator(
+                    child: AllMeetings(_meetings), onRefresh: getMeetingData),
+                new RefreshIndicator(
+                    child: RecentlyUpdated(_notes), onRefresh: getRecentNotes)
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<bool> initConnectivity() async {
     var connectionStatus;
@@ -106,7 +147,7 @@ class _DashboardState extends State<Dashboard> {
             _meetings.add(meeting);
           }
         }
-        _meetings.sort((a,b)=>b.startTime.compareTo(a.startTime));
+        _meetings.sort((a, b) => b.startTime.compareTo(a.startTime));
       });
       return null;
     } else {
@@ -114,7 +155,8 @@ class _DashboardState extends State<Dashboard> {
       return null;
     }
   }
- Future<Null> getUserDetails() async {
+
+  Future<Null> getUserDetails() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
         headers: {
@@ -127,8 +169,8 @@ class _DashboardState extends State<Dashboard> {
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
-          _displayName= mData['user']['display_name'];
-          _profile_picture=mData['user']['profile_picture'];
+        _displayName = mData['user']['display_name'];
+        _profile_picture = mData['user']['profile_picture'];
       });
       return null;
     } else {
@@ -136,6 +178,7 @@ class _DashboardState extends State<Dashboard> {
       return null;
     }
   }
+
   Future<Null> getRecentNotes() async {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/recent-notes/'),
@@ -176,52 +219,5 @@ class _DashboardState extends State<Dashboard> {
         this.fetchData();
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Dashboard'),
-
-            bottom: TabBar(
-              indicatorColor: Colors.blue,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorWeight: 4.0,
-//              indicatorPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-              tabs: [
-                Tab(
-                  text: " All Meetings",
-                ),
-
-                Tab(
-                  text: "Recent Notes",
-                ),
-                Tab(
-                  text: "",
-                )
-              ],
-            ),
-          ),
-          drawer: Dwidget(userToken,_displayName,_profile_picture),
-          body: Container(
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                  image: AssetImage('assets/background.jpeg'),
-                  fit: BoxFit.cover),
-            ),
-            child: TabBarView(
-              children: <Widget>[
-                new RefreshIndicator(child:AllMeetings(_meetings),onRefresh: getMeetingData),
-                new RefreshIndicator(child:RecentlyUpdated(_notes),onRefresh: getRecentNotes)
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

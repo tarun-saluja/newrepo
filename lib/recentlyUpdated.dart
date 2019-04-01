@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:memob/searchbar.dart';
 import './NotesClass.dart';
 import './notes.dart';
 
 class RecentlyUpdated extends StatefulWidget {
-   final List<NotesClass> notes;
+  final List<NotesClass> notes;
 
   RecentlyUpdated([this.notes = const []]);
 
@@ -16,14 +15,16 @@ class RecentlyUpdated extends StatefulWidget {
 }
 
 class _RecentlyUpdatedState extends State<RecentlyUpdated> {
-List<NotesClass> _notes;
+  List<NotesClass> _notes;
+
   @override
   void initState() {
-    if(widget.notes!=null){
-      _notes=widget.notes;
+    if (widget.notes != null) {
+      _notes = widget.notes;
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(

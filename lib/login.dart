@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'dart:async';
+import './constants.dart';
 
 enum UniLinksType { string, uri }
 
@@ -28,6 +29,97 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     initPlatformState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double x = 20;
+    return Scaffold(
+        backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
+        body: new Container(
+          transform: Matrix4.translationValues(0.0, -180.0, 0.0),
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+              image: new AssetImage(
+                "assets/signup_bg.png",
+              ),
+            ),
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) => Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Container(
+                      padding:
+                          EdgeInsets.fromLTRB(30.0, height * 0.6, 150.0, 00.0),
+                      child: new Text('$name',
+                          style: TextStyle(
+                              fontSize: 35.0,
+                              color: Color.fromRGBO(255, 255, 255, 0.8))),
+                    ),
+                    Positioned(
+                      top: height * 0.8,
+                      bottom: height * 0.118,
+                      left: width * 0.05,
+                      right: width * 0.22,
+                      child: new RaisedButton.icon(
+                          onPressed: _launchLoginUrl,
+                          icon: new Image.asset(
+                            'assets/google.png',
+                            height: 50,
+                            width: 50,
+                          ),
+                          label: new Text('$google',
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                              )),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(40.0))),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(
+                          20.0, height * 0.9, 250.0, height * 0.022),
+                      child: new RaisedButton.icon(
+                          color: Colors.red,
+                          onPressed: _launchLoginUrlSlack,
+                          icon: new Image.asset(
+                            'assets/slack.png',
+                            height: 40,
+                            width: 30,
+                          ),
+                          label: new Text('$slack',
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                              )),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(40.0))),
+                    ),
+                    Positioned(
+                      top: height * 0.9,
+                      bottom: height * 0.022,
+                      left: 180.0,
+                      right: 94.0,
+                      child: new RaisedButton.icon(
+                          color: Colors.red,
+                          onPressed: _launchLoginUrlOffice,
+                          icon: new Image.asset(
+                            'assets/office_365.png',
+                            height: 40,
+                            width: 30,
+                          ),
+                          label: new Text('$office',
+                              style: new TextStyle(
+                                fontSize: 15.0,
+                              )),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(40.0))),
+                    ),
+                  ],
+                ),
+          ),
+        ));
+  }
+
   initPlatformState() async {
     if (_type == UniLinksType.string) {
       await initPlatformStateForStringUniLinks();
@@ -42,9 +134,6 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
       if (!mounted) return;
       setState(() {
         Uri uriLink = Uri.parse(link);
-        print('------------------------------------------------------------------------');
-        print("hello");
-        print(uriLink);
         // Get token from query parameter
         token = uriLink?.queryParameters['user'];
         // Store token data in shared preferences
@@ -70,8 +159,6 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 
     // Attach a second listener to the stream
     getLinksStream().listen((String link) {
-      print('got link: $link');
-
       Uri uriLink = Uri.parse(link);
 
       // Get token from query parameter
@@ -80,9 +167,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
       utilities.setTokenData(token).then((onValue) {
         Navigator.pushReplacementNamed(context, 'Dashboard');
       });
-    }, onError: (err) {
-      print('got err: $err');
-    });
+    }, onError: (err) {});
 
     // Get the latest link
     String initialLink;
@@ -90,7 +175,6 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       initialLink = await getInitialLink();
-      print('initial link: $initialLink');
       if (initialLink != null) initialUri = Uri.parse(initialLink);
     } on PlatformException {
       initialLink = 'Failed to get initial link.';
@@ -129,11 +213,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     });
 
     // Attach a second listener to the stream
-    getUriLinksStream().listen((Uri uri) {
-      print('got uri: ${uri?.path} ${uri?.queryParametersAll}');
-    }, onError: (err) {
-      print('got err: $err');
-    });
+    getUriLinksStream().listen((Uri uri) {}, onError: (err) {});
 
     // Get the latest Uri
     Uri initialUri;
@@ -141,8 +221,6 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       initialUri = await getInitialUri();
-      print('initial uri: ${initialUri?.path}'
-          ' ${initialUri?.queryParametersAll}');
       initialLink = initialUri?.toString();
     } on PlatformException {
       initialUri = null;
@@ -172,118 +250,21 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
-        body: new Container(
-          transform: Matrix4.translationValues(0.0, -180.0, 0.0),
-          decoration: new BoxDecoration(
-            image: new DecorationImage(
-              image: new AssetImage(
-                "assets/signup_bg.png",
-              ),
-            ),
-          ),
-          child:
-           LayoutBuilder(
-            builder: (context, constraints) => Stack(
-              fit: StackFit.expand,
-              children: <Widget>[Padding(
-                padding: const EdgeInsets.fromLTRB(30.0,480.0,150.0,00.0),
-                child: new Text("Make it Large",style: TextStyle(fontSize: 50.0,color: Colors.white)),
-              ),
+  _launchLoginUrlSlack() async {
+    const url = 'https://app.meetnotes.co/login/slack/?next=/mtoken/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
-                Positioned(
-                  top: 630.0,
-                  bottom:85.0,
-                  left: width* 0.05,
-                  right:width* 0.22,
-                  child: new RaisedButton.icon(
-                        onPressed: _launchLoginUrl,
-                        icon: new Image.asset(
-                          'assets/google.png',
-                          height: 50,
-                          width: 50,
-                        ),
-                        label: new Text('Sign up with Google',
-                            style: new TextStyle(
-                              fontSize: 20.0,
-                            )),
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(40.0))),
-                  ),
-              Container(
-                padding: EdgeInsets.fromLTRB(20.0, 710.0, 250.0, 20.0),
-//                top: 710.0,
-//                bottom:20.0,
-//                left: 20.0,
-//                right: 250.0,
-
-                child: new RaisedButton.icon(
-                  color: Colors.red,
-                    onPressed: _launchLoginUrl,
-                    icon: new Image.asset(
-                      'assets/google.png',
-                      height: 50,
-                      width: 50,
-                    ),
-                    label: new Text('Slack',
-                        style: new TextStyle(
-                          fontSize: 20.0,
-                        )),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0))),
-              ),
-
-              Positioned(
-                top: 710.0,
-                bottom:20.0,
-                left: 180.0,
-                right: 94.0,
-                child: new RaisedButton.icon(
-                    color: Colors.red,
-                    onPressed: _launchLoginUrl,
-                    icon: new Image.asset(
-                      'assets/google.png',
-                      height: 40,
-                      width: 30,
-                    ),
-                    label: new Text('Office 365',
-                        style: new TextStyle(
-                          fontSize: 15.0,
-                        )),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0))),
-              ),
-
-
-
-
-
-
-              ],
-            ),
-          ),
-          //  Column(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: <Widget>[
-          //     new Center(
-          //       child: new RaisedButton.icon(
-          //          onPressed: _launchLoginUrl,
-          //           icon: new Image.asset('assets/google.png',height: 60,width: 60,),
-          //           label: new Text('Sign up with Google',
-          //               style: new TextStyle(
-          //                 fontSize: 15.0,
-          //               )),
-          //           shape: new RoundedRectangleBorder(
-          //               borderRadius: new BorderRadius.circular(30.0))),
-          //     ),
-          //   ],
-          // ),
-        ));
+  _launchLoginUrlOffice() async {
+    const url = 'https://app.meetnotes.co/login/azuread-oauth2/?next=/mtoken/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

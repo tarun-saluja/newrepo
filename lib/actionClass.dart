@@ -1,7 +1,7 @@
-
 class ActionClass {
   String uuid;
   String eventUuid;
+
   //MeetingClass meeting;
   String note;
   String profilePicture;
@@ -10,25 +10,27 @@ class ActionClass {
   bool isDeleted;
   String createdAt;
   String dueDate;
- // List<String> tags;
+
+  // List<String> tags;
   bool isExternallyModified;
- // List<String> comments;
+
+  // List<String> comments;
 
   ActionClass(
-      this.uuid,
-      this.eventUuid,
-      //this.meeting,
-      this.note,
-      this.profilePicture,
-      this.assignedTo,
-      this.status,
-      this.isDeleted,
-      this.createdAt,
-      this.dueDate,
-     // this.tags,
-      this.isExternallyModified,
-     // this.comments
-     );
+    this.uuid,
+    this.eventUuid,
+    //this.meeting,
+    this.note,
+    this.profilePicture,
+    this.assignedTo,
+    this.status,
+    this.isDeleted,
+    this.createdAt,
+    this.dueDate,
+    // this.tags,
+    this.isExternallyModified,
+    // this.comments
+  );
 
   @override
   String toString() {
