@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
-import './meetingClass.dart';
+
 import './Detail.dart';
+import './constants.dart';
+import './meetingClass.dart';
 
 class Meetings extends StatelessWidget {
   List<MeetingClass> meetings;
@@ -69,12 +71,12 @@ class Meetings extends StatelessWidget {
                           ? ((isToday == 0)
                               ? isUpcoming == true
                                   ? Text(
-                                      'Upcoming',
+                                      '$UPCOMING',
                                       style: TextStyle(
                                           fontSize: 12.0, color: Colors.white),
                                     )
                                   : Text(
-                                      'Today',
+                                      '$TODAY',
                                       style: TextStyle(
                                           fontSize: 12.0, color: Colors.white),
                                     )

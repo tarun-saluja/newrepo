@@ -1,13 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:memob/utilities.dart' as utilities;
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
-import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:memob/actionClass.dart';
+import 'package:memob/utilities.dart' as utilities;
+
+import './constants.dart';
 
 class Actions extends StatefulWidget {
   final List<ActionClass> allActions;
@@ -39,21 +39,6 @@ class _Actions extends State<Actions> {
     assignees = widget.assignees;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget actionCard = Center(
-      child: CircularProgressIndicator(),
-    );
-    if (allActions.length > 0) {
-      actionCard = ListView.builder(
-        itemBuilder: _buildActionItem,
-        itemCount: allActions.length,
-      );
-    }
-
-    return actionCard;
-  }
-
   Widget _buildActionItem(BuildContext context, int index) {
     var createdAt;
     Duration diff =
@@ -75,7 +60,7 @@ class _Actions extends State<Actions> {
       createdAt =
           "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
     else
-      createdAt = "just now";
+      createdAt = "$JUST_NOW";
 
     return Container(
         height: 130,
@@ -84,7 +69,7 @@ class _Actions extends State<Actions> {
           onTap: () {
             showDialog(
                 context: context,
-                child: AlertDialog(
+                builder: (BuildContext context) => AlertDialog(
                     title: Text(meetings[index]['title']),
                     content: Container(child: Text(allActions[index].note))));
           },
@@ -125,7 +110,7 @@ class _Actions extends State<Actions> {
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black87),
                                           )
-                                        : Text('No Assignee',
+                                        : Text('$NO_ASSIGNEE',
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
@@ -144,9 +129,9 @@ class _Actions extends State<Actions> {
                               const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
-                              color: (allActions[index].status == 'pending')
+                              color: (allActions[index].status == '$PENDING')
                                   ? Colors.pink
-                                  : (allActions[index].status == 'doing'
+                                  : (allActions[index].status == '$DOING'
                                       ? Colors.blue[400]
                                       : Colors.green[400])),
                           child: Text(
@@ -193,6 +178,21 @@ class _Actions extends State<Actions> {
         ));
   }
 
+  @override
+  Widget build(BuildContext context) {
+    Widget actionCard = Center(
+      child: CircularProgressIndicator(),
+    );
+    if (allActions.length > 0) {
+      actionCard = ListView.builder(
+        itemBuilder: _buildActionItem,
+        itemCount: allActions.length,
+      );
+    }
+
+    return actionCard;
+  }
+
   void choiceAction(String choice, int index) {
     String url = 'https://app.meetnotes.co/api/v2/action-item/' +
         allActions[index].uuid +
@@ -200,19 +200,19 @@ class _Actions extends State<Actions> {
 
     Map body;
     if (choice == Status.Doing) {
-      body = {'new_value': "doing", 'field': "status"};
+      body = {'new_value': "$DOING", 'field': "status"};
       setState(() {
         allActions[index].status = 'doing';
       });
     } else if (choice == Status.Done) {
-      body = {'new_value': "done", 'field': "status"};
+      body = {'new_value': "$DONE", 'field': "status"};
       setState(() {
-        allActions[index].status = 'done';
+        allActions[index].status = '$DONE';
       });
     } else {
-      body = {'new_value': "pending", 'field': "status"};
+      body = {'new_value': "$PENDING", 'field': "status"};
       setState(() {
-        allActions[index].status = 'pending';
+        allActions[index].status = '$PENDING';
       });
     }
     apiRequest(url, body);
@@ -237,19 +237,19 @@ class _Actions extends State<Actions> {
     var data = json.encode(body);
     var response = await http.patch(url,
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.authorizationHeader: 'Token $userToken',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
         },
         body: data);
   }
 }
 
 class Status {
-  static const String Pending = 'pending';
-  static const String Doing = 'doing';
-  static const String Done = 'done';
+  static const String Pending = '$PENDING';
+  static const String Doing = '$DOING';
+  static const String Done = '$DONE';
 
   static const List<String> choices = <String>[
     Pending,

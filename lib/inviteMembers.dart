@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:memob/memberCard.dart';
+
+import './api_service.dart';
 
 class InviteMembers extends StatefulWidget {
   final String userToken;
@@ -18,6 +19,7 @@ class InviteMembers extends StatefulWidget {
 class _InviteMembers extends State<InviteMembers> {
   String _userToken;
   List<dynamic> teamMembers = new List();
+  var api = new API_Service();
 
   @override
   void initState() {
@@ -26,23 +28,8 @@ class _InviteMembers extends State<InviteMembers> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: MemberCard(teamMembers),
-    );
-  }
-
   Future<Null> getTeamMembers() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/teams/detail/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $_userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache',
-          HttpHeaders.COOKIE: 'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn;'
-        });
+    final response = await api.getTeamMembersDetails(_userToken);
     if (response.statusCode == 200) {
       this.setState(() {
         teamMembers.clear();
@@ -59,5 +46,12 @@ class _InviteMembers extends State<InviteMembers> {
       // If that response was not OK, throw an error.
       return null;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: MemberCard(teamMembers),
+    );
   }
 }

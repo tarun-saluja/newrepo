@@ -72,6 +72,4 @@ class _MemberCard extends State<MemberCard> {
       ),
     );
   }
-
-
 }

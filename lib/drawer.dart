@@ -1,18 +1,19 @@
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
-import 'package:http/http.dart' as http;
+
+import './api_service.dart';
 import './constants.dart';
 
 class Dwidget extends StatefulWidget {
   final String userToken;
   String displayName;
-  String profile_picture;
+  String profilepicture;
 
-  Dwidget([this.userToken, this.displayName, this.profile_picture]);
+  Dwidget([this.userToken, this.displayName, this.profilepicture]);
 
   @override
   State<StatefulWidget> createState() {
@@ -23,18 +24,17 @@ class Dwidget extends StatefulWidget {
 class _DwidgetState extends State<Dwidget> {
   String userToken1;
   String displayName;
-  String profile_picture;
+  String profilepicture;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
-
-  //MyInAppBrowser inAppBrowser = new MyInAppBrowser();
+  var api = new API_Service();
 
   @override
   void initState() {
     super.initState();
     userToken1 = widget.userToken;
     displayName = widget.displayName;
-    profile_picture = widget.profile_picture;
+    profilepicture = widget.profilepicture;
   }
 
   @override
@@ -54,7 +54,7 @@ class _DwidgetState extends State<Dwidget> {
                     height: 30.0,
                   ),
                   Text(
-                    "$logoname",
+                    "$LOGONAME",
                     textAlign: TextAlign.center,
                     textScaleFactor: 1.6,
                     style: new TextStyle(color: Colors.black26),
@@ -69,14 +69,13 @@ class _DwidgetState extends State<Dwidget> {
               onTap: () {
                 Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
-              // leading: const Icon(Icons.dashboard),
               leading: Image.asset(
                 'assets/dashboard.png',
                 width: 25.0,
                 height: 25.0,
               ),
               title: new Text(
-                "$dashboard",
+                "$DASHBOARD",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.black38,
@@ -92,7 +91,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("$notes",
+              title: new Text("$NOTES",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -121,7 +120,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("$action",
+              title: new Text("$ACTION",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -136,7 +135,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 30.0,
                 height: 30.0,
               ),
-              title: Text("Team",
+              title: Text("$TEAM",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -166,7 +165,7 @@ class _DwidgetState extends State<Dwidget> {
                 height: 25.0,
                 color: Colors.black12,
               ),
-              title: new Text("$settings",
+              title: new Text("$SETTINGS",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black12,
@@ -176,9 +175,9 @@ class _DwidgetState extends State<Dwidget> {
           Container(
             margin: EdgeInsets.fromLTRB(30, 20, 70, 0),
             child: new ListTile(
-                leading: (profile_picture != null)
+                leading: (profilepicture != null)
                     ? (CircleAvatar(
-                        backgroundImage: AssetImage(profile_picture),
+                        backgroundImage: AssetImage(profilepicture),
                         maxRadius: 17,
                       ))
                     : (CircleAvatar(
@@ -191,7 +190,7 @@ class _DwidgetState extends State<Dwidget> {
                             fontSize: 18,
                             color: Colors.black38,
                             fontWeight: FontWeight.w400)))
-                    : (new Text('User',
+                    : (new Text('$USER',
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black38,
@@ -205,7 +204,7 @@ class _DwidgetState extends State<Dwidget> {
                 width: 25.0,
                 height: 25.0,
               ),
-              title: new Text("$logout",
+              title: new Text("$LOGOUT",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
@@ -244,14 +243,7 @@ class _DwidgetState extends State<Dwidget> {
   }
 
   Future<List<TeamClass>> getAllTeamsData() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/teams/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken1',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getAllTeams(userToken1);
 
     Map<String, dynamic> mData = json.decode(response.body);
     List<dynamic> list = mData["results"];

@@ -1,6 +1,7 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
+
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String> getTokenData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();

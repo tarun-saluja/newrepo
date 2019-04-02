@@ -1,17 +1,17 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 import './cancelbutton.dart';
-import './sendbutton.dart';
+import './constants.dart';
 import './drawer.dart';
+import './sendbutton.dart';
 import './utilities.dart';
 
 final ThemeData iOSTheme = new ThemeData(
@@ -25,7 +25,7 @@ final ThemeData androidTheme = new ThemeData(
   accentColor: Colors.green,
 );
 
-const String defaultUserName = "User";
+const String defaultUserName = "$USER";
 
 class Share extends StatefulWidget {
   final String meetingTitle;
@@ -68,7 +68,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   Widget build(BuildContext ctx) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("MeetNotes"),
+        title: new Text("$LOGO"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
       ),
       drawer: new Dwidget(),
@@ -82,7 +82,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
                   Navigator.pop(context);
                 }),
                 Text(
-                  "Share Notes",
+                  "$SHARE_NOTES",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 SendButton(
@@ -200,13 +200,12 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
   }
 
   Future<Null> sendEmail(String url, Map body) async {
-    //var data = json.encode(body);
     var data = jsonEncode(body);
 
     var response = await http.post(url,
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
+          HttpHeaders.authorizationHeader: 'Token $userToken',
+          HttpHeaders.contentTypeHeader: 'application/json',
         },
         body: data);
     if (response.statusCode == 200) {

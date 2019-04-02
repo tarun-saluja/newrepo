@@ -1,26 +1,26 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:memob/utilities.dart' as utilities;
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
-import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
-import 'package:flutter/cupertino.dart';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
+import 'package:memob/utilities.dart' as utilities;
 
-import './share.dart';
-import './dashboard.dart';
 import './attachmentListDialog.dart';
-import './webView.dart';
 import './cameraPage.dart';
+import './constants.dart';
+import './dashboard.dart';
+import './share.dart';
 import './speechDialog.dart';
+import './webView.dart';
 
 class Detail extends StatefulWidget {
   final String meetingUuid;
@@ -36,7 +36,6 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
-  //String _uuid;
   InAppWebViewController webView;
   Map<String, dynamic> data;
   List<dynamic> attachmentCountData;
@@ -75,7 +74,6 @@ class _DetailState extends State<Detail> {
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0),
         // this is ignored if animatedIcon is non null
-        // child: Icon(Icons.add),
         visible: true,
         curve: Curves.bounceIn,
         overlayColor: Colors.black,
@@ -92,8 +90,7 @@ class _DetailState extends State<Detail> {
           SpeedDialChild(
               child: Icon(Icons.camera),
               backgroundColor: Colors.red,
-              label: 'Capture',
-              //labelStyle: TextTheme(fontSize: 18.0),
+              label: '$CAPTURE',
               onTap: () => {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => new CameraPage(
@@ -102,15 +99,13 @@ class _DetailState extends State<Detail> {
           SpeedDialChild(
             child: Icon(Icons.edit),
             backgroundColor: Colors.blue,
-            label: 'Editor',
-            //labelStyle: TextTheme(fontSize: 18.0),
+            label: '$EDITOR',
             onTap: onChangedValue4,
           ),
           SpeedDialChild(
             child: Icon(Icons.keyboard_voice),
             backgroundColor: Colors.green,
-            label: 'Record',
-            //labelStyle: TextTheme(fontSize: 18.0),
+            label: '$RECORD',
             onTap: () => {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) =>
@@ -163,8 +158,9 @@ class _DetailState extends State<Detail> {
                                 attachmentCount != 0
                                     ? showDialog(
                                         context: context,
-                                        child: new AttachmentDialog(
-                                            widget.meetingUuid))
+                                        builder: (BuildContext context) =>
+                                            new AttachmentDialog(
+                                                widget.meetingUuid))
                                     : Fluttertoast.showToast(
                                         msg: "No Attachment",
                                         toastLength: Toast.LENGTH_SHORT,
@@ -230,7 +226,7 @@ class _DetailState extends State<Detail> {
                                                 MainAxisAlignment.center,
                                             children: <Widget>[
                                               Text(
-                                                'Start taking Notes',
+                                                '$START_NOTES',
                                                 style: TextStyle(
                                                     color: Colors.grey,
                                                     fontSize: 15),
@@ -268,6 +264,7 @@ class _DetailState extends State<Detail> {
         }
       });
     } on PlatformException catch (e) {
+      print(e);
       _connectionStatus = false;
     }
 
@@ -295,10 +292,10 @@ class _DetailState extends State<Detail> {
         Uri.encodeFull(
             'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.authorizationHeader: 'Token $userToken',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
         });
 
     if (response.statusCode == 200) {
@@ -320,7 +317,6 @@ class _DetailState extends State<Detail> {
         }
 
         noteLoaded = true;
-        // noteText = rawNote.isNotEmpty ? '${data['raw_note'][0]['body']}' : '';
         finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
       });
     } else {
@@ -328,7 +324,7 @@ class _DetailState extends State<Detail> {
       noteLoaded = true;
       throw Exception('Failed to load post');
     }
-    return 'Success';
+    return '$SUCCESS';
   }
 
   Future<String> getRecentNotesCount(String token) async {
@@ -336,10 +332,10 @@ class _DetailState extends State<Detail> {
         Uri.encodeFull(
             'https://app.meetnotes.co/api/v2/attachments/?event=${widget.meetingEventId}'),
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.authorizationHeader: 'Token $token',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
         });
 
     if (response.statusCode == 200) {
@@ -358,7 +354,7 @@ class _DetailState extends State<Detail> {
       attachmentCountLoaded = true;
       throw Exception('Failed to load post');
     }
-    return 'Success';
+    return '$SUCCESS';
   }
 
   @override
@@ -410,8 +406,8 @@ class _DetailState extends State<Detail> {
 }
 
 class Constants {
-  static const String Share = 'Share';
-  static const String Leave = 'Leave';
+  static const String Share = '$SHARE';
+  static const String Leave = '$LEAVE';
 
   static const List<String> choices = <String>[
     Share,

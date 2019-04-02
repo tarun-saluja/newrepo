@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
-import './NotesClass.dart';
+
 import './Detail.dart';
+import './NotesClass.dart';
+import './constants.dart';
 
 class Notes extends StatelessWidget {
   final List<NotesClass> notes;
@@ -42,7 +43,7 @@ class Notes extends StatelessWidget {
       updatedAt =
           "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
     else
-      updatedAt = "just now";
+      updatedAt = "$JUST_NOW";
 
     var open = notes[index].actionItems;
     return Container(

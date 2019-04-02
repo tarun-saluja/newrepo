@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:memob/inviteMembers.dart';
-import 'package:memob/utilities.dart' as utilities;
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:memob/inviteMembers.dart';
+import 'package:memob/utilities.dart' as utilities;
+
+import './constants.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -21,7 +24,7 @@ class _Settings extends State<Settings> {
   String name;
   String email;
   String userToken;
-  String title = 'Profile Information';
+  String title = '$PROFILE_INFO';
   bool profileInformation = true;
   bool aliases = false;
   String aliasEmail = "";
@@ -38,7 +41,7 @@ class _Settings extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Settings'),
+          title: Text('$SETTINGS'),
           actions: <Widget>[
             PopupMenuButton<String>(
               icon: Icon(Icons.filter),
@@ -67,7 +70,7 @@ class _Settings extends State<Settings> {
                           ),
                           Divider(),
                           Text(''),
-                          Text('Name'),
+                          Text('$NAME_USER'),
                           Text(''),
                           TextFormField(
                             enabled: false,
@@ -78,7 +81,7 @@ class _Settings extends State<Settings> {
                                         BorderSide(color: Colors.black))),
                           ),
                           Text(''),
-                          Text('Email'),
+                          Text('$EMAIL'),
                           Text(''),
                           TextFormField(
                             enabled: false,
@@ -89,23 +92,23 @@ class _Settings extends State<Settings> {
                                         BorderSide(color: Colors.black))),
                           ),
                           Text(''),
-                          Text('Notification Preferences'),
+                          Text('$NOTIFICATION_PREF'),
                           Text(''),
                           CheckboxListTile(
-                            title: Text('Daily Summary via Email'),
+                            title: Text('$SEND_VIA_EMAIL'),
                             value: this.dailyEmail,
                             onChanged: (bool val) {
                               this.setState(() {
                                 dailyEmail = !dailyEmail;
                               });
                               Map body = {
-                                "settings": {"DAILY_SUMMARY": dailyEmail}
+                                "settings": {"$DAILY_SUMMARY": dailyEmail}
                               };
                               settingsUpdate(body);
                             },
                           ),
                           CheckboxListTile(
-                            title: Text('Daily Summary via Slack'),
+                            title: Text('$SEND_VIA_SLACK'),
                             value: this.dailySlack,
                             onChanged: (bool val) {
                               this.setState(() {
@@ -228,8 +231,6 @@ class _Settings extends State<Settings> {
                               child: Text('Invite Members'),
                               color: Colors.blue,
                               onPressed: () {
-                                //List<String> members= new List();
-                                //members.add(inviteController.text);
                                 String email = inviteController.text;
                                 Map body = {
                                   "email": [email]
@@ -262,10 +263,10 @@ class _Settings extends State<Settings> {
     final response = await http.get(
         Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.authorizationHeader: 'Token $userToken',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
         });
 
     if (response.statusCode == 200) {
@@ -294,10 +295,10 @@ class _Settings extends State<Settings> {
     var response =
         await http.post('https://app.meetnotes.co/api/v2/settings/account/',
             headers: {
-              HttpHeaders.AUTHORIZATION: 'Token $userToken',
-              HttpHeaders.CONTENT_TYPE: 'application/json',
-              HttpHeaders.ACCEPT: 'application/json',
-              HttpHeaders.CACHE_CONTROL: 'no-cache'
+              HttpHeaders.authorizationHeader: 'Token $userToken',
+              HttpHeaders.contentTypeHeader: 'application/json',
+              HttpHeaders.acceptHeader: 'application/json',
+              HttpHeaders.cacheControlHeader: 'no-cache'
             },
             body: data);
   }
@@ -307,10 +308,10 @@ class _Settings extends State<Settings> {
     var response =
         await http.post('https://app.meetnotes.co/api/v2/user/alias/',
             headers: {
-              HttpHeaders.AUTHORIZATION: 'Token $userToken',
-              HttpHeaders.CONTENT_TYPE: 'application/json',
-              HttpHeaders.ACCEPT: 'application/json',
-              HttpHeaders.CACHE_CONTROL: 'no-cache'
+              HttpHeaders.authorizationHeader: 'Token $userToken',
+              HttpHeaders.contentTypeHeader: 'application/json',
+              HttpHeaders.acceptHeader: 'application/json',
+              HttpHeaders.cacheControlHeader: 'no-cache'
             },
             body: data);
   }
@@ -319,13 +320,13 @@ class _Settings extends State<Settings> {
     var data = json.encode(body);
     var response = await http.post('',
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache',
-          HttpHeaders.COOKIE:
+          HttpHeaders.authorizationHeader: 'Token $userToken',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache',
+          HttpHeaders.cookieHeader:
               'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn; csrftoken=Rc56oTojXV1N3cKEdV1ImYXxOTfb4pVi;',
-          HttpHeaders.REFERER:
+          HttpHeaders.refererHeader:
               'https://app.meetnotes.co/settings/teams/members/'
         },
         body: data);
@@ -357,8 +358,6 @@ class SettingFilters {
   static const String ProfileInformation = 'Profile Information';
   static const String Aliases = 'Aliases';
   static const String InviteMembers = 'Invite Members';
-
-  // static const String RecentlyClosed = 'Recently Closed';
 
   static const List<String> choices = <String>[
     ProfileInformation,

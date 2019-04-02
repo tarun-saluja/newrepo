@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as Path;
 
@@ -19,8 +20,8 @@ Future<dynamic> uploadAttachment(
     url,
     body: body,
     headers: {
-      HttpHeaders.AUTHORIZATION: "Token $token",
-      HttpHeaders.ACCEPT: "application/json, text/plain, */*"
+      HttpHeaders.authorizationHeader: "Token $token",
+      HttpHeaders.acceptHeader: "application/json, text/plain, */*"
     },
   ).then((http.Response response) {
     final String res = response.body;
@@ -41,8 +42,8 @@ _postRequest(response, bytes) async {
     json.decode(response.body)['url'],
     body: bytes,
     headers: {
-      HttpHeaders.CONTENT_TYPE: "binary/octet-stream",
-      HttpHeaders.ACCEPT: "application/json, text/plain, */*"
+      HttpHeaders.contentTypeHeader: "binary/octet-stream",
+      HttpHeaders.acceptHeader: "application/json, text/plain, */*"
     },
   ).then((http.Response responsePost) {
     if (responsePost.statusCode == 200) {
@@ -60,10 +61,10 @@ _changeStatus(responsePost) async {
       "upload_status": "UPLOAD_COMPLETED",
     }),
     headers: {
-      HttpHeaders.AUTHORIZATION:
+      HttpHeaders.authorizationHeader:
           "Token 74290f9175b0816113ee9b18d1b1a19ff120a313",
-      HttpHeaders.CONTENT_TYPE: "application/json",
-      HttpHeaders.ACCEPT: "application/json"
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.acceptHeader: "application/json"
     },
   ).then((http.Response response) {
     print('response, ${response.body}');

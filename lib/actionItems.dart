@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:http/http.dart' as http;
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionClass.dart';
 import 'package:memob/actionManager.dart';
-import './constants.dart';
 import 'package:memob/drawer.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:memob/utilities.dart' as utilities;
+
+import './api_service.dart';
+import './constants.dart';
 
 class ActionItems extends StatefulWidget {
   @override
@@ -48,6 +48,8 @@ class _ActionItems extends State<ActionItems> {
   String profile_picture;
   bool _connectionStatus = false;
 
+  var api = new API_Service();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +57,7 @@ class _ActionItems extends State<ActionItems> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('ACTION ITEMS'),
+            title: Text('$ACTION_ITEMS'),
             actions: <Widget>[
               PopupMenuButton<String>(
                 // icon: Icon(
@@ -84,10 +86,10 @@ class _ActionItems extends State<ActionItems> {
               indicatorColor: Colors.blue,
               tabs: <Widget>[
                 Tab(
-                  text: 'All $action',
+                  text: 'All $ACTION',
                 ),
                 Tab(
-                  text: 'My $action',
+                  text: 'My $ACTION',
                 )
               ],
             ),
@@ -151,14 +153,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getAllActionsData() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v1/action-items/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getAllActions(userToken);
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -227,14 +222,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getUserDetails() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getUser(userToken);
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -267,18 +255,8 @@ class _ActionItems extends State<ActionItems> {
     super.initState();
   }
 
-  // ....................................................................
-
   Future<Null> getOpenActionsData() async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v1/action-items/?status__in=pending,doing'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getOpenActions(userToken);
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -340,15 +318,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getRecentlyUpdatedActionsData() async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getRecentlyUpdatedActions(userToken);
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -369,7 +339,6 @@ class _ActionItems extends State<ActionItems> {
             ActionClass action = new ActionClass(
               actionData['uuid'],
               actionData['event_uuid'],
-              //actionData['meeting'],
               actionData['note'],
               actionData['assignee']['profile_picture'],
               actionData['assigned_to'],
@@ -377,16 +346,13 @@ class _ActionItems extends State<ActionItems> {
               actionData['is_deleted'],
               actionData['created_at'],
               actionData['due_date'],
-              // actionData['tags'],
               actionData['isExternallyModified'],
-              //  actionData['comments'],
             );
             updatedAllActions.add(action);
           } else {
             ActionClass action = new ActionClass(
               actionData['uuid'],
               actionData['event_uuid'],
-              //actionData['meeting'],
               actionData['note'],
               actionData['assignee'],
               actionData['assigned_to'],
@@ -394,9 +360,7 @@ class _ActionItems extends State<ActionItems> {
               actionData['is_deleted'],
               actionData['created_at'],
               actionData['due_date'],
-              // actionData['tags'],
               actionData['isExternallyModified'],
-              //  actionData['comments'],
             );
             updatedAllActions.add(action);
           }
@@ -410,15 +374,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getRecentlyClosedActionsData() async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v1/action-items/?ordering=-updated_at&status=done'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getRecentlyClosedActions(userToken);
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -537,10 +493,10 @@ class _ActionItems extends State<ActionItems> {
 }
 
 class Filters {
-  static const String Everything = 'Everything';
-  static const String OpenActions = 'All Open Actions';
-  static const String RecentlyUpdated = 'Recently Updated';
-  static const String RecentlyClosed = 'Recently Closed';
+  static const String Everything = '$EVERYTHING';
+  static const String OpenActions = '$OPEN_ACTIONS';
+  static const String RecentlyUpdated = '$RECENTLY_UPDATED';
+  static const String RecentlyClosed = '$RECENTLY_CLOSED';
 
   static const List<String> choices = <String>[
     Everything,

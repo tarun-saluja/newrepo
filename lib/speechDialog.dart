@@ -1,15 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:memob/uploadAttachment.dart' as UploadAttachment;
+import 'package:memob/utilities.dart' as utilities;
+import 'package:path_provider/path_provider.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 import 'package:speech_recognition/speech_recognition.dart';
-import 'package:memob/utilities.dart' as utilities;
-import 'package:flutter/services.dart';
-import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'dart:typed_data';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:memob/uploadAttachment.dart' as UploadAttachment;
 
 class Speech extends StatefulWidget {
   final String meetingUuid;
@@ -39,11 +38,9 @@ class _MyAppState extends State<Speech> {
   @override
   initState() {
     super.initState();
-    //initPlatformState();
     activateSpeechRecognizer();
     fetchData();
     checkPermission();
-    // requestPermission();
     getPermissionStatus();
   }
 

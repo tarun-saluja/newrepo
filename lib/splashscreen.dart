@@ -1,15 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'package:connectivity/connectivity.dart';
+
 import 'package:flutter/material.dart';
-import 'package:memob/NotesClass.dart';
-import 'package:memob/dashboard.dart';
-import 'package:memob/meetingClass.dart';
 import 'package:memob/utilities.dart' as utilities;
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uni_links/uni_links.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

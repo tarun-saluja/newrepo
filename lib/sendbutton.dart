@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import './constants.dart';
 
 class SendButton extends StatelessWidget {
   SendButton({@required this.onPressed});
@@ -19,7 +21,7 @@ class SendButton extends StatelessWidget {
               Icons.send,
               color: Colors.white,
             ),
-            const Text("Send", style: TextStyle(color: Colors.white)),
+            const Text("$SEND", style: TextStyle(color: Colors.white)),
           ],
         ),
       ),

@@ -1,15 +1,16 @@
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:connectivity/connectivity.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:memob/NotesClass.dart';
 import 'package:memob/meetingClass.dart';
 import 'package:memob/utilities.dart' as utilities;
-import './constants.dart';
-import './recentlyUpdated.dart';
+
 import './allMeetings.dart';
+import './api_service.dart';
+import './constants.dart';
 import './drawer.dart';
+import './recentlyUpdated.dart';
 
 class Dashboard extends StatefulWidget {
   static final Dashboard _dashboard = new Dashboard._private();
@@ -29,9 +30,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String userToken;
   String _displayName;
-  String _profile_picture;
+  String _profilepicture;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
+  var api = new API_Service();
 
   List<MeetingClass> _meetings = new List();
   List<NotesClass> _notes = new List();
@@ -43,17 +45,17 @@ class _DashboardState extends State<Dashboard> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('$dashboard'),
+            title: Text('$DASHBOARD'),
             bottom: TabBar(
               indicatorColor: Colors.blue,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 4.0,
               tabs: [
                 Tab(
-                  text: "$allmeetings",
+                  text: "$ALL_MEETINGS",
                 ),
                 Tab(
-                  text: "$recentnotes",
+                  text: "$RECENT_NOTES",
                 ),
                 Tab(
                   text: "",
@@ -61,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
               ],
             ),
           ),
-          drawer: Dwidget(userToken, _displayName, _profile_picture),
+          drawer: Dwidget(userToken, _displayName, _profilepicture),
           body: Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
@@ -120,14 +122,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<Null> getMeetingData() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/meetings/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache',
-        });
+    final response = await api.getMeeting(userToken);
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
@@ -157,20 +152,13 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<Null> getUserDetails() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getUser(userToken);
 
     if (response.statusCode == 200) {
       this.setState(() {
         Map<String, dynamic> mData = json.decode(response.body);
         _displayName = mData['user']['display_name'];
-        _profile_picture = mData['user']['profile_picture'];
+        _profilepicture = mData['user']['profilepicture'];
       });
       return null;
     } else {
@@ -180,14 +168,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<Null> getRecentNotes() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/recent-notes/'),
-        headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $userToken',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
-        });
+    final response = await api.getRecentNotesDetails(userToken);
     if (response.statusCode == 200) {
       this.setState(() {
         List<dynamic> mData = json.decode(response.body);

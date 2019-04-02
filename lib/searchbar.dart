@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:memob/NotesClass.dart';
 
+import './constants.dart';
+
 class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search App'),
+        title: Text('$SEARCH_APP'),
       ),
       drawer: Drawer(),
     );

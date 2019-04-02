@@ -10,16 +10,11 @@ class ActionClass {
   bool isDeleted;
   String createdAt;
   String dueDate;
-
-  // List<String> tags;
   bool isExternallyModified;
-
-  // List<String> comments;
 
   ActionClass(
     this.uuid,
     this.eventUuid,
-    //this.meeting,
     this.note,
     this.profilePicture,
     this.assignedTo,
@@ -27,9 +22,7 @@ class ActionClass {
     this.isDeleted,
     this.createdAt,
     this.dueDate,
-    // this.tags,
     this.isExternallyModified,
-    // this.comments
   );
 
   @override

@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import './constants.dart';
 
 class CancelButton extends StatelessWidget {
   CancelButton({@required this.onPressed});
@@ -15,8 +17,7 @@ class CancelButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
         child: Row(
           children: <Widget>[
-            //const Icon(Icons.send,color: Colors.white,),
-            const Text("cancel", style: TextStyle(color: Colors.white)),
+            const Text("$CANCEL", style: TextStyle(color: Colors.white)),
           ],
         ),
       ),

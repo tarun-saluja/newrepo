@@ -25,7 +25,6 @@ class _ActionManagerState extends State<ActionManager> {
     return Column(
       children: <Widget>[
         Expanded(
-          // child: Actions(_allActions, _meetings, _assignees),
           child: Actions(_allActions, _meetings, _assignees),
         )
       ],

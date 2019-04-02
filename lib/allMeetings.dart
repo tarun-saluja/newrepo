@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
+import 'package:memob/meetingClass.dart';
+
 import './meetingClass.dart';
 import './meetings.dart';
-
-import 'package:memob/meetingClass.dart';
 
 class AllMeetings extends StatefulWidget {
   final List<MeetingClass> meetings;

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:memob/utilities.dart' as utilities;
 import 'package:memob/uploadAttachment.dart' as UploadAttachment;
+import 'package:memob/utilities.dart' as utilities;
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
 
 class CameraPage extends StatefulWidget {
   final String meetingUuid;
@@ -130,7 +129,6 @@ class _CameraPageState extends State<CameraPage> {
   Widget _cameraSaveController() {
     return new Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      // crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         new RaisedButton(
             child: new Icon(
@@ -235,7 +233,6 @@ class _CameraPageState extends State<CameraPage> {
           imagePath = filePath;
           pictureClicked = true;
         });
-        if (filePath != null) ;
       }
     });
   }

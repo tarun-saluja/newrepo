@@ -1,15 +1,18 @@
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:memob/utilities.dart' as utilities;
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:memob/utilities.dart' as utilities;
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_permissions/simple_permissions.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/services.dart';
+
+import './constants.dart';
 
 class AttachmentDialog extends StatefulWidget {
   final String meetingUuid;
@@ -39,17 +42,16 @@ class AttachmentDialogState extends State<AttachmentDialog> {
 
     return new CupertinoAlertDialog(
       title: new Column(
-        children: <Widget>[new Text("Attachments"), new Divider()],
+        children: <Widget>[new Text("$ATTACHMENT"), new Divider()],
       ),
       content: new Container(
           height: height * 0.50,
           child: new MaterialApp(
-              title: 'Attachment',
+              title: '$ATTACHMENT',
               home: new Scaffold(
                 body: this.attachmentLoaded == true
                     ? new ListView.builder(
                         primary: true,
-                        // shrinkWrap: true,
                         itemCount: attachmentData.length,
                         itemBuilder: (BuildContext context, int index) {
                           return new ListTile(
@@ -150,6 +152,7 @@ class AttachmentDialogState extends State<AttachmentDialog> {
         }
       });
     } on PlatformException catch (e) {
+      print(e);
       _connectionStatus = false;
     }
 
@@ -178,10 +181,10 @@ class AttachmentDialogState extends State<AttachmentDialog> {
         Uri.encodeFull(
             'https://app.meetnotes.co/api/v2/attachments/?meeting=${widget.meetingUuid}'),
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.authorizationHeader: 'Token $token',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
         });
     if (response.statusCode == 200) {
       this.setState(() {
@@ -197,7 +200,7 @@ class AttachmentDialogState extends State<AttachmentDialog> {
       attachmentLoaded = true;
       throw Exception('Failed to load attachments');
     }
-    return 'Success';
+    return '$SUCCESS';
   }
 
   Future<String> downloadAttachment(String token, String attachmentId) async {
@@ -207,10 +210,10 @@ class AttachmentDialogState extends State<AttachmentDialog> {
         Uri.encodeFull(
             'https://app.meetnotes.co/api/v2/attachments/$attachmentId/'),
         headers: {
-          HttpHeaders.AUTHORIZATION: 'Token $token',
-          HttpHeaders.CONTENT_TYPE: 'application/json',
-          HttpHeaders.ACCEPT: 'application/json',
-          HttpHeaders.CACHE_CONTROL: 'no-cache'
+          HttpHeaders.authorizationHeader: 'Token $token',
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
         });
 
     if (response.statusCode == 200) {

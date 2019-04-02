@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:memob/utilities.dart' as utilities;
-import 'dart:async';
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import './constants.dart';
 
 enum UniLinksType { string, uri }
@@ -14,7 +16,7 @@ class Login extends StatefulWidget {
 }
 
 class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
-  String _latestLink = 'Unknown';
+  String _latestLink = '$UNKNOWN';
   Uri _latestUri;
 
   StreamSubscription _sub;
@@ -52,7 +54,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                     Container(
                       padding:
                           EdgeInsets.fromLTRB(30.0, height * 0.6, 150.0, 00.0),
-                      child: new Text('$name',
+                      child: new Text('$NAME',
                           style: TextStyle(
                               fontSize: 35.0,
                               color: Color.fromRGBO(255, 255, 255, 0.8))),
@@ -69,7 +71,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                             height: 50,
                             width: 50,
                           ),
-                          label: new Text('$google',
+                          label: new Text('$GOOGLE',
                               style: new TextStyle(
                                 fontSize: 20.0,
                               )),
@@ -87,7 +89,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                             height: 40,
                             width: 30,
                           ),
-                          label: new Text('$slack',
+                          label: new Text('$SLACK',
                               style: new TextStyle(
                                 fontSize: 20.0,
                               )),
@@ -107,7 +109,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                             height: 40,
                             width: 30,
                           ),
-                          label: new Text('$office',
+                          label: new Text('$OFFICE',
                               style: new TextStyle(
                                 fontSize: 15.0,
                               )),
@@ -143,7 +145,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
             'Dashboard',
           );
         });
-        _latestLink = link ?? 'Unknown';
+        _latestLink = link ?? '$UNKNOWN';
         _latestUri = null;
         try {
           if (link != null) _latestUri = Uri.parse(link);
@@ -202,7 +204,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
       if (!mounted) return;
       setState(() {
         _latestUri = uri;
-        _latestLink = uri?.toString() ?? 'Unknown';
+        _latestLink = uri?.toString() ?? '$UNKNOWN';
       });
     }, onError: (err) {
       if (!mounted) return;
