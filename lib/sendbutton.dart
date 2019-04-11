@@ -21,7 +21,7 @@ class SendButton extends StatelessWidget {
               Icons.send,
               color: Colors.white,
             ),
-            const Text("$SEND", style: TextStyle(color: Colors.white)),
+            const Text("Send", style: TextStyle(color: Colors.white)),
           ],
         ),
       ),

@@ -1,26 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:memob/api_service.dart';
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
 import 'package:memob/utilities.dart' as utilities;
-
 import './attachmentListDialog.dart';
 import './cameraPage.dart';
 import './constants.dart';
 import './dashboard.dart';
 import './share.dart';
 import './speechDialog.dart';
+import './api_service.dart';
 import './webView.dart';
+
+const kAndroidUserAgent =
+    'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36';
+final flutterWebviewPlugin = new FlutterWebviewPlugin();
+BuildContext m;
+final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class Detail extends StatefulWidget {
   final String meetingUuid;
@@ -42,210 +49,129 @@ class _DetailState extends State<Detail> {
   List<dynamic> attachmentData;
   String userToken;
   String url = "";
-
   bool noteLoaded = false;
   bool attachmentCountLoaded = false;
   bool attachmentLoaded = false;
   bool emptyAttachment = false;
-
   String noteText;
   String title;
   List<String> attendeesEmail;
   String rawHtml;
   String delta;
   bool recordPermission = false;
-
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
-
   int attachmentCount;
-
   var finalDateTime;
+
+  Future<Null> _goback() {
+    flutterWebviewPlugin.close();
+    Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(context);
+    print('p');
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      floatingActionButton: SpeedDial(
-        // both default to 16
-        marginRight: 18,
-        marginBottom: 20,
-        animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: IconThemeData(size: 22.0),
-        // this is ignored if animatedIcon is non null
-        visible: true,
-        curve: Curves.bounceIn,
-        overlayColor: Colors.black,
-        overlayOpacity: 0.5,
-        onOpen: () => print('OPENING DIAL'),
-        onClose: () => print('DIAL CLOSED'),
-        tooltip: 'Speed Dial',
-        heroTag: 'speed-dial-hero-tag',
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 8.0,
-        shape: CircleBorder(),
-        children: [
-          SpeedDialChild(
-              child: Icon(Icons.camera),
-              backgroundColor: Colors.red,
-              label: '$CAPTURE',
-              onTap: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => new CameraPage(
-                            widget.meetingTitle, widget.meetingUuid)))
-                  }),
-          SpeedDialChild(
-            child: Icon(Icons.edit),
-            backgroundColor: Colors.blue,
-            label: '$EDITOR',
-            onTap: onChangedValue4,
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.keyboard_voice),
-            backgroundColor: Colors.green,
-            label: '$RECORD',
-            onTap: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          new Speech(widget.meetingUuid)))
-                },
-          ),
-        ],
-      ),
-      appBar: AppBar(
-        elevation: defaultTargetPlatform == TargetPlatform.android ? 1.0 : 0.0,
-        title: Text(widget.meetingTitle),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: choiceAction,
-            itemBuilder: (BuildContext context) {
-              return Constants.choices.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          )
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
-        child: (title != null)
-            ? (Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                    new Container(
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(
-                                20.0, 10.0, 20.0, 10.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20.0)),
-                            child: Text('$finalDateTime'),
-                          ),
-                          Container(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              onPressed: () {
-                                attachmentCount != 0
-                                    ? showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            new AttachmentDialog(
-                                                widget.meetingUuid))
-                                    : Fluttertoast.showToast(
-                                        msg: "No Attachment",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIos: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                              },
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  new Icon(
-                                    Icons.attach_file,
-                                    color: Colors.amber,
-                                  ),
-                                  Text(attachmentCount.toString()),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+    double height1 = MediaQuery.of(context).size.height;
+    double width1 = MediaQuery.of(context).size.width;
+    print(height);
+    print(width);
+    String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
+    CookieManager.setCookie(
+        url, 'sessionid', 'x80d4gds1lx5ltv8bdndcj6mconfen0i');
+    flutterWebviewPlugin.launch(url,
+        rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.91),
+        userAgent: kAndroidUserAgent);
+    return WillPopScope(
+      onWillPop: _goback,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: new AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Column(children: [
+          Container(
+              alignment: Alignment.bottomLeft,
+              padding: EdgeInsets.fromLTRB(0.0, height1 * 0.8127, 0.0, 0.0),
+              child: new Row(
+                children: [
+                  Container(
+                    alignment: Alignment.bottomLeft,
+//                    child: new RaisedButton.icon(
+//                        onPressed: (){print('pressed');},
+//                        icon: new Image.asset(
+//                          'assets/captures.png',
+//                          height: 20,
+//                          width: 50,
+//                        ),
+//                        label: new Text('',
+//                            style: new TextStyle(
+//                              fontSize: 20.0,
+//                            )),
+//                        ),
+                      child: FlatButton(
+                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                        onPressed:(){
+                          flutterWebviewPlugin.hide();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => new CameraPage(
+                                widget.meetingTitle, widget.meetingUuid)));
+                        },
+                        child: new Image.asset('assets/camera.png',
+                          fit: BoxFit.cover,
+                        height: height*0.06162241887,
+                        width:width*0.13152777777,
+                        ),
                       ),
-                    ),
-                    // new Switch(),
-
-                    Container(
-                      padding:
-                          const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      margin: new EdgeInsets.all(10.0),
-                      height: height * 0.75,
-                      width: width,
-                      decoration: BoxDecoration(
-                          color: Colors.white70,
-                          borderRadius: BorderRadius.circular(5.0),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.white70,
-                                blurRadius: 10.0,
-                                spreadRadius: 1.0),
-                          ]),
-                      child: ListView(
-                        children: <Widget>[
-                          new RefreshIndicator(
-                              child: ((noteText != null)
-                                  ? Text(
-                                      '$noteText',
-                                      style: TextStyle(
-                                          fontSize: 15.0, color: Colors.black),
-                                    )
-                                  : (Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          0, height * .180, 0, 0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Image.asset(
-                                            'assets/empty.png',
-                                            height: 200,
-                                            width: 200,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(
-                                                '$START_NOTES',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 15),
-                                              ),
-                                              IconButton(
-                                                icon: Icon(Icons.mode_edit),
-                                                color: Colors.blue,
-                                                onPressed: onChangedValue4,
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      )))),
-                              onRefresh: getRecentNotes)
-                        ],
+//                    child: new FlatButton.icon(
+//                      color: Colors.red,
+//                      icon: Icon(Icons.add_a_photo), //`Icon` to display
+//                      label: Text('Add a Photo'), //`Text` to display
+//                      onPressed: () {
+//                        flutterWebviewPlugin.hide();
+//                        Navigator.of(context).push(MaterialPageRoute(
+//                            builder: (BuildContext context) => new CameraPage(
+//                                widget.meetingTitle, widget.meetingUuid)));
+//                      },
+//                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    margin: EdgeInsets.fromLTRB(width1 * 0.57215, 0.0, 0.0, 0.0),
+                      child: FlatButton(
+                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                        onPressed:(){
+                          flutterWebviewPlugin.hide();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new Speech(widget.meetingUuid)));
+                        },
+                        child: new Image.asset('assets/audio_meeting.png',
+                          fit: BoxFit.cover,
+                          height: height*0.05162241887,
+                          width:width*0.04861111111,
+                        ),
                       ),
-                    ),
-                  ]))
-            : Center(child: CircularProgressIndicator()),
+//                    child: new FlatButton.icon(
+//                      color: Colors.red,
+//                      icon: Icon(Icons.add_a_photo), //`Icon` to display
+//                      label: Text('Hide'), //`Text` to display
+//                      onPressed: () {
+////              Code to execute when Floating Action Button is clicked
+////              ...
+//                        flutterWebviewPlugin.hide();
+//                        Navigator.of(context).push(MaterialPageRoute(
+//                            builder: (BuildContext context) =>
+//                                new Speech(widget.meetingUuid)));
+//                      },
+//                    ),
+                  ),
+                ],
+              ))
+        ]),
       ),
     );
   }
@@ -255,7 +181,6 @@ class _DetailState extends State<Detail> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       connectionStatus = (await _connectivity.checkConnectivity());
-
       this.setState(() {
         if (connectionStatus == ConnectivityResult.none) {
           _connectionStatus = false;
@@ -267,7 +192,6 @@ class _DetailState extends State<Detail> {
       print(e);
       _connectionStatus = false;
     }
-
     if (!mounted) {
       return false;
     }
@@ -288,20 +212,10 @@ class _DetailState extends State<Detail> {
   }
 
   Future<String> getRecentNotes() async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v2/meeting-data/${widget.meetingUuid}'),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Token $userToken',
-          HttpHeaders.contentTypeHeader: 'application/json',
-          HttpHeaders.acceptHeader: 'application/json',
-          HttpHeaders.cacheControlHeader: 'no-cache'
-        });
-
+    final response = await api.getRecentNotes(widget.meetingUuid);
     if (response.statusCode == 200) {
       this.setState(() {
         data = json.decode(response.body);
-
         List<dynamic> rawNote = data['raw_note'];
         List<dynamic> attendees = data['attendees'];
         title = data['title'];
@@ -311,11 +225,9 @@ class _DetailState extends State<Detail> {
           noteText = data['raw_note'][0]['body'];
         }
         attendeesEmail = new List();
-
         for (int i = 0; i < attendees.length; i++) {
           attendeesEmail.add('${data['attendees'][i]['email']}');
         }
-
         noteLoaded = true;
         finalDateTime = DateTimeFormatter.getDateTimeFormat(data['start_time']);
       });
@@ -328,20 +240,11 @@ class _DetailState extends State<Detail> {
   }
 
   Future<String> getRecentNotesCount(String token) async {
-    final response = await http.get(
-        Uri.encodeFull(
-            'https://app.meetnotes.co/api/v2/attachments/?event=${widget.meetingEventId}'),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Token $token',
-          HttpHeaders.contentTypeHeader: 'application/json',
-          HttpHeaders.acceptHeader: 'application/json',
-          HttpHeaders.cacheControlHeader: 'no-cache'
-        });
-
+    final response =
+        await api.getRecentNotesCount(token, widget.meetingEventId);
     if (response.statusCode == 200) {
       this.setState(() {
         attachmentCountData = json.decode(response.body);
-
         if (attachmentCountData.isNotEmpty) {
           attachmentCount = attachmentCountData[0]['count'];
         } else {
@@ -360,7 +263,7 @@ class _DetailState extends State<Detail> {
   @override
   void initState() {
     super.initState();
-
+    BuildContext context;
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
@@ -369,22 +272,55 @@ class _DetailState extends State<Detail> {
         attachmentCountLoaded = true;
       }
     });
+    flutterWebviewPlugin.close();
+    onChangedValue4(context);
+//    flutterWebviewPlugin.onUrlChanged.listen((onData) {
+
+//      onData=selectedUrl;
+//      if (onData.toString() != url.toString()){
+//        print(url);
+//        print(onData);
+//        flutterWebviewPlugin.close();
+//        flutterWebviewPlugin.launch(url, rect: new Rect.fromLTWH(
+//            0.0, 80.0, 430, 600.0),
+//            userAgent: kAndroidUserAgent);
+//      }
+//    });
   }
 
   bool value4 = false;
   MyInAppBrowser inAppBrowser = new MyInAppBrowser();
 
-  void onChangedValue4() {
-    String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
-    CookieManager.setCookie(
-        url, 'sessionid', 'vbi9r3skam36mc4c3z203wahmseygqee;');
-    inAppBrowser.open(
-        url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-        options: {
-          "useShouldOverrideUrlLoading": true,
-          "useOnLoadResource": true,
-          "toolbarTop": false,
-        });
+  void onChangedValue4(BuildContext contxt) {
+    print(contxt);
+    print('m');
+//    double height = MediaQuery.of(contxt).size.height;
+//    double width = MediaQuery.of(contxt).size.width;
+//    print(height);
+//    print(width);
+
+//    inAppBrowser.open(
+//        url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
+//        rect: new Rect.fromLTWH(
+//            0.0, 80.0, 430, 600.0),
+//        options: {
+//          "useShouldOverrideUrlLoading": true,
+//          "useOnLoadResource": true,
+//          "toolbarTop": false,
+//        });
+//    flutterWebviewPlugin.onUrlChanged.listen((onData) {
+//
+//
+////      onData=selectedUrl;
+//      if (onData.toString() != url.toString()){
+//        print(url);
+//        print(onData);
+//        flutterWebviewPlugin.close();
+//        flutterWebviewPlugin.launch(url, rect: new Rect.fromLTWH(
+//            0.0, 80.0, 430, 600.0),
+//            userAgent: kAndroidUserAgent);
+//      }
+//    });
   }
 
   void choiceAction(String choice) {
@@ -406,9 +342,8 @@ class _DetailState extends State<Detail> {
 }
 
 class Constants {
-  static const String Share = '$SHARE';
-  static const String Leave = '$LEAVE';
-
+  static const String Share = 'Share';
+  static const String Leave = 'Leave';
   static const List<String> choices = <String>[
     Share,
     Leave,

@@ -27,7 +27,6 @@ class _DwidgetState extends State<Dwidget> {
   String profilepicture;
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
-  var api = new API_Service();
 
   @override
   void initState() {
@@ -39,19 +38,23 @@ class _DwidgetState extends State<Dwidget> {
 
   @override
   Widget build(BuildContext context) {
+    double heights = MediaQuery.of(context).size.height;
+    double widths = MediaQuery.of(context).size.width;
+    print(heights);
+    print(widths);
     return new Drawer(
       child: new ListView(
         children: <Widget>[
           new Container(
             child: Container(
-              margin: EdgeInsets.fromLTRB(10, 35, 50, 50),
+              margin: EdgeInsets.fromLTRB(widths*0.02430555555, widths*0.08506944444, widths*0.12152777777, widths*0.12152777777),
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   new Image.asset(
                     'assets/meetnotes_icon.png',
-                    width: 30.0,
-                    height: 30.0,
+                    width: widths*0.07291666666,
+                    height: widths*0.07291666666,
                   ),
                   Text(
                     "$LOGONAME",
@@ -64,15 +67,15 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
             child: new ListTile(
               onTap: () {
                 Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
               leading: Image.asset(
                 'assets/dashboard.png',
-                width: 25.0,
-                height: 25.0,
+                width: widths*0.06076388888,
+                height: widths*0.06076388888,
               ),
               title: new Text(
                 "$DASHBOARD",
@@ -84,12 +87,15 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
             child: new ListTile(
+              onTap: () {
+                Navigator.popUntil(context, ModalRoute.withName('Notes'));
+              },
               leading: Image.asset(
                 'assets/notes.png',
-                width: 25.0,
-                height: 25.0,
+                width: widths*0.06076388888,
+                height: widths*0.06076388888,
               ),
               title: new Text("$NOTES",
                   style: TextStyle(
@@ -99,7 +105,7 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
             child: new ListTile(
               onTap: () {
                 bool isNewRouteSameAsCurrent = false;
@@ -117,8 +123,8 @@ class _DwidgetState extends State<Dwidget> {
               },
               leading: Image.asset(
                 'assets/action_items.png',
-                width: 25.0,
-                height: 25.0,
+                width: widths*0.06076388888,
+                height: widths*0.06076388888,
               ),
               title: new Text("$ACTION",
                   style: TextStyle(
@@ -128,12 +134,12 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           new Container(
-            margin: EdgeInsets.fromLTRB(30, 30, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, widths*0.07291666666, widths*0.17013888888, 0),
             child: ExpansionTile(
               leading: Image.asset(
                 'assets/team.png',
-                width: 30.0,
-                height: 30.0,
+                width: widths*0.07291666666,
+                height: widths*0.07291666666,
               ),
               title: Text("$TEAM",
                   style: TextStyle(
@@ -147,10 +153,10 @@ class _DwidgetState extends State<Dwidget> {
           ),
           new Divider(
             color: Colors.white,
-            height: 50,
+            height: widths*0.12152777777,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 120, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.08291666666, heights*0.06166666666, widths*0.17013888888, 0),
             child: new ListTile(
               onTap: () {
                 Navigator.push(
@@ -161,8 +167,8 @@ class _DwidgetState extends State<Dwidget> {
               },
               leading: Image.asset(
                 'assets/settings.png',
-                width: 25.0,
-                height: 25.0,
+                width: widths*0.06076388888,
+                height: widths*0.06076388888,
                 color: Colors.black12,
               ),
               title: new Text("$SETTINGS",
@@ -173,7 +179,7 @@ class _DwidgetState extends State<Dwidget> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 20, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
             child: new ListTile(
                 leading: (profilepicture != null)
                     ? (CircleAvatar(
@@ -190,19 +196,19 @@ class _DwidgetState extends State<Dwidget> {
                             fontSize: 18,
                             color: Colors.black38,
                             fontWeight: FontWeight.w400)))
-                    : (new Text('$USER',
+                    : (new Text('User',
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black38,
                             fontWeight: FontWeight.w400)))),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 70, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
             child: new ListTile(
               leading: Image.asset(
                 'assets/logout.png',
-                width: 25.0,
-                height: 25.0,
+                width: widths*0.06076388888,
+                height: widths*0.06076388888,
               ),
               title: new Text("$LOGOUT",
                   style: TextStyle(

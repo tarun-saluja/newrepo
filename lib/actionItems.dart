@@ -7,8 +7,8 @@ import 'package:memob/actionManager.dart';
 import 'package:memob/drawer.dart';
 import 'package:memob/utilities.dart' as utilities;
 
-import './api_service.dart';
 import './constants.dart';
+import './api_service.dart';
 
 class ActionItems extends StatefulWidget {
   @override
@@ -48,7 +48,6 @@ class _ActionItems extends State<ActionItems> {
   String profile_picture;
   bool _connectionStatus = false;
 
-  var api = new API_Service();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class _ActionItems extends State<ActionItems> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('$ACTION_ITEMS'),
+            title: Text(ACTION_ITEMS),
             actions: <Widget>[
               PopupMenuButton<String>(
                 // icon: Icon(
@@ -86,10 +85,10 @@ class _ActionItems extends State<ActionItems> {
               indicatorColor: Colors.blue,
               tabs: <Widget>[
                 Tab(
-                  text: 'All $ACTION',
+                  text: 'All ' + ACTION,
                 ),
                 Tab(
-                  text: 'My $ACTION',
+                  text: 'My ' + ACTION,
                 )
               ],
             ),
@@ -153,7 +152,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getAllActionsData() async {
-    final response = await api.getAllActions(userToken);
+    final response = await api.getAllActions();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -222,7 +221,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getUserDetails() async {
-    final response = await api.getUser(userToken);
+    final response = await api.getUser();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -256,7 +255,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getOpenActionsData() async {
-    final response = await api.getOpenActions(userToken);
+    final response = await api.getOpenActions();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -318,7 +317,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getRecentlyUpdatedActionsData() async {
-    final response = await api.getRecentlyUpdatedActions(userToken);
+    final response = await api.getRecentlyUpdatedActions();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -374,7 +373,7 @@ class _ActionItems extends State<ActionItems> {
   }
 
   Future<Null> getRecentlyClosedActionsData() async {
-    final response = await api.getRecentlyClosedActions(userToken);
+    final response = await api.getRecentlyClosedActions();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -493,10 +492,10 @@ class _ActionItems extends State<ActionItems> {
 }
 
 class Filters {
-  static const String Everything = '$EVERYTHING';
-  static const String OpenActions = '$OPEN_ACTIONS';
-  static const String RecentlyUpdated = '$RECENTLY_UPDATED';
-  static const String RecentlyClosed = '$RECENTLY_CLOSED';
+  static const String Everything = 'Everything';
+  static const String OpenActions = 'All Open Actions';
+  static const String RecentlyUpdated = 'Recently Updated';
+  static const String RecentlyClosed = 'Recently Closed';
 
   static const List<String> choices = <String>[
     Everything,

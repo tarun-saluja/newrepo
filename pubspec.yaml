@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_webview_plugin: ^0.3.3
   url_launcher: ^5.0.1
   connectivity: ^0.4.2
   flutter_speed_dial: ^1.1.1
@@ -39,6 +40,7 @@ dependencies:
   simple_permissions:
   scoped_model: ^1.0.1
   # flutter_webview_plugin: ^0.3.0+2
+
   flutter_inappbrowser: ^0.6.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -74,13 +76,20 @@ flutter:
     - assets/meetnotes_icon.png
     - assets/splash_background.png
     - assets/signup_bg.png
+    - assets/capture.svg
     - blank_user.jpeg
     - assets/meetn.png
     - assets/empty.png
     - dashboard.png
     - meetings.png
+    - captures.png
     - notes.png
     - settings.png
+    - audio.png
+    - audio_meeting.png
+    - camera.png
+    - capture.svg
+    - record_meeting.svg
     - team.png
     - bg.png
     - action_items.png

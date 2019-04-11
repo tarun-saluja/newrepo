@@ -7,6 +7,7 @@ import 'package:memob/inviteMembers.dart';
 import 'package:memob/utilities.dart' as utilities;
 
 import './constants.dart';
+import './api_service.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class _Settings extends State<Settings> {
   bool meetingsFeedback;
   String name;
   String email;
+  String aliasemail;
   String userToken;
   String title = '$PROFILE_INFO';
   bool profileInformation = true;
@@ -70,7 +72,7 @@ class _Settings extends State<Settings> {
                           ),
                           Divider(),
                           Text(''),
-                          Text('$NAME_USER'),
+                          Text('Name'),
                           Text(''),
                           TextFormField(
                             enabled: false,
@@ -182,7 +184,7 @@ class _Settings extends State<Settings> {
                           ),
                           Divider(),
                           Text(''),
-                          Text('Email'),
+                          Text('Email', style: TextStyle(fontSize: 15.0),),
                           Text(''),
                           TextFormField(
                             enabled: false,
@@ -193,7 +195,11 @@ class _Settings extends State<Settings> {
                                         BorderSide(color: Colors.black))),
                           ),
                           Text(''),
-                          Text('Other Email Aliases'),
+                          Text('Other Email Aliases', style: TextStyle(fontSize: 15.0),),
+                          Text(''),
+                          Text(
+                            '$aliasemail'
+                          ),
                           Text(''),
                           TextFormField(
                             controller: aliasController,
@@ -204,14 +210,18 @@ class _Settings extends State<Settings> {
                             onSaved: (String value) {
                               this.aliasEmail = value;
                             },
+                            style: TextStyle(height: 1.0),
                           ),
-                          RaisedButton(
-                            child: Text('+Add Another Aliases'),
-                            color: Colors.blue,
-                            onPressed: () {
-                              Map body = {"email": aliasController.text};
-                              addAliases(body);
-                            },
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,0.0),
+                            child: RaisedButton(
+                              child: Text('+Add Another Aliases'),
+                              color: Colors.blue,
+                              onPressed: () {
+                                Map body = {"email": aliasController.text};
+                                addAliases(body);
+                              },
+                            ),
                           )
                         ])))))
                     : (Container(
@@ -252,6 +262,7 @@ class _Settings extends State<Settings> {
       if (value != null) {
         userToken = value;
         fetchUserData();
+        getAliases();
       } else {
         utilities.showLongToast(value);
         return null;
@@ -260,14 +271,7 @@ class _Settings extends State<Settings> {
   }
 
   Future<Null> fetchUserData() async {
-    final response = await http.get(
-        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Token $userToken',
-          HttpHeaders.contentTypeHeader: 'application/json',
-          HttpHeaders.acceptHeader: 'application/json',
-          HttpHeaders.cacheControlHeader: 'no-cache'
-        });
+    final response = await api.fetchUserData();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -291,47 +295,36 @@ class _Settings extends State<Settings> {
   }
 
   Future<Null> settingsUpdate(Map body) async {
-    var data = json.encode(body);
     var response =
-        await http.post('https://app.meetnotes.co/api/v2/settings/account/',
-            headers: {
-              HttpHeaders.authorizationHeader: 'Token $userToken',
-              HttpHeaders.contentTypeHeader: 'application/json',
-              HttpHeaders.acceptHeader: 'application/json',
-              HttpHeaders.cacheControlHeader: 'no-cache'
-            },
-            body: data);
+        await api.settingsUpdate(body);
   }
 
   Future<Null> addAliases(Map body) async {
-    var data = json.encode(body);
-    var response =
-        await http.post('https://app.meetnotes.co/api/v2/user/alias/',
-            headers: {
-              HttpHeaders.authorizationHeader: 'Token $userToken',
-              HttpHeaders.contentTypeHeader: 'application/json',
-              HttpHeaders.acceptHeader: 'application/json',
-              HttpHeaders.cacheControlHeader: 'no-cache'
-            },
-            body: data);
+
+    var response = await api.addAliases(body);
+  }
+
+  Future<Null> getAliases() async {
+//    print(userToken);
+    var response = await api.getAliases();
+    print(response.body);
+    if (response.statusCode == 200) {
+      this.setState(() {
+        List<dynamic> mData = json.decode(response.body);
+        aliasemail = mData[0]['email'];
+        print(mData[0]["email"]);
+
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      return null;
+    }
   }
 
   Future<Null> inviteMember(Map body) async {
-    var data = json.encode(body);
-    var response = await http.post('',
-        headers: {
-          HttpHeaders.authorizationHeader: 'Token $userToken',
-          HttpHeaders.contentTypeHeader: 'application/json',
-          HttpHeaders.acceptHeader: 'application/json',
-          HttpHeaders.cacheControlHeader: 'no-cache',
-          HttpHeaders.cookieHeader:
-              'sessionid=hqzl74coesky2o60rj58vwv618v7h8kn; csrftoken=Rc56oTojXV1N3cKEdV1ImYXxOTfb4pVi;',
-          HttpHeaders.refererHeader:
-              'https://app.meetnotes.co/settings/teams/members/'
-        },
-        body: data);
+    var response = await api.inviteMember(body);
   }
-
   void choiceAction(String choice) async {
     if (choice == SettingFilters.ProfileInformation) {
       setState(() {

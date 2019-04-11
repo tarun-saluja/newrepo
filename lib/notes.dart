@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './Detail.dart';
 import './NotesClass.dart';
 import './constants.dart';
+import './duration.dart';
 
 class Notes extends StatelessWidget {
   final List<NotesClass> notes;
@@ -26,24 +27,7 @@ class Notes extends StatelessWidget {
     var updatedAt;
     Duration diff =
         DateTime.now().difference(DateTime.parse(notes[index].updatedAt));
-    if (diff.inDays > 365)
-      updatedAt =
-          "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} ago";
-    else if (diff.inDays > 30)
-      updatedAt =
-          "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} ago";
-    else if (diff.inDays > 7)
-      updatedAt =
-          "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} ago";
-    else if (diff.inDays > 0)
-      updatedAt = "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} ago";
-    else if (diff.inHours > 0)
-      updatedAt = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
-    else if (diff.inMinutes > 0)
-      updatedAt =
-          "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
-    else
-      updatedAt = "$JUST_NOW";
+    updatedAt = duration(diff);
 
     var open = notes[index].actionItems;
     return Container(

@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+
+final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    flutterWebviewPlugin.close();
     startTime();
   }
 

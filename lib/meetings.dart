@@ -37,10 +37,11 @@ class Meetings extends StatelessWidget {
     var display = displaymeetings[index];
     var meetingDay = DateFormat.yMd().format(DateTime.parse(display.startTime));
     var isToday = today.compareTo(meetingDay);
-
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     var isUpcoming = DateTimeFormatter.isUpcomingMeeting(display.startTime);
     return Container(
-        margin: EdgeInsets.fromLTRB(5.0, 5.0, 10.0, 5.0),
+        margin: EdgeInsets.fromLTRB(height*0.00645280235, height*0.00645280235, height*0.00645280235*2, height*0.00645280235),
         child: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -54,19 +55,19 @@ class Meetings extends StatelessWidget {
             elevation: 100.0,
             color: Colors.white,
             child: Container(
-              margin: EdgeInsets.fromLTRB(10, 18, 18, 18),
+              margin: EdgeInsets.fromLTRB(height*0.00645280235*2, height*0.02323008849, height*0.02323008849, height*0.02323008849),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Container(
-                      padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
+                      padding: const EdgeInsets.fromLTRB(10, 2, 2, 2),
                       decoration: new BoxDecoration(
                           color: (isToday == 0)
                               ? (isUpcoming == true ? Colors.blue : Colors.blue)
                               : Colors.grey[400],
                           border: Border.all(color: Colors.white, width: 1.0),
-                          borderRadius: BorderRadius.circular(20.0)),
+                          borderRadius: BorderRadius.circular(height*0.01290560471*2)),
                       child: (isUpcoming == false)
                           ? ((isToday == 0)
                               ? isUpcoming == true

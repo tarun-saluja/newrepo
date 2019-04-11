@@ -8,6 +8,8 @@ import 'package:memob/actionClass.dart';
 import 'package:memob/utilities.dart' as utilities;
 
 import './constants.dart';
+import './api_service.dart';
+import './duration.dart';
 
 class Actions extends StatefulWidget {
   final List<ActionClass> allActions;
@@ -43,24 +45,7 @@ class _Actions extends State<Actions> {
     var createdAt;
     Duration diff =
         DateTime.now().difference(DateTime.parse(allActions[index].createdAt));
-    if (diff.inDays > 365)
-      createdAt =
-          "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} ago";
-    else if (diff.inDays > 30)
-      createdAt =
-          "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} ago";
-    else if (diff.inDays > 7)
-      createdAt =
-          "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} ago";
-    else if (diff.inDays > 0)
-      createdAt = "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} ago";
-    else if (diff.inHours > 0)
-      createdAt = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
-    else if (diff.inMinutes > 0)
-      createdAt =
-          "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
-    else
-      createdAt = "$JUST_NOW";
+    createdAt = duration(diff);
 
     return Container(
         height: 130,
@@ -110,7 +95,7 @@ class _Actions extends State<Actions> {
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black87),
                                           )
-                                        : Text('$NO_ASSIGNEE',
+                                        : Text(NO_ASSIGNEE,
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
@@ -129,9 +114,9 @@ class _Actions extends State<Actions> {
                               const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
-                              color: (allActions[index].status == '$PENDING')
+                              color: (allActions[index].status == 'pending')
                                   ? Colors.pink
-                                  : (allActions[index].status == '$DOING'
+                                  : (allActions[index].status == 'doing'
                                       ? Colors.blue[400]
                                       : Colors.green[400])),
                           child: Text(
@@ -194,25 +179,23 @@ class _Actions extends State<Actions> {
   }
 
   void choiceAction(String choice, int index) {
-    String url = 'https://app.meetnotes.co/api/v2/action-item/' +
-        allActions[index].uuid +
-        '/command/update/';
+    String url = api.choiceAction(allActions[index].uuid);
 
     Map body;
     if (choice == Status.Doing) {
-      body = {'new_value': "$DOING", 'field': "status"};
+      body = {'new_value': "doing", 'field': "status"};
       setState(() {
         allActions[index].status = 'doing';
       });
     } else if (choice == Status.Done) {
-      body = {'new_value': "$DONE", 'field': "status"};
+      body = {'new_value': "done", 'field': "status"};
       setState(() {
-        allActions[index].status = '$DONE';
+        allActions[index].status = 'done';
       });
     } else {
-      body = {'new_value': "$PENDING", 'field': "status"};
+      body = {'new_value': "pending", 'field': "status"};
       setState(() {
-        allActions[index].status = '$PENDING';
+        allActions[index].status = 'pending';
       });
     }
     apiRequest(url, body);
@@ -247,9 +230,9 @@ class _Actions extends State<Actions> {
 }
 
 class Status {
-  static const String Pending = '$PENDING';
-  static const String Doing = '$DOING';
-  static const String Done = '$DONE';
+  static const String Pending = 'pending';
+  static const String Doing = 'doing';
+  static const String Done = 'done';
 
   static const List<String> choices = <String>[
     Pending,

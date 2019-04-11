@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/NotesClass.dart';
 import 'package:memob/meetingClass.dart';
@@ -11,6 +12,8 @@ import './api_service.dart';
 import './constants.dart';
 import './drawer.dart';
 import './recentlyUpdated.dart';
+
+final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
 class Dashboard extends StatefulWidget {
   static final Dashboard _dashboard = new Dashboard._private();
@@ -33,7 +36,6 @@ class _DashboardState extends State<Dashboard> {
   String _profilepicture;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
-  var api = new API_Service();
 
   List<MeetingClass> _meetings = new List();
   List<NotesClass> _notes = new List();
@@ -104,19 +106,17 @@ class _DashboardState extends State<Dashboard> {
     }
     return _connectionStatus;
   }
-
+  var api = new API_Service();
   Future<Null> fetchData() async {
     Future<String> token = utilities.getTokenData();
     token.then((value) {
-      if (value != null) {
+      if (true) {
         userToken = value;
         getMeetingData();
         getRecentNotes();
         getUserDetails();
-        return null;
       } else {
         utilities.showLongToast(value);
-        return null;
       }
     });
   }
@@ -144,15 +144,11 @@ class _DashboardState extends State<Dashboard> {
         }
         _meetings.sort((a, b) => b.startTime.compareTo(a.startTime));
       });
-      return null;
-    } else {
-      // If that response was not OK, throw an error.
-      return null;
     }
   }
 
   Future<Null> getUserDetails() async {
-    final response = await api.getUser(userToken);
+    final response = await api.getUser();
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -160,15 +156,12 @@ class _DashboardState extends State<Dashboard> {
         _displayName = mData['user']['display_name'];
         _profilepicture = mData['user']['profilepicture'];
       });
-      return null;
-    } else {
-      // If that response was not OK, throw an error.
-      return null;
+
     }
   }
 
   Future<Null> getRecentNotes() async {
-    final response = await api.getRecentNotesDetails(userToken);
+    final response = await api.getRecentNotesDetails();
     if (response.statusCode == 200) {
       this.setState(() {
         List<dynamic> mData = json.decode(response.body);
@@ -185,16 +178,13 @@ class _DashboardState extends State<Dashboard> {
           _notes.add(note);
         }
       });
-      return null;
-    } else {
-      // If that response was not OK, throw an error.
-      return null;
     }
   }
 
   @override
   initState() {
     super.initState();
+    flutterWebviewPlugin.close();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();

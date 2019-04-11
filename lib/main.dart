@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
+import 'package:memob/notes.dart';
 import 'package:memob/login.dart';
 import 'package:memob/splashscreen.dart';
 import 'package:memob/utilities.dart' as utilities;
@@ -27,6 +28,11 @@ void main() {
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new ActionItems();
   }));
+
+  router.define('Notes', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+        return new Notes();
+      }));
 
   runApp(new MaterialApp(
       debugShowCheckedModeBanner: false,

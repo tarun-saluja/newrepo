@@ -12,6 +12,7 @@ import './cancelbutton.dart';
 import './constants.dart';
 import './drawer.dart';
 import './sendbutton.dart';
+import './api_service.dart';
 import './utilities.dart';
 
 final ThemeData iOSTheme = new ThemeData(
@@ -25,7 +26,7 @@ final ThemeData androidTheme = new ThemeData(
   accentColor: Colors.green,
 );
 
-const String defaultUserName = "$USER";
+const String defaultUserName = "User";
 
 class Share extends StatefulWidget {
   final String meetingTitle;
@@ -184,8 +185,7 @@ class ShareWindow extends State<Share> with TickerProviderStateMixin {
 
   Future<Null> postData(Map body) async {
     Future<String> token = getTokenData();
-    dynamic url =
-        "https://app.meetnotes.co/api/v2/meeting/${widget.meetingUuid}/share/";
+    dynamic url = api.postData(widget.meetingUuid);
     token.then((value) {
       if (value != null) {
         userToken = value;

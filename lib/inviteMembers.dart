@@ -19,7 +19,6 @@ class InviteMembers extends StatefulWidget {
 class _InviteMembers extends State<InviteMembers> {
   String _userToken;
   List<dynamic> teamMembers = new List();
-  var api = new API_Service();
 
   @override
   void initState() {
@@ -29,7 +28,7 @@ class _InviteMembers extends State<InviteMembers> {
   }
 
   Future<Null> getTeamMembers() async {
-    final response = await api.getTeamMembersDetails(_userToken);
+    final response = await api.getTeamMembersDetails();
     if (response.statusCode == 200) {
       this.setState(() {
         teamMembers.clear();

@@ -36,10 +36,12 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     double x = 20;
+    print(height);
+    print(width);
     return Scaffold(
         backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
         body: new Container(
-          transform: Matrix4.translationValues(0.0, -180.0, 0.0),
+          transform: Matrix4.translationValues(0.0, -height*0.23230088495, 0.0),
           decoration: new BoxDecoration(
             image: new DecorationImage(
               image: new AssetImage(
@@ -53,7 +55,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                   children: <Widget>[
                     Container(
                       padding:
-                          EdgeInsets.fromLTRB(30.0, height * 0.6, 150.0, 00.0),
+                          EdgeInsets.fromLTRB(height*0.03871681415, height * 0.6, height*0.19358407079, 00.0),
                       child: new Text('$NAME',
                           style: TextStyle(
                               fontSize: 35.0,
@@ -68,53 +70,54 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                           onPressed: _launchLoginUrl,
                           icon: new Image.asset(
                             'assets/google.png',
-                            height: 50,
+                            height: height*0.06452802359,
                             width: 50,
                           ),
-                          label: new Text('$GOOGLE',
+                          label: new Text(GOOGLE,
                               style: new TextStyle(
                                 fontSize: 20.0,
                               )),
                           shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0))),
+                              borderRadius: new BorderRadius.circular(height*0.05162241887))),
                     ),
+
                     Container(
                       padding: EdgeInsets.fromLTRB(
-                          20.0, height * 0.9, 250.0, height * 0.022),
+                          width*0.03881120943, height * 0.9, width*0.62264011799, height * 0.022),
                       child: new RaisedButton.icon(
                           color: Colors.red,
                           onPressed: _launchLoginUrlSlack,
                           icon: new Image.asset(
                             'assets/slack.png',
-                            height: 40,
-                            width: 30,
+                            height: height*0.02581120943*2,
+                            width: height*0.03871681415,
                           ),
                           label: new Text('$SLACK',
                               style: new TextStyle(
                                 fontSize: 20.0,
                               )),
                           shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0))),
+                              borderRadius: new BorderRadius.circular(height*0.05162241887))),
                     ),
                     Positioned(
                       top: height * 0.9,
                       bottom: height * 0.022,
-                      left: 180.0,
-                      right: 94.0,
+                      left: width*0.43230088495,
+                      right: width*0.22131268436,
                       child: new RaisedButton.icon(
                           color: Colors.red,
                           onPressed: _launchLoginUrlOffice,
                           icon: new Image.asset(
                             'assets/office_365.png',
-                            height: 40,
-                            width: 30,
+                            height: height*0.05162241887,
+                            width: height*0.03891681415,
                           ),
                           label: new Text('$OFFICE',
                               style: new TextStyle(
                                 fontSize: 15.0,
                               )),
                           shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(40.0))),
+                              borderRadius: new BorderRadius.circular(height*0.05162241887))),
                     ),
                   ],
                 ),
