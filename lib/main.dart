@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
 import 'package:memob/notes.dart';
@@ -34,13 +35,16 @@ void main() {
         return new Notes();
       }));
 
-  runApp(new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home: SplashScreen(),
-      onGenerateRoute: router.generator));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.white,
+        ),
+        home: SplashScreen(),
+        onGenerateRoute: router.generator));
+  });
 }
 
 Future<Null> initUniLink() async {

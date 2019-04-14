@@ -83,8 +83,13 @@ class _DetailState extends State<Detail> {
     CookieManager.setCookie(
         url, 'sessionid', 'x80d4gds1lx5ltv8bdndcj6mconfen0i');
     flutterWebviewPlugin.launch(url,
+        allowFileURLs: true,
         rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.91),
-        userAgent: kAndroidUserAgent);
+        userAgent: kAndroidUserAgent,
+    );
+    flutterWebviewPlugin.onHttpError.listen((onData){
+      print(onData);
+    });
     return WillPopScope(
       onWillPop: _goback,
       child: Scaffold(

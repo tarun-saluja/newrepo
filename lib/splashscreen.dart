@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: new Container(
         decoration: new BoxDecoration(
           image: new DecorationImage(
-            image: new AssetImage('assets/splash_background.png'),
+            image: new AssetImage('assets/Splash.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -38,9 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     bottom: 0.0,
                     left: 0.0,
                     right: 0.0,
-                    child: new Image.asset(
-                      'assets/meetnotes_icon.png',
-                    ),
+                    child: Text(''),
                   ),
                 ],
               ),

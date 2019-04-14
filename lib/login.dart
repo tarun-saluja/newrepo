@@ -20,7 +20,6 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
   Uri _latestUri;
 
   StreamSubscription _sub;
-
   UniLinksType _type = UniLinksType.string;
 
   String token;
@@ -33,96 +32,400 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     double x = 20;
-    print(height);
-    print(width);
+//    print(height);
+//    print(width);
+    final Shader linearGradient = LinearGradient(
+      colors: <Color>[Color(0XFF2BE7FA), Color(0XFF2190D5)],
+    ).createShader(Rect.fromLTWH(0.0, 0.0, 500.0, 800.0));
+    final Shader linearGradient1 = LinearGradient(
+      colors: <Color>[Color(0XFF0FD0FA), Color(0XFF3C8BFA)],
+    ).createShader(Rect.fromLTWH(0.0, 0.0, 500.0, 800.0));
+    final Shader linearGradient2 = LinearGradient(
+      colors: <Color>[Color(0XFF21B3FA), Color(0XFF0f3ebf)],
+    ).createShader(Rect.fromLTWH(0.0, 0.0, 500.0, 800.0));
     return Scaffold(
-        backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
-        body: new Container(
-          transform: Matrix4.translationValues(0.0, -height*0.23230088495, 0.0),
-          decoration: new BoxDecoration(
-            image: new DecorationImage(
-              image: new AssetImage(
-                "assets/signup_bg.png",
-              ),
+      backgroundColor: Color.fromRGBO(26, 34, 51, 1),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            alignment: Alignment.topCenter,
+            image: AssetImage(
+              "assets/signup_bg.png",
             ),
           ),
-          child: LayoutBuilder(
-            builder: (context, constraints) => Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    Container(
-                      padding:
-                          EdgeInsets.fromLTRB(height*0.03871681415, height * 0.6, height*0.19358407079, 00.0),
-                      child: new Text('$NAME',
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.fromLTRB(screenWidth * 0.1,
+                        screenHeight * 0.4, screenWidth * 0.15, 0),
+                    child: Text('$NAME',
+                        style: TextStyle(
+                            fontSize: 35.0,
+                            color: Color.fromRGBO(255, 255, 255, 0.8))),
+                  ),
+                  Container(
+                    height: screenHeight*0.065,
+                    margin: EdgeInsets.fromLTRB(
+                        screenWidth * 0.1, 10, screenWidth * 0.183, 0),
+                    child: RaisedButton.icon(
+                      onPressed: _launchLoginUrl,
+                      icon: Image.asset(
+                        'assets/google.png',
+                        height: 39,
+                        width: 38,
+                      ),
+                      label: Text('$GOOGLE',
                           style: TextStyle(
-                              fontSize: 35.0,
-                              color: Color.fromRGBO(255, 255, 255, 0.8))),
+                            fontSize: 10.0,
+                          )),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0)),
                     ),
-                    Positioned(
-                      top: height * 0.8,
-                      bottom: height * 0.118,
-                      left: width * 0.05,
-                      right: width * 0.22,
-                      child: new RaisedButton.icon(
-                          onPressed: _launchLoginUrl,
-                          icon: new Image.asset(
-                            'assets/google.png',
-                            height: height*0.06452802359,
-                            width: 50,
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(
+                        screenWidth * 0.1, 10, screenWidth * 0.35, 0),
+                    child: Row(children: [
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          height: 1.0,
+                          width: 72,
+                          color: Color.fromRGBO(255, 255, 255, 0.2),
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'OR',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(255, 255, 255, 0.2),
+                                  fontSize: 15.0,
+                                  fontFamily: 'Roboto'),
+                            ),
+                          )),
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          height: 1.0,
+                          width: 72,
+                          color: Color.fromRGBO(255, 255, 255, 0.2),
+                        ),
+                      ),
+                    ]),
+                  ),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(
+                          screenWidth * 0.1, 10, screenWidth * 0.182, 0),
+                      child: Row(children: [
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+//                         height: 55,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment(0.8, 0.0),
+                            // 10% of the width, so there are ten blinds.
+                            colors: [
+                              Color(0XFF0099B5),
+                              Color(0XFF00B55E)
+                            ], // whitish to gray
+//                          tileMode: TileMode.clamp, // repeats the gradient over the canvas
                           ),
-                          label: new Text(GOOGLE,
-                              style: new TextStyle(
-                                fontSize: 20.0,
-                              )),
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(height*0.05162241887))),
+                          borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(30),
+                            topRight: const Radius.circular(30.0),
+                            bottomLeft: const Radius.circular(30),
+                            bottomRight: const Radius.circular(30),
+                          ),
+                        ),
+                        child: new RaisedButton.icon(
+                            elevation: 0,
+                            color: Colors.transparent,
+                            onPressed: _launchLoginUrlSlack,
+                            icon: new Image.asset(
+                              'assets/slack.png',
+                              height: 25,
+                              width: 35,
+                            ),
+                            label: new Text('$SLACK',
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                )),
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(40))),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(''),
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: Container(
+//                        height: 55,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment(0.8, 0.0),
+                              // 10% of the width, so there are ten blinds.
+                              colors: [
+                                Color(0XFFD8384F),
+                                Color(0XFFE15029)
+                              ], // whitish to gray
+//                          tileMode: TileMode.clamp, // repeats the gradient over the canvas
+                            ),
+                            borderRadius: new BorderRadius.only(
+                              topLeft: const Radius.circular(30),
+                              topRight: const Radius.circular(30.0),
+                              bottomLeft: const Radius.circular(30),
+                              bottomRight: const Radius.circular(30),
+                            ),
+                          ),
+                          child: new RaisedButton.icon(
+                              elevation: 0,
+                              color: Colors.transparent,
+                              onPressed: _launchLoginUrlOffice,
+                              icon: new Image.asset(
+                                'assets/office_365.png',
+                                height: 39,
+                                width: 38,
+                              ),
+                              label: new Text('$OFFICE',
+                                  style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontFamily: 'Roboto')),
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(40))),
+                        ),
+                      ),
                     ),
 
-                    Container(
-                      padding: EdgeInsets.fromLTRB(
-                          width*0.03881120943, height * 0.9, width*0.62264011799, height * 0.022),
-                      child: new RaisedButton.icon(
-                          color: Colors.red,
-                          onPressed: _launchLoginUrlSlack,
-                          icon: new Image.asset(
-                            'assets/slack.png',
-                            height: height*0.02581120943*2,
-                            width: height*0.03871681415,
-                          ),
-                          label: new Text('$SLACK',
-                              style: new TextStyle(
-                                fontSize: 20.0,
-                              )),
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(height*0.05162241887))),
-                    ),
-                    Positioned(
-                      top: height * 0.9,
-                      bottom: height * 0.022,
-                      left: width*0.43230088495,
-                      right: width*0.22131268436,
-                      child: new RaisedButton.icon(
-                          color: Colors.red,
-                          onPressed: _launchLoginUrlOffice,
-                          icon: new Image.asset(
-                            'assets/office_365.png',
-                            height: height*0.05162241887,
-                            width: height*0.03891681415,
-                          ),
-                          label: new Text('$OFFICE',
-                              style: new TextStyle(
-                                fontSize: 15.0,
-                              )),
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(height*0.05162241887))),
-                    ),
-                  ],
-                ),
-          ),
-        ));
+                  ])),
+        Container(
+          margin: EdgeInsets.fromLTRB(
+              screenWidth * 0.1, screenHeight*.25, screenWidth * 0.182, 0),
+                      alignment: Alignment.bottomCenter,
+                    child:
+                    Text('version 0.0.1', style: TextStyle(color: Color(0XFF5A6278),fontSize:15),),),
+                ],
+              ),
+        ),
+      ),
+    );
+//    return Scaffold(
+//        backgroundColor: Color.fromRGBO(35, 45, 71, 0.9),
+//        body:
+//        new Container(
+//          decoration: new BoxDecoration(
+//            image: new DecorationImage(
+//              alignment: Alignment.topCenter,
+//              image: new AssetImage(
+//                "assets/signup_bg.png",
+//              ),
+//            ),
+//          ),
+//          child:
+//          LayoutBuilder(
+//            builder: (context, constraints) => Stack(
+////                  fit: StackFit.expand,
+//                  children: <Widget>[
+//                    Container(
+//                      padding: EdgeInsets.fromLTRB(height * 0.03871681415,
+//                          250, 0.0, 00.0),
+//                      child: new ListView(children: [
+//                        Container(
+//                          child: Text(
+//                            'Meetings',
+//                            style: TextStyle(
+//                              fontSize: 50.0,
+//                              fontFamily: 'Roboto Thin',
+////                              color: Color.fromRGBO(255, 255, 255, 0.8),
+//                              foreground: Paint()..shader = linearGradient,
+//                            ),
+//                          ),
+//                        ),
+//                        Container(
+//                          child: Text(
+//                            'that Get',
+//                            style: TextStyle(
+//                              fontSize: 50.0,
+//
+//                              fontFamily: 'Roboto Thin',
+////                              color: Color.fromRGBO(255, 255, 255, 0.8),
+//                              foreground: Paint()..shader = linearGradient1,
+//                            ),
+//                          ),
+//                        ),
+//                        Container(
+//                          child: Text(
+//                            'Things Done!',
+//                            style: TextStyle(
+//                              fontSize: 50.0,
+//                              fontFamily: 'Roboto Thin',
+////                              color: Color.fromRGBO(255, 255, 255, 0.8),
+//                              foreground: Paint()..shader = linearGradient2,
+//                            ),
+//                          ),
+//                        ),
+//                      ]),
+//                    ),
+//                    ListView(
+//                      children:[
+//                     Container(
+//                       padding:
+//                       const EdgeInsets.fromLTRB(20.0, 450.0, 110.0, 0.0),
+//                        height: 520,
+//                        child: new RaisedButton.icon(
+//                          color: Color(0XFFF6F8FB),
+//                            onPressed: _launchLoginUrl,
+//                            icon: new Image.asset(
+//                              'assets/google.png',
+//                              height: height * 0.06452802359,
+//                              width: 50,
+//                            ),
+//                            label: new Text(GOOGLE,
+//                                style: new TextStyle(
+//                                  fontSize: 20.0,
+//                                )),
+//                            shape: new RoundedRectangleBorder(
+//                                borderRadius: new BorderRadius.circular(
+//                                    height * 0.05162241887))),
+//                      ),
+//
+//                    Row(children: [
+//                      Padding(
+//                        padding:
+//                            const EdgeInsets.fromLTRB(58.0, 20.0, 0.0, 00.0),
+//                        child: Container(
+//                          height: 1.0,
+//                          width: 72,
+//                          color: Color.fromRGBO(255, 255, 255, 0.2),
+//                        ),
+//                      ),
+//                      Padding(
+//                        padding:
+//                        const EdgeInsets.fromLTRB(15.0, 20.0, 0.0, 00.0),
+//                        child: Text(
+//                          'OR',
+//                          style: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.2),fontSize: 15.0,fontFamily: 'Roboto'),
+//                        ),
+//                      ),
+//                      Padding(
+//                        padding:
+//                        const EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 00.0),
+//                        child: Container(
+//                          height: 1.0,
+//                          width: 72,
+//                          color: Color.fromRGBO(255, 255, 255, 0.2),
+//                        ),
+//                      ),
+//                    ]),
+//
+//                     Row(
+//                       children:[
+//                     Padding(
+//                       padding: const EdgeInsets.fromLTRB(20.0,20.0,20.0,0.0),
+//                       child: Container(
+//                         height: 55,
+//                         decoration: BoxDecoration(
+//                            gradient: LinearGradient(
+//                              begin: Alignment.topLeft,
+//                              end: Alignment(0.8, 0.0),
+//                              // 10% of the width, so there are ten blinds.
+//                              colors: [
+//                                Color(0XFF0099B5), Color(0XFF00B55E)
+//                              ], // whitish to gray
+////                          tileMode: TileMode.clamp, // repeats the gradient over the canvas
+//                            ),
+//                            borderRadius: new BorderRadius.only(
+//                              topLeft: const Radius.circular(30),
+//                              topRight: const Radius.circular(30.0),
+//                              bottomLeft: const Radius.circular(30),
+//                              bottomRight: const Radius.circular(30),
+//                            ),
+//                          ),
+//                          child: new RaisedButton.icon(
+//                              elevation: 0,
+//                              color: Colors.transparent,
+//                              onPressed: _launchLoginUrlSlack,
+//                              icon: new Image.asset(
+//                                'assets/slack.png',
+//                                height: height * 0.02581120943 * 2,
+//                                width: height * 0.03871681415,
+//                              ),
+//                              label: new Text('$SLACK',
+//                                  style: new TextStyle(
+//                                    color: Colors.white,
+//                                    fontSize: 18.0,
+//                                  )),
+//                              shape: new RoundedRectangleBorder(
+//                                  borderRadius: new BorderRadius.circular(
+//                                      height * 0.05162241887))),
+//                        ),
+//                     ),
+//
+//                    Padding(
+//                      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 20.0, 0),
+//                      child: Container(
+//                        height: 55,
+//                        child: Container(
+//                          decoration: BoxDecoration(
+//                            gradient: LinearGradient(
+//                              begin: Alignment.topLeft,
+//                              end: Alignment(0.8, 0.0),
+//                              // 10% of the width, so there are ten blinds.
+//                              colors: [
+//                                Color(0XFFD8384F), Color(0XFFE15029)
+//                              ], // whitish to gray
+////                          tileMode: TileMode.clamp, // repeats the gradient over the canvas
+//                            ),
+//                            borderRadius: new BorderRadius.only(
+//                              topLeft: const Radius.circular(30),
+//                              topRight: const Radius.circular(30.0),
+//                              bottomLeft: const Radius.circular(30),
+//                              bottomRight: const Radius.circular(30),
+//                            ),
+//                          ),
+//                          child: new RaisedButton.icon(
+//                              elevation: 0,
+//                              color: Colors.transparent,
+//                              onPressed: _launchLoginUrlOffice,
+//                              icon: new Image.asset(
+//                                'assets/office_365.png',
+//                                height: height * 0.05162241887,
+//                                width: height * 0.03891681415,
+//                              ),
+//                              label: new Text('$OFFICE',
+//                                  style: new TextStyle(
+//                                      color: Colors.white,
+//                                    fontSize: 18.0,
+//                                    fontFamily: 'Roboto'
+//                                  )),
+//                              shape: new RoundedRectangleBorder(
+//                                  borderRadius: new BorderRadius.circular(
+//                                      height * 0.05162241887))),
+//                        ),
+//                      ),
+//                    )]),
+//                  ],
+//                ),
+//
+//          ),
+//        )
+//    );
   }
 
   initPlatformState() async {

@@ -93,7 +93,7 @@ class _Actions extends State<Actions> {
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: Color(0XFF8A93AA)),
                                           )
                                         : Text(NO_ASSIGNEE,
                                             style: TextStyle(
@@ -103,7 +103,7 @@ class _Actions extends State<Actions> {
                                     Text(
                                       createdAt,
                                       style: TextStyle(
-                                          color: Colors.grey, fontSize: 12),
+                                          color: Colors.grey, fontSize: 14),
                                     )
                                   ],
                                 )
@@ -150,7 +150,7 @@ class _Actions extends State<Actions> {
                             allActions[index].note,
                             style:
                                 TextStyle(color: Colors.black54, fontSize: 15),
-                            overflow: TextOverflow.visible,
+                            overflow: TextOverflow.clip,
                           ),
                         ),
                       )

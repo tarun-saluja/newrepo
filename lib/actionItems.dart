@@ -56,7 +56,7 @@ class _ActionItems extends State<ActionItems> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(ACTION_ITEMS),
+            title: Text(ACTION_ITEMS,style: TextStyle(color: Color(0XFFBCC4D1),fontFamily: 'Roboto'),),
             actions: <Widget>[
               PopupMenuButton<String>(
                 // icon: Icon(
@@ -66,8 +66,8 @@ class _ActionItems extends State<ActionItems> {
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
                     'assets/filter.png',
-                    width: 30,
-                    height: 30,
+                    width: 23,
+                    height: 23,
                   ),
                 ),
                 onSelected: choiceAction,
@@ -83,12 +83,16 @@ class _ActionItems extends State<ActionItems> {
             ],
             bottom: TabBar(
               indicatorColor: Colors.blue,
-              tabs: <Widget>[
+              indicatorWeight: 3,
+              unselectedLabelColor: Color(0XFF8A93AA),
+              labelColor: Color(0XFF1794FF),
+              tabs: [
                 Tab(
-                  text: 'All ' + ACTION,
+//                  text: 'All ' + ACTION,
+                  child: Text('All ' +ACTION, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
                 ),
                 Tab(
-                  text: 'My ' + ACTION,
+                  child: Text('My ' +ACTION, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
                 )
               ],
             ),
