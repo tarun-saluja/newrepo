@@ -49,19 +49,19 @@ class _DashboardState extends State<Dashboard> {
           appBar: AppBar(
             title: Text('$DASHBOARD'),
             bottom: TabBar(
-              indicatorColor: Colors.blue,
+              indicatorWeight: 3,
+              unselectedLabelColor: Color(0XFF8A93AA),
+              labelColor: Color(0XFF1794FF),
               indicatorSize: TabBarIndicatorSize.label,
-              indicatorWeight: 4.0,
               tabs: [
                 Tab(
-                  text: "$ALL_MEETINGS",
+//                  text: 'All ' + ACTION,
+                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
                 ),
                 Tab(
-                  text: "$RECENT_NOTES",
+                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
                 ),
-                Tab(
-                  text: "",
-                )
+
               ],
             ),
           ),

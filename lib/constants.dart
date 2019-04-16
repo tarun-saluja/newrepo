@@ -1,4 +1,4 @@
-final NAME = "Meetings that get things done";
+final NAME = "Meetings\nthat get\nthings done";
 final GOOGLE = "Sign up with google";
 final SLACK = "Slack";
 final OFFICE = "Office 365";

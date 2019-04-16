@@ -157,6 +157,7 @@ class _ActionItems extends State<ActionItems> {
 
   Future<Null> getAllActionsData() async {
     final response = await api.getAllActions();
+    print(response);
 
     if (response.statusCode == 200) {
       this.setState(() {

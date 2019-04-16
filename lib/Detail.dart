@@ -14,6 +14,8 @@ import 'package:http/http.dart' as http;
 import 'package:memob/api_service.dart';
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
 import 'package:memob/utilities.dart' as utilities;
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import './attachmentListDialog.dart';
 import './cameraPage.dart';
 import './constants.dart';
@@ -81,15 +83,11 @@ class _DetailState extends State<Detail> {
     print(width);
     String url = "https://app.meetnotes.co/m/${widget.meetingUuid}/";
     CookieManager.setCookie(
-        url, 'sessionid', 'x80d4gds1lx5ltv8bdndcj6mconfen0i');
+        url, 'sessionid', 'ocbq6fjxtl8w5nqqlz9a4ppp8izjjrwo');
+
     flutterWebviewPlugin.launch(url,
-        allowFileURLs: true,
         rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.91),
-        userAgent: kAndroidUserAgent,
-    );
-    flutterWebviewPlugin.onHttpError.listen((onData){
-      print(onData);
-    });
+        userAgent: kAndroidUserAgent);
     return WillPopScope(
       onWillPop: _goback,
       child: Scaffold(
@@ -117,20 +115,20 @@ class _DetailState extends State<Detail> {
 //                              fontSize: 20.0,
 //                            )),
 //                        ),
-                      child: FlatButton(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                        onPressed:(){
-                          flutterWebviewPlugin.hide();
+                    child: FlatButton(
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                      onPressed:(){
+                        flutterWebviewPlugin.hide();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) => new CameraPage(
                                 widget.meetingTitle, widget.meetingUuid)));
-                        },
-                        child: new Image.asset('assets/camera.png',
-                          fit: BoxFit.cover,
+                      },
+                      child: new Image.asset('assets/camera.png',
+                        fit: BoxFit.cover,
                         height: height*0.06162241887,
                         width:width*0.13152777777,
-                        ),
                       ),
+                    ),
 //                    child: new FlatButton.icon(
 //                      color: Colors.red,
 //                      icon: Icon(Icons.add_a_photo), //`Icon` to display
@@ -146,20 +144,20 @@ class _DetailState extends State<Detail> {
                   Container(
                     alignment: Alignment.bottomCenter,
                     margin: EdgeInsets.fromLTRB(width1 * 0.57215, 0.0, 0.0, 0.0),
-                      child: FlatButton(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                        onPressed:(){
-                          flutterWebviewPlugin.hide();
+                    child: FlatButton(
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                      onPressed:(){
+                        flutterWebviewPlugin.hide();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new Speech(widget.meetingUuid)));
-                        },
-                        child: new Image.asset('assets/audio_meeting.png',
-                          fit: BoxFit.cover,
-                          height: height*0.05162241887,
-                          width:width*0.04861111111,
-                        ),
+                            new Speech(widget.meetingUuid)));
+                      },
+                      child: new Image.asset('assets/audio_meeting.png',
+                        fit: BoxFit.cover,
+                        height: height*0.05162241887,
+                        width:width*0.04861111111,
                       ),
+                    ),
 //                    child: new FlatButton.icon(
 //                      color: Colors.red,
 //                      icon: Icon(Icons.add_a_photo), //`Icon` to display
@@ -246,7 +244,7 @@ class _DetailState extends State<Detail> {
 
   Future<String> getRecentNotesCount(String token) async {
     final response =
-        await api.getRecentNotesCount(token, widget.meetingEventId);
+    await api.getRecentNotesCount(token, widget.meetingEventId);
     if (response.statusCode == 200) {
       this.setState(() {
         attachmentCountData = json.decode(response.body);
@@ -279,9 +277,26 @@ class _DetailState extends State<Detail> {
     });
     flutterWebviewPlugin.close();
     onChangedValue4(context);
-//    flutterWebviewPlugin.onUrlChanged.listen((onData) {
+    int count=0;
+    flutterWebviewPlugin.onUrlChanged.listen((String url) {
+      if(count==1) {
+        if(url.startsWith('https://meetnotes-uploads.s3.amazonaws.com')){
+          _downloadFile(url,'attachment-1');
+        }
+        else {
+          launch(url);
+          flutterWebviewPlugin.goBack();
+        }
+      }
+      if(count==0){
+        count=1;
+      }
+      print(url);
+      print(count);
+      print('TestinURL');
 
-//      onData=selectedUrl;
+
+//      onData=url;
 //      if (onData.toString() != url.toString()){
 //        print(url);
 //        print(onData);
@@ -290,7 +305,7 @@ class _DetailState extends State<Detail> {
 //            0.0, 80.0, 430, 600.0),
 //            userAgent: kAndroidUserAgent);
 //      }
-//    });
+    });
   }
 
   bool value4 = false;
@@ -327,7 +342,19 @@ class _DetailState extends State<Detail> {
 //      }
 //    });
   }
-
+  static var httpClient = new HttpClient();
+  Future<File> _downloadFile(String url, String filename) async {
+    print(url);
+    print(filename);
+    var request = await httpClient.getUrl(Uri.parse(url));
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    String dir = (await getExternalStorageDirectory()).path;
+    File file = new File('$dir/$filename');
+    await file.writeAsBytes(bytes);
+    utilities.showLongToast('Downloaded Successfully..!');
+    return file;
+  }
   void choiceAction(String choice) {
     if (choice == Constants.Share) {
       Navigator.push(

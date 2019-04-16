@@ -14,10 +14,12 @@ class Notes extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget noteCard = Center(child: CircularProgressIndicator());
     if (notes.length > 0) {
-      noteCard = ListView.builder(
-        itemBuilder: _buildNoteItem,
-        itemCount: notes.length,
-      );
+      noteCard = Container(
+          padding: EdgeInsets.only(top: 20),
+          child:ListView.builder(
+            itemBuilder: _buildNoteItem,
+            itemCount: notes.length,
+          ));
     }
 
     return noteCard;
@@ -26,13 +28,13 @@ class Notes extends StatelessWidget {
   Widget _buildNoteItem(BuildContext context, int index) {
     var updatedAt;
     Duration diff =
-        DateTime.now().difference(DateTime.parse(notes[index].updatedAt));
+    DateTime.now().difference(DateTime.parse(notes[index].updatedAt));
     updatedAt = duration(diff);
 
     var open = notes[index].actionItems;
-    return Container(
-        height: 80,
-        margin: new EdgeInsets.all(10.0),
+    return  Container(
+        height: 90,
+        margin: new EdgeInsets.fromLTRB(10.0,5.0,10.0,5.0),
         child: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -55,17 +57,21 @@ class Notes extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          notes[index].meetingTitle,
-                          style: TextStyle(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        Container(
+                            width:250,
+                            child:
+                            Text(
+                              notes[index].meetingTitle,
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0XFF5A6278)),
+                              overflow: TextOverflow.ellipsis,
+                            )),
                         Text(
                           'Last Modified $updatedAt',
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                          style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 15),
                         )
                       ],
                     ),
@@ -80,18 +86,18 @@ class Notes extends StatelessWidget {
                           children: <Widget>[
                             (open != 0)
                                 ? Container(
-                                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.grey[200]),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10.0, 2.0, 10.0, 2.0),
-                                    child: Text(
-                                      '$open Open',
-                                      style: TextStyle(
-                                          color: Colors.green, fontSize: 12),
-                                    ),
-                                  )
+                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Color(0XFFF0F5F8)),
+                              padding: const EdgeInsets.fromLTRB(
+                                  10.0, 8.0, 11.0, 8.0),
+                              child: Text(
+                                '$open Open',
+                                style: TextStyle(
+                                    color: Color(0XFF1DBC6F), fontSize: 14),
+                              ),
+                            )
                                 : Text(''),
                           ],
                         ),
@@ -112,6 +118,7 @@ class Notes extends StatelessWidget {
               ),
             ),
           ),
-        ));
+        )
+    );
   }
 }

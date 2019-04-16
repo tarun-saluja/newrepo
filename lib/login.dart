@@ -66,13 +66,14 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                         screenHeight * 0.4, screenWidth * 0.15, 0),
                     child: Text('$NAME',
                         style: TextStyle(
-                            fontSize: 35.0,
+                            fontSize: 45.0,
+                            fontFamily: 'Roboto Thin',
                             color: Color.fromRGBO(255, 255, 255, 0.8))),
                   ),
                   Container(
                     height: screenHeight*0.065,
                     margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, 10, screenWidth * 0.183, 0),
+                        screenWidth * 0.1, 30, screenWidth * 0.183, 0),
                     child: RaisedButton.icon(
                       onPressed: _launchLoginUrl,
                       icon: Image.asset(
@@ -90,8 +91,12 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, 10, screenWidth * 0.35, 0),
+                        screenWidth * 0.1, 25, screenWidth * 0.35, 15),
                     child: Row(children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(''),
+                      ),
                       Expanded(
                         flex: 3,
                         child: Container(
@@ -216,7 +221,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                   ])),
         Container(
           margin: EdgeInsets.fromLTRB(
-              screenWidth * 0.1, screenHeight*.25, screenWidth * 0.182, 0),
+              screenWidth * 0.1, screenHeight*.1, screenWidth * 0.182, 0),
                       alignment: Alignment.bottomCenter,
                     child:
                     Text('version 0.0.1', style: TextStyle(color: Color(0XFF5A6278),fontSize:15),),),

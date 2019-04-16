@@ -37,6 +37,7 @@ class API_Service {
           HttpHeaders.acceptHeader: 'application/json',
           HttpHeaders.cacheControlHeader: 'no-cache'
         });
+    print(response.headers);
     return response;
   }
 
@@ -139,6 +140,7 @@ class API_Service {
           HttpHeaders.acceptHeader: 'application/json',
           HttpHeaders.cacheControlHeader: 'no-cache',
         });
+
     return response;
   }
   choiceAction(String uuid){
