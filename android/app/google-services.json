@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "453880558206",
+    "firebase_url": "https://menote-436e5.firebaseio.com",
+    "project_id": "menote-436e5",
+    "storage_bucket": "menote-436e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453880558206:android:6772cc59f2d4a5e6",
+        "android_client_info": {
+          "package_name": "com.example.memob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453880558206-91upln9pnqnb76q4bat4pbeu087thamg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.memob",
+            "certificate_hash": "46918798d2a9cf01b73833c6172d99d7b2d8c59a"
+          }
+        },
+        {
+          "client_id": "453880558206-c7v09qa6uopfm09thd399924qdctg2hi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZzruZBCGGOozaqgXBZGuIQ-LFpBm_JL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453880558206-c7v09qa6uopfm09thd399924qdctg2hi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
