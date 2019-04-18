@@ -2,18 +2,27 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:memob/actionItems.dart';
+import 'package:memob/analyticUtil.dart';
 import 'package:memob/dashboard.dart';
+import 'package:memob/localization.dart';
 import 'package:memob/notes.dart';
 import 'package:memob/login.dart';
 import 'package:memob/splashscreen.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   Router router = new Router();
 
   // Define our splash page.
+  router.define('Splash', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+        return new SplashScreen();
+      }));
+
   router.define('Login', handler: new Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new Login();
@@ -42,8 +51,20 @@ void main() {
         theme: ThemeData(
           primaryColor: Colors.white,
         ),
-        home: SplashScreen(),
-        onGenerateRoute: router.generator));
+        initialRoute: 'Splash',
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: AnalyticUtil.analytics),
+        ],
+        onGenerateRoute: router.generator,
+        localizationsDelegates: [
+          const LocalizationDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+        ]));
+
   });
 }
 
