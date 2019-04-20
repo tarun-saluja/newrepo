@@ -66,7 +66,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                 child: Text('$NAME',
                     style: TextStyle(
                       fontSize: screenHeight*.06,
-                      fontFamily: 'Roboto Thin',
+                      fontFamily: 'RobotoThin',
 //                            color: Color.fromRGBO(255, 255, 255, 0.8),
                       foreground: Paint()..shader = linearGradient,
                     )),

@@ -49,7 +49,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  requests: 
+  requests:
 
   # flutter_webview_plugin: ^0.2.1+2
   # simple_permissions:
@@ -124,12 +124,20 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Roboto Thin
+    - family: RobotoThin
       fonts:
         - asset: fonts/Roboto-Thin.ttf
     - family: Roboto
       fonts:
         - asset: fonts/Roboto-Regular.ttf
+
+    - family: RobotoBold
+      fonts:
+        - asset: fonts/Roboto-Bold.ttf
+
+    - family: RobotoMedium
+      fonts:
+        - asset: fonts/Roboto-Medium.ttf
 
 
   # For details regarding fonts from package dependencies,

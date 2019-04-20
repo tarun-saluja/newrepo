@@ -165,11 +165,11 @@ class Meetings extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
                       decoration: new BoxDecoration(
                           color: (isToday == 0)
                               ? (isUpcoming == true ? Colors.blue : Colors.blue)
-                              : Colors.grey[400],
+                              : Color(0XFFBCC4D1),
                           border: Border.all(color: Colors.white, width: 1.0),
                           borderRadius: BorderRadius.circular(
                               height * 0.01290560471 * 2)),
@@ -179,18 +179,18 @@ class Meetings extends StatelessWidget {
                           ? Text(
                         '$UPCOMING',
                         style: TextStyle(
-                            fontFamily:'Roboto',fontSize: 12.0, color: Colors.white),
+                            fontFamily:'RobotoMedium',fontSize: 12.0, color: Colors.white),
                       )
                           : Text(
                         '$TODAY',
                         style: TextStyle(
-                            fontFamily:'Roboto', fontSize: 12.0, color: Colors.white),
+                            fontFamily:'RobotoMedium', fontSize: 12.0, color: Colors.white),
                       )
                           : Text(
                         '${DateTimeFormatter.getDate(display.startTime)}',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily:'Roboto', fontSize: 12.0,
+                          fontFamily:'RobotoMedium', fontSize: 12.0,
                         ),
                       ))
                           : null),
@@ -208,8 +208,7 @@ class Meetings extends StatelessWidget {
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Roboto',
+                                    fontFamily: 'RobotoBold',
                                     color: Color(0XFF5A6278)),
                               )),
                           Container(
