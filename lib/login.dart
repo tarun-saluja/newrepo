@@ -41,8 +41,8 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
     final Shader linearGradient = LinearGradient(
     begin: Alignment.topLeft,
       end:Alignment.bottomRight,
-      colors: <Color>[Color(0XFF2BE7FA), Color(0XFF0f3ebf)],
-    ).createShader(Rect.fromLTWH(20.0, 0.0, 500.0, 0.0));
+      colors: <Color>[Color(0XFF2BE7FA), Color(0XFF6450f6)],
+    ).createShader(Rect.fromLTWH(50.0, 50.0, 200.0, 10.0));
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(26, 34, 51, 1),
@@ -94,7 +94,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, screenHeight*.025, screenWidth * 0.35, 15),
+                        screenWidth * 0.1, screenHeight*.025, screenWidth * 0.183, 15),
                     child: Row(children: [
                       Expanded(
                         flex: 2,
@@ -135,6 +135,10 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                           width: 72,
                           color: Color.fromRGBO(255, 255, 255, 0.2),
                         ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(''),
                       ),
                     ]),
                   ),
