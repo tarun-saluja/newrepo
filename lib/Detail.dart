@@ -73,6 +73,7 @@ class _DetailState extends State<Detail> {
 
   @override
   Widget build(BuildContext context) {
+    int count=0;
     print(context);
     print('p');
     double height = MediaQuery.of(context).size.height;
@@ -88,6 +89,28 @@ class _DetailState extends State<Detail> {
     flutterWebviewPlugin.launch(url,
         rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.91),
         userAgent: kAndroidUserAgent);
+    flutterWebviewPlugin.onUrlChanged.listen((String url) {
+      if(count==1) {
+        if(url.startsWith('https://app.meetnotes.co/')){
+          count=1;
+        }
+        else if(url.startsWith('https://meetnotes-uploads.s3.amazonaws.com')){
+          _downloadFile(url,'attachment-1');
+        }
+        else {
+          launch(url);
+          flutterWebviewPlugin.goBack();
+        }
+      }
+      if(count==0){
+        count=1;
+      }
+      print(url);
+      print(count);
+      print('TestinURL');
+
+
+    });
     return WillPopScope(
       onWillPop: _goback,
       child: Scaffold(
@@ -125,8 +148,8 @@ class _DetailState extends State<Detail> {
                       },
                       child: new Container(alignment: Alignment.bottomLeft,child:Image.asset('assets/camera.png',
                         fit: BoxFit.cover,
-                        height: height*0.04162241887,
-                        width:width*0.09152777777,
+                        height: height*0.04462241887,
+                        width:width*0.09352777777,
                       )),
                     ),
                   ),
@@ -143,7 +166,7 @@ class _DetailState extends State<Detail> {
                       },
                       child: new Image.asset('assets/audio_meeting.png',
                         fit: BoxFit.cover,
-                        height: height*0.04162241887,
+                        height: height*0.04462241887,
                         width:width*0.04861111111,
                       ),
                     ),
@@ -266,35 +289,7 @@ class _DetailState extends State<Detail> {
     });
     flutterWebviewPlugin.close();
     onChangedValue4(context);
-    int count=0;
-    flutterWebviewPlugin.onUrlChanged.listen((String url) {
-      if(count==1) {
-        if(url.startsWith('https://meetnotes-uploads.s3.amazonaws.com')){
-          _downloadFile(url,'attachment-1');
-        }
-        else {
-          launch(url);
-          flutterWebviewPlugin.goBack();
-        }
-      }
-      if(count==0){
-        count=1;
-      }
-      print(url);
-      print(count);
-      print('TestinURL');
 
-
-//      onData=url;
-//      if (onData.toString() != url.toString()){
-//        print(url);
-//        print(onData);
-//        flutterWebviewPlugin.close();
-//        flutterWebviewPlugin.launch(url, rect: new Rect.fromLTWH(
-//            0.0, 80.0, 430, 600.0),
-//            userAgent: kAndroidUserAgent);
-//      }
-    });
   }
 
   bool value4 = false;
@@ -333,13 +328,14 @@ class _DetailState extends State<Detail> {
   }
   static var httpClient = new HttpClient();
   Future<File> _downloadFile(String url, String filename) async {
-    print(url);
-    print(filename);
-    var request = await httpClient.getUrl(Uri.parse(url));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    String dir = (await getExternalStorageDirectory()).path;
+    http.Client client = new http.Client();
+    var req = await client.get(Uri.parse(url));
+    var bytes = req.bodyBytes;
+
+    String dir = (await getApplicationDocumentsDirectory()).path;
     File file = new File('$dir/$filename');
+    print('$dir');
+    print('jkjkjk');
     await file.writeAsBytes(bytes);
     utilities.showLongToast('Downloaded Successfully..!');
     return file;

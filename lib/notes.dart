@@ -65,7 +65,7 @@ class Notes extends StatelessWidget {
                             Text(
                               notes[index].meetingTitle,
                               style: TextStyle(
-                                  fontSize: 18.0,
+                                  fontSize: 16.0,
                                   fontFamily: 'Roboto',
                                   fontWeight: FontWeight.bold,
                                   color: Color(0XFF5A6278)),
@@ -73,7 +73,7 @@ class Notes extends StatelessWidget {
                             )),
                         Text(
                           'Last Modified $updatedAt',
-                          style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 15),
+                          style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 13),
                         )
                       ],
                     ),
@@ -97,7 +97,7 @@ class Notes extends StatelessWidget {
                               child: Text(
                                 '$open Open',
                                 style: TextStyle(
-                                    color: Color(0XFF1DBC6F), fontSize: 14),
+                                    color: Color(0XFF1DBC6F), fontSize: 12),
                               ),
                             )
                                 : Text(''),

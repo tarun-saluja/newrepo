@@ -48,7 +48,7 @@ class Meetings extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int parentIndex) {
             return new Container(
-                padding: EdgeInsets.only(left:20, right: 20, bottom: 20, top: 10),
+                padding: EdgeInsets.only(left:20, right: 20, bottom: 6, top: 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -58,7 +58,7 @@ class Meetings extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             dayprint(parentIndex),
-                            style: TextStyle(color: Colors.white, fontSize: 17, fontFamily: 'Roboto', fontWeight: FontWeight.normal),
+                            style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.normal),
                           ),
                         ),
                       ],
@@ -185,13 +185,13 @@ class Meetings extends StatelessWidget {
                               : Text(
                             '$TODAY',
                             style: TextStyle(
-                                fontSize: 12.0, color: Colors.white),
+                                fontSize: 11.0, color: Colors.white),
                           )
                               : Text(
                             '${DateTimeFormatter.getDate(display.startTime)}',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.0,
+                              fontSize: 11.0,
                             ),
                           ))
                               : null),
@@ -201,14 +201,14 @@ class Meetings extends StatelessWidget {
                         child: Column(
                             children:[
                               Container(
-                                  padding: EdgeInsets.only(bottom: 5.0),
+                                  padding: EdgeInsets.only(bottom: 3.0),
                                   alignment: Alignment.bottomLeft,
                                   child:Text(
                                     display.title,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                        fontSize: 17.0,
+                                        fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Roboto',
                                         color: Color(0XFF5A6278)),
@@ -217,7 +217,7 @@ class Meetings extends StatelessWidget {
                                   alignment: Alignment.bottomLeft,
                                   child:Text(
                                     '${DateTimeFormatter.getTime(display.startTime)}',
-                                    style: TextStyle(fontSize: 15.0,fontFamily: 'Roboto', color: Color(0XFFBCC4D1)),
+                                    style: TextStyle(fontSize: 14.0,fontFamily: 'Roboto', color: Color(0XFFBCC4D1)),
                                   )),
                             ]),
                       ),

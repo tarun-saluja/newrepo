@@ -9,8 +9,9 @@ import 'package:memob/uploadAttachment.dart' as UploadAttachment;
 import 'package:memob/utilities.dart' as utilities;
 import 'package:path_provider/path_provider.dart';
 import 'package:memob/Detail.dart';
-
+import 'main.dart';
 class CameraPage extends StatefulWidget {
+
   final String meetingUuid;
   final String meetingTitle;
 
@@ -40,6 +41,7 @@ void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 
 class _CameraPageState extends State<CameraPage> {
+
   CameraController controller;
   String imagePath;
 
@@ -81,13 +83,20 @@ class _CameraPageState extends State<CameraPage> {
     initCamera();
     fetchData();
   }
+  Future<Null> _goback() {
+    flutterWebviewPlugin.show();
+    Navigator.pop(context);
+//    Navigator.popUntil(context, ModalRoute.withName('Detail'));
+  }
 
   @override
   Widget build(BuildContext context) {
     widget.height = MediaQuery.of(context).size.height;
     widget.width = MediaQuery.of(context).size.width;
 
-    return new MaterialApp(
+    return new WillPopScope(
+        onWillPop: _goback,
+        child: MaterialApp(
         home: new Scaffold(
             key: _scaffoldKey,
             body: new Container(
@@ -117,7 +126,7 @@ class _CameraPageState extends State<CameraPage> {
       ),
     _cameraSaveController()
     ])),
-            )));
+            ))));
   }
 
   /// Display the preview from the camera (or a message if the preview is not available).

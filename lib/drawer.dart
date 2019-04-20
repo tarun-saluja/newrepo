@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:memob/actionClass.dart';
 import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:http/http.dart' as http;
 
 import './api_service.dart';
 import './constants.dart';
@@ -29,12 +32,28 @@ class _DwidgetState extends State<Dwidget> {
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
 
+  List<ActionClass> allActions = new List();
+  List allAssignees = new List();
+  List allMeetings = new List();
+
+  List<ActionClass> myActions = new List();
+  List myAssignees = new List();
+  List myMeetings = new List();
+
+  String userToken;
+  int userID;
+  String profile_picture;
+  bool _connectionStatus = false;
+
+  var api = new API_Service();
+
   @override
   void initState() {
     super.initState();
     userToken1 = widget.userToken;
     displayName = widget.displayName;
     profilepicture = widget.profilepicture;
+    getUserDetails();
   }
 
   @override
@@ -46,49 +65,69 @@ class _DwidgetState extends State<Dwidget> {
     return new Drawer(
       child: new ListView(
         children: <Widget>[
-          new Container(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(widths*0.02430555555, widths*0.08506944444, widths*0.12152777777, widths*0.12152777777),
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  new Image.asset(
-                    'assets/meetnotes_icon.png',
-                    width: widths*0.07291666666,
-                    height: widths*0.07291666666,
-                  ),
-                  Text(
-                    "$LOGONAME",
-                    textAlign: TextAlign.center,
-                    textScaleFactor: 1.6,
-                    style: new TextStyle(color: Colors.black26),
-                  ),
-                ],
+          Container(
+            margin: EdgeInsets.fromLTRB(widths*0.07191666666, widths*0.08506944444, 0, widths*0.12152777777),
+            child: new ListTile(
+              leading: Image.asset(
+                'assets/meetnotes_icon.png',
+                width: 30,
+                height: 30,
+              ),
+              title: new Text(
+                "$LOGONAME",
+                textScaleFactor: 1.2,
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black38,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400),
               ),
             ),
           ),
+//          new Container(
+//            child: Container(
+//              margin: EdgeInsets.fromLTRB(widths*0.07191666666, widths*0.08506944444, 0, widths*0.12152777777),
+//              child: new Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                children: <Widget>[
+//                  new Image.asset(
+//                    'assets/meetnotes_icon.png',
+//                    width: 30,
+//                    height: 30,
+//                  ),
+//                  Text(
+//                    "$LOGONAME",
+//                    textScaleFactor: 1.6,
+//                    style: new TextStyle(color: Colors.black26,
+//                    fontFamily: 'Roboto'),
+//                  ),
+//                ],
+//              ),
+//            ),
+//          ),
           Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
             child: new ListTile(
               onTap: () {
                 Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
               leading: Image.asset(
                 'assets/dashboard.png',
-                width: widths*0.06076388888,
-                height: widths*0.06076388888,
+                width: 25,
+                height: 25,
               ),
               title: new Text(
-                "$DASHBOARD",
+                "$DASHBOARDS",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.black38,
+                    fontFamily: 'Roboto',
                     fontWeight: FontWeight.w400),
               ),
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
             child: new ListTile(
               onTap: () {
                 m=1;
@@ -96,18 +135,19 @@ class _DwidgetState extends State<Dwidget> {
               },
               leading: Image.asset(
                 'assets/notes.png',
-                width: widths*0.06076388888,
-                height: widths*0.06076388888,
+                width: 25,
+                height: 25,
               ),
               title: new Text("$NOTES",
                   style: TextStyle(
                       fontSize: 18,
+                      fontFamily: 'Roboto',
                       color: Colors.black38,
                       fontWeight: FontWeight.w400)),
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
             child: new ListTile(
               onTap: () {
                 bool isNewRouteSameAsCurrent = false;
@@ -125,27 +165,29 @@ class _DwidgetState extends State<Dwidget> {
               },
               leading: Image.asset(
                 'assets/action_items.png',
-                width: widths*0.06076388888,
-                height: widths*0.06076388888,
+                width: 25,
+                height: 25,
               ),
               title: new Text("$ACTION",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black38,
+                      fontFamily: 'Roboto',
                       fontWeight: FontWeight.w400)),
             ),
           ),
           new Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, widths*0.07291666666, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, widths*0.07291666666, 0, 0),
             child: ExpansionTile(
               leading: Image.asset(
                 'assets/team.png',
-                width: widths*0.07291666666,
-                height: widths*0.07291666666,
+                width: 25,
+                height: 25,
               ),
               title: Text("$TEAM",
                   style: TextStyle(
                       fontSize: 18,
+                      fontFamily: 'Roboto',
                       color: Colors.black38,
                       fontWeight: FontWeight.w400)),
               children: <Widget>[
@@ -158,7 +200,7 @@ class _DwidgetState extends State<Dwidget> {
             height: widths*0.12152777777,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(widths*0.08291666666, heights*0.06166666666, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, heights*0.06166666666, 0, 0),
             child: new ListTile(
               onTap: () {
                 Navigator.push(
@@ -169,25 +211,33 @@ class _DwidgetState extends State<Dwidget> {
               },
               leading: Image.asset(
                 'assets/settings.png',
-                width: widths*0.06076388888,
-                height: widths*0.06076388888,
+                width: 25,
+                height: 25,
                 color: Colors.black12,
               ),
               title: new Text("$SETTINGS",
                   style: TextStyle(
                       fontSize: 18,
+                      fontFamily: 'Roboto',
                       color: Colors.black38,
                       fontWeight: FontWeight.w400)),
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
             child: new ListTile(
                 leading: (profilepicture != null)
-                    ? (CircleAvatar(
-                        backgroundImage: AssetImage(profilepicture),
-                        maxRadius: 17,
-                      ))
+                    ? Container(
+                    height: 30,
+                    width: 30,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: new NetworkImage(
+                                profilepicture)
+                        )
+                    ))
                     : (CircleAvatar(
                         backgroundImage: AssetImage('assets/blank_user.jpeg'),
                         maxRadius: 17,
@@ -197,24 +247,27 @@ class _DwidgetState extends State<Dwidget> {
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black38,
+                            fontFamily: 'Roboto',
                             fontWeight: FontWeight.w400)))
                     : (new Text('User',
                         style: TextStyle(
                             fontSize: 18,
+                            fontFamily: 'Roboto',
                             color: Colors.black38,
                             fontWeight: FontWeight.w400)))),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
             child: new ListTile(
               leading: Image.asset(
                 'assets/logout.png',
-                width: widths*0.06076388888,
-                height: widths*0.06076388888,
+                width: 25,
+                height: 25,
               ),
               title: new Text("$LOGOUT",
                   style: TextStyle(
                       fontSize: 18,
+                      fontFamily: 'Roboto',
                       color: Colors.black38,
                       fontWeight: FontWeight.w400)),
               onTap: () async {
@@ -240,7 +293,7 @@ class _DwidgetState extends State<Dwidget> {
               for (var i = 0; i < snapshot.data.length; i++) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 6.0),
-                  child: Center(child: Text(snapshot.data[i].name)),
+                  child: Center(child: Text(snapshot.data[i].name, style: TextStyle(fontFamily: 'Roboto'),)),
                 );
               }
             } else {
@@ -260,5 +313,29 @@ class _DwidgetState extends State<Dwidget> {
       teamNames.add(team);
     }
     return teamNames;
+  }
+  Future<Null> getUserDetails() async {
+    var response = await http.get(
+        Uri.encodeFull('https://app.meetnotes.co/api/v2/settings/account/'),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Token ' + userToken1,
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.cacheControlHeader: 'no-cache'
+        });
+//    print(response.body.substring(100,120));
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+        profilepicture = mData['profile_picture'];
+
+//        print(myActions[0]);
+      });
+      return null;
+    } else {
+      // If that response was not OK, throw an error.
+      return null;
+    }
   }
 }

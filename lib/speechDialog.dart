@@ -47,6 +47,11 @@ class _MyAppState extends State<Speech> {
     checkPermission();
     getPermissionStatus();
   }
+  Future<Null> _goback() {
+    flutterWebviewPlugin.show();
+    Navigator.pop(context);
+//    Navigator.popUntil(context, ModalRoute.withName('Detail'));
+  }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   void activateSpeechRecognizer() {
@@ -114,18 +119,14 @@ class _MyAppState extends State<Speech> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    return new Column(
+    return new WillPopScope(
+        onWillPop: _goback,
+        child: Column(
         children: [
           Container(
               transform: Matrix4.translationValues(0.0, 45.0, 20.0),
             child:
       CupertinoAlertDialog(
-        title: new Column(
-          children: <Widget>[
-            new Text("Voice note"),
-            new Divider(),
-          ],
-        ),
         content: new Container(
           child: new Container(
             child: new Padding(
@@ -145,7 +146,7 @@ class _MyAppState extends State<Speech> {
           Center(
            child: Padding(
              padding: const EdgeInsets.only(bottom:35.0),
-             child: Text('Listening...', style: TextStyle(fontFamily: 'Roboto', fontSize: 12, color: Colors.black),),
+             child: Text('Listening...', style: TextStyle(fontFamily: 'Roboto', fontSize: 20, color: Color(0XFFBCC4D1)),),
            ),
           ):Container()
         ],
@@ -300,7 +301,7 @@ class _MyAppState extends State<Speech> {
 //                      : new Container()
                 ]),
               ))),
-    ]);
+    ]));
   }
 
 

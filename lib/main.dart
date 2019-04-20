@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:memob/Detail.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/analyticUtil.dart';
 import 'package:memob/dashboard.dart';
@@ -31,6 +32,10 @@ void main() {
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new Login();
   }));
+  router.define('Detail', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+        return new Detail();
+      }));
 
   // Define our home page.
   router.define('Dashboard', handler: new Handler(

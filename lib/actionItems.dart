@@ -109,10 +109,10 @@ class _ActionItems extends State<ActionItems> {
               tabs: <Widget>[
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text('All $ACTION', style: TextStyle(fontSize: screenHeight*.028, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
+                  child: Text('All $ACTION', style: TextStyle(fontSize: screenHeight*.023, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
                 ),
                 Tab(
-                  child: Text('My $ACTION', style: TextStyle(fontSize: screenHeight*0.028, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
+                  child: Text('My $ACTION', style: TextStyle(fontSize: screenHeight*0.023, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
                 ),
               ],
             ),
