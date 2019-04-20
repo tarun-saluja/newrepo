@@ -39,7 +39,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 //    print(width);
 
     final Shader linearGradient = LinearGradient(
-    begin: Alignment.topLeft,
+      begin: Alignment.topLeft,
       end:Alignment.bottomRight,
       colors: <Color>[Color(0XFF2BE7FA), Color(0XFF6450f6)],
     ).createShader(Rect.fromLTWH(50.0, 50.0, 200.0, 10.0));
@@ -57,101 +57,101 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
         ),
         child: LayoutBuilder(
           builder: (context, constraints) => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(screenWidth * 0.1,
-                        screenHeight * 0.35, screenWidth * 0.15, 0),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(screenWidth * 0.1,
+                    screenHeight * 0.35, screenWidth * 0.15, 0),
 
-                    child: Text('$NAME',
-                        style: TextStyle(
-                            fontSize: screenHeight*.06,
-                            fontFamily: 'Roboto Thin',
+                child: Text('$NAME',
+                    style: TextStyle(
+                      fontSize: screenHeight*.06,
+                      fontFamily: 'Roboto Thin',
 //                            color: Color.fromRGBO(255, 255, 255, 0.8),
-                          foreground: Paint()..shader = linearGradient,
-                        )),
+                      foreground: Paint()..shader = linearGradient,
+                    )),
+              ),
+              Container(
+                height: screenHeight*0.075,
+                margin: EdgeInsets.fromLTRB(
+                    screenWidth * 0.1, screenHeight*.04, screenWidth * 0.183, 0),
+                child: RaisedButton.icon(
+                  color: Color(0XFFF6F8FB),
+                  onPressed: _launchLoginUrl,
+                  icon: Image.asset(
+                    'assets/google.png',
+                    height: 39,
+                    width: 38,
                   ),
-                  Container(
-                    height: screenHeight*0.075,
-                    margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, screenHeight*.04, screenWidth * 0.183, 0),
-                    child: RaisedButton.icon(
-                      color: Color(0XFFF6F8FB),
-                      onPressed: _launchLoginUrl,
-                      icon: Image.asset(
-                        'assets/google.png',
-                        height: 39,
-                        width: 38,
-                      ),
-                      label: Text('$GOOGLE',
-                          style: TextStyle(
-                            fontSize: screenHeight*0.025,
-                            fontFamily: 'Roboto',
-                          )),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40.0)),
+                  label: Text('$GOOGLE',
+                      style: TextStyle(
+                        fontSize: screenHeight*0.025,
+                        fontFamily: 'Roboto',
+                      )),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0)),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    screenWidth * 0.1, screenHeight*.025, screenWidth * 0.183, 15),
+                child: Row(children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(''),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 1.0,
+                      width: 72,
+                      color: Color.fromRGBO(255, 255, 255, 0.2),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, screenHeight*.025, screenWidth * 0.183, 15),
-                    child: Row(children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(''),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          height: 1.0,
-                          width: 72,
-                          color: Color.fromRGBO(255, 255, 255, 0.2),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(''),
-                      ),
-                      Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'OR',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(255, 255, 255, 0.2),
-                                  fontSize: 15.0,
-                                  fontFamily: 'Roboto'),
-                            ),
-                          )),
-                      Expanded(
-                        flex: 1,
-                        child: Text(''),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          height: 1.0,
-                          width: 72,
-                          color: Color.fromRGBO(255, 255, 255, 0.2),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(''),
-                      ),
-                    ]),
+                  Expanded(
+                    flex: 1,
+                    child: Text(''),
                   ),
-                  Container(
-                      height: screenHeight*0.065,
-                      margin: EdgeInsets.fromLTRB(
-                          screenWidth * 0.1, screenHeight*.001, screenWidth * 0.182, 0),
-                      child: Row(children: [
+                  Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'OR',
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 255, 255, 0.2),
+                              fontSize: 15.0,
+                              fontFamily: 'Roboto'),
+                        ),
+                      )),
+                  Expanded(
+                    flex: 1,
+                    child: Text(''),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 1.0,
+                      width: 72,
+                      color: Color.fromRGBO(255, 255, 255, 0.2),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(''),
+                  ),
+                ]),
+              ),
+              Container(
+                  height: screenHeight*0.065,
+                  margin: EdgeInsets.fromLTRB(
+                      screenWidth * 0.1, screenHeight*.001, screenWidth * 0.182, 0),
+                  child: Row(children: [
                     Expanded(
                       flex: 8,
                       child: Container(
 //                         height: 55,
-                      width: 100,
+                        width: 100,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
@@ -237,14 +237,19 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                     ),
 
                   ])),
-        Container(
-          margin: EdgeInsets.fromLTRB(
-              screenWidth * 0.1, screenHeight*.15, screenWidth * 0.182, 0),
+              Container(
+                  child: Expanded(
+                    child: Align(
                       alignment: Alignment.bottomCenter,
-                    child:
-                    Text('version 0.0.1', style: TextStyle(color: Color(0XFF5A6278),fontSize:15,fontFamily: 'Roboto'),),),
-                ],
-              ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text('version 0.0.1', style:
+                        TextStyle(color: Color(0XFF5A6278),fontSize:15,fontFamily: 'Roboto'),),
+                      ),),
+                  )
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -65,7 +65,7 @@ class Notes extends StatelessWidget {
                             Text(
                               notes[index].meetingTitle,
                               style: TextStyle(
-                                  fontSize: 18.0,
+                                  fontSize: 15.0,
                                   fontFamily: 'Roboto',
                                   fontWeight: FontWeight.bold,
                                   color: Color(0XFF5A6278)),

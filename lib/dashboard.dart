@@ -72,10 +72,10 @@ class _DashboardState extends State<Dashboard> {
               tabs: [
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: screenHeight*.025, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
+                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: 17, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
                 ),
                 Tab(
-                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: screenHeight*0.025, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
+                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: 17, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
                 ),
 
               ],
