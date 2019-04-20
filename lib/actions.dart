@@ -49,7 +49,7 @@ class _Actions extends State<Actions> {
 
     return Container(
         height: 130,
-        margin: EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 0.0),
+        margin: EdgeInsets.fromLTRB(15.0, 6.0, 15.0, 0.0),
         child: GestureDetector(
           onTap: () {
             showDialog(
@@ -93,7 +93,10 @@ class _Actions extends State<Actions> {
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
-                                                color: Color(0XFF8A93AA)),
+                                                color: Color(0XFF8A93AA),
+                                            fontFamily: 'Roboto',
+                                            ),
+                                      overflow: TextOverflow.ellipsis,
                                           )
                                         : Text(NO_ASSIGNEE,
                                             style: TextStyle(
@@ -103,7 +106,8 @@ class _Actions extends State<Actions> {
                                     Text(
                                       createdAt,
                                       style: TextStyle(
-                                          color: Colors.grey, fontSize: 14),
+                                          color: Colors.grey, fontSize: 14, fontFamily: 'Roboto'),
+                                      overflow: TextOverflow.ellipsis,
                                     )
                                   ],
                                 )
@@ -117,10 +121,11 @@ class _Actions extends State<Actions> {
                               color: (allActions[index].status == 'pending')
                                   ? Colors.pink
                                   : (allActions[index].status == 'doing'
-                                      ? Colors.blue[400]
+                                      ? Color(0XFFF5A622)
                                       : Colors.green[400])),
                           child: Text(
-                            allActions[index].status,
+//                            choice[0].toUpperCase()+choice.substring(1)
+                            allActions[index].status[0].toUpperCase()+allActions[index].status.substring(1),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -131,7 +136,7 @@ class _Actions extends State<Actions> {
                               return Status.choices.map((String choice) {
                                 return (choice != allActions[index].status)
                                     ? PopupMenuItem<String>(
-                                        value: choice, child: Text(choice))
+                                        value: choice, child: Text(choice[0].toUpperCase()+choice.substring(1)))
                                     : (null);
                               }).toList();
                             },
@@ -150,7 +155,7 @@ class _Actions extends State<Actions> {
                             allActions[index].note,
                             style:
                                 TextStyle(color: Colors.black54, fontSize: 15),
-                            overflow: TextOverflow.clip,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       )

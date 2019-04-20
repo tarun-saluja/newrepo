@@ -4,14 +4,18 @@ import 'package:flutter/services.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/dashboard.dart';
 import 'package:memob/notes.dart';
+import 'package:memob/NotesClass.dart';
 import 'package:memob/login.dart';
 import 'package:memob/splashscreen.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
+import './recentlyUpdated.dart';
 
 void main() {
   Router router = new Router();
+
+  List<NotesClass> _notes = new List();
 
   // Define our splash page.
   router.define('Login', handler: new Handler(
@@ -30,9 +34,9 @@ void main() {
     return new ActionItems();
   }));
 
-  router.define('Notes', handler: new Handler(
+  router.define('RecentNotes', handler: new Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-        return new Notes();
+        return new RecentlyUpdated(_notes);
       }));
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

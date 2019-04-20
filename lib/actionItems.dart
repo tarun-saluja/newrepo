@@ -7,8 +7,10 @@ import 'package:memob/actionManager.dart';
 import 'package:memob/drawer.dart';
 import 'package:memob/utilities.dart' as utilities;
 
-import './constants.dart';
 import './api_service.dart';
+import './constants.dart';
+
+var _result;
 
 class ActionItems extends StatefulWidget {
   @override
@@ -48,15 +50,30 @@ class _ActionItems extends State<ActionItems> {
   String profile_picture;
   bool _connectionStatus = false;
 
+  var api = new API_Service();
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(ACTION_ITEMS,style: TextStyle(color: Color(0XFFBCC4D1),fontFamily: 'Roboto'),),
+            title: Text('$ACTION_ITEMS',style: TextStyle(color: Color(0XFFBCC4D1), fontWeight: FontWeight.bold)),
+            leading:  Builder(
+              builder: (context) =>
+                  FlatButton(
+                    onPressed:(){
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: new Image.asset('assets/menu.png',
+                      fit: BoxFit.cover,
+                      height: 20,
+                      width:25,
+                    ),
+                  ),
+            ),
             actions: <Widget>[
               PopupMenuButton<String>(
                 // icon: Icon(
@@ -66,8 +83,8 @@ class _ActionItems extends State<ActionItems> {
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
                     'assets/filter.png',
-                    width: 23,
-                    height: 23,
+                    width: 30,
+                    height: 30,
                   ),
                 ),
                 onSelected: choiceAction,
@@ -75,7 +92,9 @@ class _ActionItems extends State<ActionItems> {
                   return Filters.choices.map((String filter) {
                     return PopupMenuItem<String>(
                       value: filter,
-                      child: Text(filter),
+                      child: Text(filter,
+                        style: _result[filter]?TextStyle(color: Colors.blue):TextStyle(color: Colors.black),
+                      ),
                     );
                   }).toList();
                 },
@@ -83,25 +102,25 @@ class _ActionItems extends State<ActionItems> {
             ],
             bottom: TabBar(
               indicatorColor: Colors.blue,
-              indicatorWeight: 3,
               unselectedLabelColor: Color(0XFF8A93AA),
               labelColor: Color(0XFF1794FF),
-              tabs: [
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorWeight: 3,
+              tabs: <Widget>[
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text('All ' +ACTION, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
+                  child: Text('All $ACTION', style: TextStyle(fontSize: screenHeight*.028, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
                 ),
                 Tab(
-                  child: Text('My ' +ACTION, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
-                )
+                  child: Text('My $ACTION', style: TextStyle(fontSize: screenHeight*0.028, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
+                ),
               ],
             ),
           ),
           drawer: Dwidget(userToken, displayName, profile_picture),
           body: Container(
             decoration: BoxDecoration(
-              image: new DecorationImage(
-                  image: AssetImage('assets/bg.png'), fit: BoxFit.cover),
+              color: Color.fromRGBO(135, 206, 250, .4),
             ),
             child: TabBarView(
               children: <Widget>[
@@ -157,7 +176,6 @@ class _ActionItems extends State<ActionItems> {
 
   Future<Null> getAllActionsData() async {
     final response = await api.getAllActions();
-    print(response);
 
     if (response.statusCode == 200) {
       this.setState(() {
@@ -257,6 +275,12 @@ class _ActionItems extends State<ActionItems> {
       }
     });
     super.initState();
+    _result = {
+      'Everything' : true,
+      'All Open Actions' : false,
+      'Recently Updated' : false,
+      'Recently Closed' : false,
+    };
   }
 
   Future<Null> getOpenActionsData() async {
@@ -441,6 +465,12 @@ class _ActionItems extends State<ActionItems> {
     myAssignees.clear();
     myMeetings.clear();
     if (choice == Filters.Everything) {
+      _result = {
+        'Everything' : true,
+        'All Open Actions' : false,
+        'Recently Updated' : false,
+        'Recently Closed' : false,
+      };
       this.setState(() {
         for (var i = 0; i < allActions.length; i++) {
           actions.add(allActions[i]);
@@ -454,6 +484,12 @@ class _ActionItems extends State<ActionItems> {
         }
       });
     } else if (choice == Filters.OpenActions) {
+      _result = {
+        'Everything' : false,
+        'All Open Actions' : true,
+        'Recently Updated' : false,
+        'Recently Closed' : false,
+      };
       this.setState(() {
         for (var i = 0; i < openAllActions.length; i++) {
           actions.add(openAllActions[i]);
@@ -467,6 +503,12 @@ class _ActionItems extends State<ActionItems> {
         }
       });
     } else if (choice == Filters.RecentlyUpdated) {
+      _result = {
+        'Everything' : false,
+        'All Open Actions' : false,
+        'Recently Updated' : true,
+        'Recently Closed' : false,
+      };
       this.setState(() {
         for (var i = 0; i < updatedAllActions.length; i++) {
           actions.add(updatedAllActions[i]);
@@ -480,6 +522,12 @@ class _ActionItems extends State<ActionItems> {
         }
       });
     } else if (choice == Filters.RecentlyClosed) {
+      _result = {
+        'Everything' : false,
+        'All Open Actions' : false,
+        'Recently Updated' : false,
+        'Recently Closed' : true,
+      };
       this.setState(() {
         for (var i = 0; i < closedAllActions.length; i++) {
           actions.add(closedAllActions[i]);

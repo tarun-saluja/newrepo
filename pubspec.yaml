@@ -80,11 +80,15 @@ flutter:
     - blank_user.jpeg
     - assets/meetn.png
     - assets/empty.png
+    - assets/tick.png
     - dashboard.png
     - meetings.png
     - captures.png
     - notes.png
+    - start.png
+    - tick.png
     - Splash.jpg
+    - menu.png
     - settings.png
     - audio.png
     - audio_meeting.png
@@ -94,8 +98,10 @@ flutter:
     - team.png
     - bg.png
     - action_items.png
+    - stop.png
     - logout.png
     - filter.png
+    - cross.png
     - slack.png
     - office_365.png
     - arrow.png

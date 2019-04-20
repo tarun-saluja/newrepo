@@ -41,38 +41,25 @@ class _Settings extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: Text('$SETTINGS'),
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              icon: Icon(Icons.filter),
-              onSelected: choiceAction,
-              itemBuilder: (BuildContext context) {
-                return SettingFilters.choices.map((String filter) {
-                  return PopupMenuItem<String>(
-                    value: filter,
-                    child: Text(filter),
-                  );
-                }).toList();
-              },
-            )
-          ],
+          title: Text('$SETTINGS', style: TextStyle(fontFamily: 'Roboto'),),
         ),
         body: (dailyEmail != null)
-            ? ((profileInformation == true)
-                ? ((Container(
+            ? ((Container(
                     padding: EdgeInsets.all(20),
                     child: Form(
                       child: ListView(
                         children: <Widget>[
                           Text(
                             title,
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontSize: 25, fontFamily: 'Roboto'),
                           ),
                           Divider(),
                           Text(''),
-                          Text('Name'),
+                          Text('Name', style: TextStyle(fontFamily: 'Roboto'),),
                           Text(''),
                           TextFormField(
                             enabled: false,
@@ -83,7 +70,7 @@ class _Settings extends State<Settings> {
                                         BorderSide(color: Colors.black))),
                           ),
                           Text(''),
-                          Text('$EMAIL'),
+                          Text('$EMAIL', style: TextStyle(fontFamily: 'Roboto'),),
                           Text(''),
                           TextFormField(
                             enabled: false,
@@ -94,10 +81,10 @@ class _Settings extends State<Settings> {
                                         BorderSide(color: Colors.black))),
                           ),
                           Text(''),
-                          Text('$NOTIFICATION_PREF'),
+                          Text('$NOTIFICATION_PREF',style: TextStyle(fontFamily: 'Roboto')),
                           Text(''),
                           CheckboxListTile(
-                            title: Text('$SEND_VIA_EMAIL'),
+                            title: Text('$SEND_VIA_EMAIL',style: TextStyle(fontFamily: 'Roboto')),
                             value: this.dailyEmail,
                             onChanged: (bool val) {
                               this.setState(() {
@@ -110,7 +97,7 @@ class _Settings extends State<Settings> {
                             },
                           ),
                           CheckboxListTile(
-                            title: Text('$SEND_VIA_SLACK'),
+                            title: Text('$SEND_VIA_SLACK',style: TextStyle(fontFamily: 'Roboto')),
                             value: this.dailySlack,
                             onChanged: (bool val) {
                               this.setState(() {
@@ -125,7 +112,7 @@ class _Settings extends State<Settings> {
                             },
                           ),
                           CheckboxListTile(
-                            title: Text('Meeting Reminder'),
+                            title: Text('Meeting Reminder',style: TextStyle(fontFamily: 'Roboto')),
                             value: this.meetingReminder,
                             onChanged: (bool val) {
                               this.setState(() {
@@ -140,7 +127,7 @@ class _Settings extends State<Settings> {
                             },
                           ),
                           CheckboxListTile(
-                            title: Text('Meeting Agenda Reminder'),
+                            title: Text('Meeting Agenda Reminder',style: TextStyle(fontFamily: 'Roboto')),
                             value: this.meetingAgenda,
                             onChanged: (bool val) {
                               this.setState(() {
@@ -155,7 +142,7 @@ class _Settings extends State<Settings> {
                             },
                           ),
                           CheckboxListTile(
-                            title: Text('Daily Meetings Feedback'),
+                            title: Text('Daily Meetings Feedback',style: TextStyle(fontFamily: 'Roboto')),
                             value: this.meetingsFeedback,
                             onChanged: (bool val) {
                               this.setState(() {
@@ -168,89 +155,74 @@ class _Settings extends State<Settings> {
                               };
                               settingsUpdate(body);
                             },
-                          )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top:8.0, bottom: 8.0),
+                            child: Container(
+                              height: 1,
+                              width: width*1.1,
+                              color: Colors.black26,
+                            ),
+                          ),
+                          Form(
+                                  child: Column(
+                                      children:[
+                                    Container(
+                                        alignment: Alignment.topLeft,
+                                        child:Text(
+                                      'Aliases',
+                                      style: TextStyle(fontSize: 25, fontFamily: 'Roboto'),
+                                    )),
+                                    Divider(),
+                                    Text(''),
+                                    Container(alignment: Alignment.topLeft,
+                                        child:Text('Email', style: TextStyle(fontSize: 15.0, fontFamily: 'Roboto'),)),
+                                    Text(''),
+                                    TextFormField(
+                                      enabled: false,
+                                      decoration: InputDecoration(
+                                          labelText: email,
+                                          border: OutlineInputBorder(
+                                              borderSide:
+                                              BorderSide(color: Colors.black))),
+                                    ),
+                                    Text(''),
+                              Container(alignment: Alignment.topLeft,
+                                  child:Text('Other Email Aliases', style: TextStyle(fontSize: 15.0, fontFamily: 'Roboto'),)),
+                                    Text(''),
+                              Container(alignment: Alignment.topLeft,
+                                  child:Text(
+                                        '$aliasemail',style: TextStyle(fontFamily: 'Roboto')
+                                    )),
+                                    Text(''),
+                                    TextFormField(
+                                      controller: aliasController,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderSide:
+                                              BorderSide(color: Colors.black))),
+                                      onSaved: (String value) {
+                                        this.aliasEmail = value;
+                                      },
+                                      style: TextStyle(height: 1.0),
+                                    ),
+                              Container(alignment: Alignment.topLeft,
+                                  child:Padding(
+                                      padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,0.0),
+                                      child: RaisedButton(
+                                        child: Text('+Add Another Aliases',style: TextStyle(fontFamily: 'Roboto')),
+                                        color: Colors.blue,
+                                        onPressed: () {
+                                          Map body = {"email": aliasController.text};
+                                          addAliases(body);
+                                        },
+                                      ),
+                                    ))
+                                  ]))
                         ],
                       ),
                     ),
                   )))
-                : (aliases == true)
-                    ? ((Container(
-                        padding: EdgeInsets.all(20),
-                        child: Form(
-                            child: ListView(children: <Widget>[
-                          Text(
-                            title,
-                            style: TextStyle(fontSize: 25),
-                          ),
-                          Divider(),
-                          Text(''),
-                          Text('Email', style: TextStyle(fontSize: 15.0),),
-                          Text(''),
-                          TextFormField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                                labelText: email,
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black))),
-                          ),
-                          Text(''),
-                          Text('Other Email Aliases', style: TextStyle(fontSize: 15.0),),
-                          Text(''),
-                          Text(
-                            '$aliasemail'
-                          ),
-                          Text(''),
-                          TextFormField(
-                            controller: aliasController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black))),
-                            onSaved: (String value) {
-                              this.aliasEmail = value;
-                            },
-                            style: TextStyle(height: 1.0),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,0.0),
-                            child: RaisedButton(
-                              child: Text('+Add Another Aliases'),
-                              color: Colors.blue,
-                              onPressed: () {
-                                Map body = {"email": aliasController.text};
-                                addAliases(body);
-                              },
-                            ),
-                          )
-                        ])))))
-                    : (Container(
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: InviteMembers(userToken),
-                            ),
-                            TextFormField(
-                              controller: inviteController,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black))),
-                            ),
-                            RaisedButton(
-                              child: Text('Invite Members'),
-                              color: Colors.blue,
-                              onPressed: () {
-                                String email = inviteController.text;
-                                Map body = {
-                                  "email": [email]
-                                };
-                                inviteMember(body);
-                              },
-                            )
-                          ],
-                        ),
-                      )))
             : (Center(
                 child: CircularProgressIndicator(),
               )));
@@ -320,10 +292,6 @@ class _Settings extends State<Settings> {
       // If that response was not OK, throw an error.
       return null;
     }
-  }
-
-  Future<Null> inviteMember(Map body) async {
-    var response = await api.inviteMember(body);
   }
   void choiceAction(String choice) async {
     if (choice == SettingFilters.ProfileInformation) {

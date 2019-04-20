@@ -30,11 +30,13 @@ class Notes extends StatelessWidget {
     Duration diff =
     DateTime.now().difference(DateTime.parse(notes[index].updatedAt));
     updatedAt = duration(diff);
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     var open = notes[index].actionItems;
     return  Container(
         height: 90,
-        margin: new EdgeInsets.fromLTRB(10.0,5.0,10.0,5.0),
+        margin: new EdgeInsets.fromLTRB(20.0,5.0,20.0,5.0),
         child: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -47,7 +49,7 @@ class Notes extends StatelessWidget {
             elevation: 100.0,
             color: Colors.white,
             child: Container(
-              margin: EdgeInsets.all(15),
+              margin: EdgeInsets.fromLTRB(15,15,0,15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -58,7 +60,7 @@ class Notes extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                            width:250,
+                            width:screenHeight*0.25,
                             child:
                             Text(
                               notes[index].meetingTitle,
@@ -77,7 +79,7 @@ class Notes extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[

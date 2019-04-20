@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/uploadAttachment.dart' as UploadAttachment;
 import 'package:memob/utilities.dart' as utilities;
+import 'package:memob/Detail.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 import 'package:speech_recognition/speech_recognition.dart';
@@ -28,10 +29,13 @@ class _MyAppState extends State<Speech> {
 
   String textFilePath;
 
-  bool _speechRecognitionAvailable = false;
-  bool _isListening = false;
+  bool _speechRecognitionAvailable = true;
+  bool _isListening = true;
+  bool isstop=false;
 
   String transcription = '';
+  String lastWord = '';
+  int lastwordindex = 0;
 
   String _currentLocale = 'en_US';
 
@@ -88,116 +92,269 @@ class _MyAppState extends State<Speech> {
     });
   }
 
+  bool visibilitylisten = true;
+  bool visibilitystop = false;
+  bool visibilitySelectOption = false;
+
+  void _changed(bool visibility, String field) {
+    setState(() {
+      if (field == "listen") {
+        visibilitylisten = visibility;
+      }
+      if (field == "stop") {
+        visibilitystop = visibility;
+      }
+      if (field == "selectoption") {
+        visibilitySelectOption = visibility;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    return new CupertinoAlertDialog(
-      title: new Column(
-        children: <Widget>[
-          new Text("Voice note"),
-          new Divider(),
-        ],
-      ),
-      content: new Container(
-        child: new Container(
-          child: new Padding(
-              padding: new EdgeInsets.all(1.0),
-              child: new Center(
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    new Container(child: new Text(transcription)),
-                    new Container(
-                      child: new Column(
-                        children: <Widget>[
-                          new ButtonTheme(
-                            child: _buildButton(
-                              onPressed:
-                                  _speechRecognitionAvailable && !_isListening
-                                      ? () => start()
-                                      : null,
-                              label: _isListening ? 'Listening...' : 'Listen',
-                            ),
-                            minWidth: double.infinity,
-                          ),
-                          new ButtonTheme(
-                            child: _buildButton(
-                              onPressed: _isListening ? () => stop() : null,
-                              label: 'Stop',
-                            ),
-                            minWidth: double.infinity,
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+    return new Column(
+        children: [
+          Container(
+              transform: Matrix4.translationValues(0.0, 45.0, 20.0),
+            child:
+      CupertinoAlertDialog(
+        title: new Column(
+          children: <Widget>[
+            new Text("Voice note"),
+            new Divider(),
+          ],
         ),
-        height: height * 0.50,
-      ),
-      actions: <Widget>[
-        new FlatButton(
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-
-              writeToFile().then((file) {
-                UploadAttachment.uploadAttachment(
-                    userToken, file.path, widget.meetingUuid);
-
-                utilities.showLongToast('Transcription saved successfully..!');
-              });
-            },
-            child: new Icon(
-              Icons.done,
-              color: Colors.green,
-            )),
-        new FlatButton(
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-            child: new Icon(
-              Icons.close,
-              color: Colors.red,
-            ))
-      ],
-    );
+        content: new Container(
+          child: new Container(
+            child: new Padding(
+                padding: new EdgeInsets.all(1.0),
+                child: new Center(
+                  child: new Column(
+                    children: [
+                      new Container(child: new Text(transcription)),
+                    ],
+                  ),
+                )),
+          ),
+          height: height * 0.55,
+        ),
+        actions: <Widget>[
+          visibilitystop?
+          Center(
+           child: Padding(
+             padding: const EdgeInsets.only(bottom:35.0),
+             child: Text('Listening...', style: TextStyle(fontFamily: 'Roboto', fontSize: 12, color: Colors.black),),
+           ),
+          ):Container()
+        ],
+      )),
+      Container(
+          child: Padding(
+              padding: EdgeInsets.only(left: height*.07, bottom: 8.0),
+              child: Container(
+                child: Row(children: [
+                  visibilitySelectOption
+                      ? Container(
+                        transform: Matrix4.translationValues(0.0, -20.0, 20.0),
+                          child: FlatButton(
+                            padding:
+                                const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              flutterWebviewPlugin.show();
+                              writeToFile().then((file) {
+                                UploadAttachment.uploadAttachment(
+                                    userToken, file.path, widget.meetingUuid);
+                                utilities.showLongToast(
+                                    'Transcription saved successfully..!');
+                              });
+                            },
+                            child: new Image.asset(
+                              'assets/tick.png',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: 80,
+                            ),
+                          ),
+                        )
+                      : Container(),
+//                          height:
+//                          width: 70,
+//                      child:FlatButton(
+//                          onPressed: () {
+//                            Navigator.of(context, rootNavigator: true).pop();
+//                            writeToFile().then((file) {
+//                              UploadAttachment.uploadAttachment(
+//                                  userToken, file.path, widget.meetingUuid);
+//                              utilities.showLongToast(
+//                                  'Transcription saved successfully..!');
+//                            });
+//                          },
+//                          child: Padding(
+//                            padding: const EdgeInsets.only(bottom: 60.0),
+//                            child: new Icon(
+//                              Icons.done,
+//                              color: Colors.green,
+//                            ),
+//                          ))
+                  visibilitystop
+                      ? Padding(
+                          padding:  EdgeInsets.only(left: height*.159),
+                          child: Container(
+//                            transform:
+//                                Matrix4.translationValues(0.0, -45.0, 20.0),
+//                            margin: EdgeInsets.only(bottom: 2000.0),
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                              color: Colors.white,
+                              border: new Border.all(
+                                width: 1.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: Container(
+                                child: FlatButton(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 0.5, 0.0, 0.0),
+                              onPressed: stop,
+                              child: new Image.asset(
+                                'assets/stop.png',
+                                fit: BoxFit.cover,
+                                height: 40,
+                                width: 40,
+                              ),
+                            )),
+                          ),
+                        )
+                      : Container(),
+                  visibilitylisten
+                      ? Padding(
+                          padding: EdgeInsets.only(left: height*.159),
+                          child: Container(
+//                            transform:
+//                                Matrix4.translationValues(0.0, -45.0, 20.0),
+//                            margin: EdgeInsets.only(bottom: 2000.0),
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: new Border.all(
+                                width: 1.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: Container(
+                                child: FlatButton(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
+                              onPressed: start,
+                              child: new Image.asset(
+                                'assets/start.png',
+                                fit: BoxFit.cover,
+                                height: 70,
+                                width: 70,
+                              ),
+                            )),
+                          ),
+                        )
+                      : Container(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 110.0),
+                    child: visibilitySelectOption
+                        ? Container(
+                      transform: Matrix4.translationValues(0.0, -20.0, 20.0),
+                            child: FlatButton(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                flutterWebviewPlugin.show();
+                              },
+                              child: new Image.asset(
+                                'assets/cross.png',
+                                fit: BoxFit.cover,
+                                height: 100,
+                                width: 70,
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ),
+//                      ? new FlatButton(
+//                          onPressed: () {
+//                            Navigator.of(context, rootNavigator: true).pop();
+//                          },
+//                          child: Padding(
+//                            padding:
+//                                const EdgeInsets.only(bottom: 55.0, left: 140),
+//                            child: new Icon(
+//                              Icons.close,
+//                              color: Colors.red,
+//                            ),
+//                          ))
+//                      : new Container()
+                ]),
+              ))),
+    ]);
   }
 
-  Widget _buildButton({String label, VoidCallback onPressed}) => new Padding(
-      padding: new EdgeInsets.all(3.0),
-      child: new RaisedButton(
-        color: Colors.cyan.shade600,
-        onPressed: onPressed,
-        child: new Text(
-          label,
-          style: const TextStyle(color: Colors.white),
-        ),
-      ));
 
-  void start() => _speech
-      .listen(locale: _currentLocale)
-      .then((result) => print('_MyAppState.start => result $result'));
 
-  void cancel() =>
-      _speech.cancel().then((result) => setState(() => _isListening = result));
+  void start() => {
+    print('inside start'),
+        _changed(true, 'stop'),
+        _changed(false, 'listen'),
+        _changed(false, 'selectoption'),
+        _speech
+            .listen(locale: _currentLocale)
 
-  void stop() =>
-      _speech.stop().then((result) => setState(() => _isListening = result));
+      };
+
+  void stop() => {
+  print('inside stop'),
+  isstop = true,
+  _changed(true, 'selectoption'),
+        _changed(false, 'stop'),
+        _changed(false, 'listen'),
+        lastwordindex = 0,
+        _speech.stop().then((result) => setState(() => _isListening = false)),
+      };
 
   void onSpeechAvailability(bool result) =>
-      setState(() => _speechRecognitionAvailable = result);
+      {    print('inside onSpeechAvailability'),
+      setState(() => _speechRecognitionAvailable = true)};
 
   void onCurrentLocale(String locale) =>
-      setState(() => _currentLocale = locale);
+  {
+  setState(() => _currentLocale = locale)
+};
+  void onRecognitionStarted() => {
+  print('inside onRecognitionStarted'),
 
-  void onRecognitionStarted() => setState(() => _isListening = true);
+  lastwordindex = 0,
+        setState(() => _isListening = true)
+      };
 
-  void onRecognitionResult(String text) => setState(() => transcription = text);
+  void onRecognitionResult(String text) => {
+  print('inside onRecognitionResult'),
 
-  void onRecognitionComplete() => setState(() => _isListening = false);
+  lastWord = text.substring(lastwordindex, text.length),
+        print(lastWord),
+        setState(() => transcription += lastWord),
+        lastwordindex = text.length,
+      };
+
+  void onRecognitionComplete() async=>
+      {     await Future.delayed(const Duration(seconds: 6), (){}),
+      isstop ?_speech.stop():
+  _speech
+      .listen(locale: _currentLocale),
+      setState(() => _isListening = true)};
 }
 
 void requestPermission() async {

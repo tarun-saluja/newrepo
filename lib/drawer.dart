@@ -7,6 +7,7 @@ import 'package:memob/utilities.dart' as utilities;
 
 import './api_service.dart';
 import './constants.dart';
+import './dashboard.dart';
 
 class Dwidget extends StatefulWidget {
   final String userToken;
@@ -90,7 +91,8 @@ class _DwidgetState extends State<Dwidget> {
             margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, widths*0.17013888888, 0),
             child: new ListTile(
               onTap: () {
-                Navigator.popUntil(context, ModalRoute.withName('Notes'));
+                m=1;
+                Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
               leading: Image.asset(
                 'assets/notes.png',
@@ -174,7 +176,7 @@ class _DwidgetState extends State<Dwidget> {
               title: new Text("$SETTINGS",
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black12,
+                      color: Colors.black38,
                       fontWeight: FontWeight.w400)),
             ),
           ),

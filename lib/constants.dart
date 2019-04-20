@@ -1,10 +1,10 @@
-final NAME = "Meetings\nthat get\nthings done";
-final GOOGLE = "Sign up with google";
+final NAME = "Meetings\nthat Get\nThings Done!";
+final GOOGLE = "Sign in with google";
 final SLACK = "Slack";
 final OFFICE = "Office 365";
 final ALL_MEETINGS = "All meetings";
 final RECENT_NOTES = "Recent Notes";
-final DASHBOARD = "Dashboard";
+final DASHBOARD = "DASHBOARD";
 final NOTES = "Notes";
 final ACTION = "Action";
 final SETTINGS = "Settings";
@@ -29,3 +29,8 @@ final DAILY_SUMMARY = "DAILY_SUMMARY";
 final SEND_VIA_SLACK = "Daily Summary via Slack";
 final LOGO = "MeetNotes";
 final SHARE_NOTES = "Share Notes";
+int m = 0;
+var secondtab={
+  0:0,
+  1:1
+};

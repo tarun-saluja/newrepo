@@ -15,6 +15,7 @@ import './recentlyUpdated.dart';
 
 final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
+
 class Dashboard extends StatefulWidget {
   static final Dashboard _dashboard = new Dashboard._private();
 
@@ -42,24 +43,39 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('$DASHBOARD'),
+            title: Text('$DASHBOARD',style: TextStyle(color: Color(0XFFBCC4D1),fontWeight: FontWeight.bold),),
+            leading:  Builder(
+              builder: (context) =>
+                  FlatButton(
+                    onPressed:(){
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: new Image.asset('assets/menu.png',
+                      fit: BoxFit.cover,
+                      height: 20,
+                      width:25,
+                    ),
+                  ),
+            ),
             bottom: TabBar(
               indicatorWeight: 3,
               unselectedLabelColor: Color(0XFF8A93AA),
               labelColor: Color(0XFF1794FF),
-              indicatorSize: TabBarIndicatorSize.label,
+              indicatorSize: TabBarIndicatorSize.tab,
               tabs: [
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
+                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: screenHeight*.025, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
                 ),
                 Tab(
-                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: 19, fontFamily: 'Roboto'),),
+                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: screenHeight*0.025, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
                 ),
 
               ],
@@ -83,6 +99,12 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+
+  int value(){
+    print('klklklkl');
+    print(secondtab[m]);
+    return secondtab[m];
   }
 
   Future<bool> initConnectivity() async {

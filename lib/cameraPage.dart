@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:memob/uploadAttachment.dart' as UploadAttachment;
 import 'package:memob/utilities.dart' as utilities;
 import 'package:path_provider/path_provider.dart';
+import 'package:memob/Detail.dart';
 
 class CameraPage extends StatefulWidget {
   final String meetingUuid;
@@ -89,6 +91,7 @@ class _CameraPageState extends State<CameraPage> {
         home: new Scaffold(
             key: _scaffoldKey,
             body: new Container(
+              color: Colors.black,
               child: pictureClicked == false
                   ? new Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -97,13 +100,23 @@ class _CameraPageState extends State<CameraPage> {
                         _captureControlRowWidget(),
                       ],
                     )
-                  : new Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  : new Container(
+                child:Column(
+    children:[
+      Container(
+        height:widget.height*0.65,
+          transform: Matrix4.translationValues(0, 70, 0),child:AlertDialog(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      content: Column(
+//                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         _thumbnailWidget(),
-                        _cameraSaveController()
                       ],
-                    ),
+                    ))
+
+      ),
+    _cameraSaveController()
+    ])),
             )));
   }
 
@@ -113,7 +126,7 @@ class _CameraPageState extends State<CameraPage> {
       return const Text(
         'Tap a camera',
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.transparent,
           fontSize: 24.0,
           fontWeight: FontWeight.w900,
         ),
@@ -130,23 +143,41 @@ class _CameraPageState extends State<CameraPage> {
     return new Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        new RaisedButton(
-            child: new Icon(
-              Icons.check,
-              color: Colors.green,
-            ),
+        Container(
+          child: FlatButton(
+            padding:
+            const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
             onPressed: () {
-              //Save Pic
               UploadAttachment.uploadAttachment(
                   userToken, imagePath, widget.meetingUuid);
 
               Navigator.pop(context);
-            }),
-        new RaisedButton(
-            child: new Icon(Icons.close, color: Colors.red),
+              flutterWebviewPlugin.show();
+              },
+            child: new Image.asset(
+              'assets/tick.png',
+              fit: BoxFit.cover,
+              height: 100,
+              width: 80,
+            ),
+          ),
+        ),
+        Container(
+          child: FlatButton(
+            padding:
+            const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
             onPressed: () {
               Navigator.pop(context);
-            })
+              flutterWebviewPlugin.show();
+            },
+            child: new Image.asset(
+              'assets/cross.png',
+              fit: BoxFit.cover,
+              height: 100,
+              width: 80,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -164,8 +195,8 @@ class _CameraPageState extends State<CameraPage> {
                       new SizedBox(
                         child: new Container(
                             child: new Image.file(new File(imagePath))),
-                        width: widget.width,
-                        height: widget.height * 0.70,
+                        width: widget.height *.37,
+                        height: widget.height * 0.54,
                       ),
                     ],
                   ),

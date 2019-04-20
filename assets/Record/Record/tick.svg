@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="279" height="279" viewBox="0 0 279 279">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1dbc6f;
+        filter: url(#filter);
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+    <filter id="filter" x="0" y="0" width="279" height="279" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="12" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="8.062"/>
+      <feFlood result="flood" flood-color="#1dbc6f" flood-opacity="0.38"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <circle id="Ellipse_1_copy_12" data-name="Ellipse 1 copy 12" class="cls-1" cx="139" cy="127" r="75"/>
+  <path id="Forma_1" data-name="Forma 1" class="cls-2" d="M11296.5,6541.11l-27.1,26.78-10.9-10.7a3.839,3.839,0,0,0-5.4,0,3.731,3.731,0,0,0,0,5.34l13.6,13.37a3.738,3.738,0,0,0,2.7,1.1,4.1,4.1,0,0,0,2.7-1.1l29.8-29.46a3.719,3.719,0,0,0,0-5.33A3.839,3.839,0,0,0,11296.5,6541.11Z" transform="translate(-11138 -6431)"/>
+</svg>

@@ -58,7 +58,7 @@ class Meetings extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             dayprint(parentIndex),
-                            style: TextStyle(color: Colors.white, fontSize: 17),
+                            style: TextStyle(color: Colors.white, fontSize: 17, fontFamily: 'Roboto', fontWeight: FontWeight.normal),
                           ),
                         ),
                       ],
@@ -143,7 +143,7 @@ class Meetings extends StatelessWidget {
                 height * 0.0045280235,
                 height * 0.00645280235,
                 height * 0.00645280235 * 0,
-                height * 0.01945280235),
+                height * 0.02945280235),
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -160,7 +160,7 @@ class Meetings extends StatelessWidget {
                       height * 0.01845280235 * 2,
                       height * 0.02323008849,
                       height * 0.02323008849,
-                      height * 0.02323008849),
+                      height * 0.00323008849),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

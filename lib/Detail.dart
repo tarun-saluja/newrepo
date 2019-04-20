@@ -93,12 +93,12 @@ class _DetailState extends State<Detail> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: new AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Back to Login'),
         ),
         body: Column(children: [
           Container(
               alignment: Alignment.bottomLeft,
-              padding: EdgeInsets.fromLTRB(0.0, height1 * 0.8127, 0.0, 0.0),
+              padding: EdgeInsets.fromLTRB(0.0, height1 * 0.798, 0.0, 0.0),
               child: new Row(
                 children: [
                   Container(
@@ -123,27 +123,16 @@ class _DetailState extends State<Detail> {
                             builder: (BuildContext context) => new CameraPage(
                                 widget.meetingTitle, widget.meetingUuid)));
                       },
-                      child: new Image.asset('assets/camera.png',
+                      child: new Container(alignment: Alignment.bottomLeft,child:Image.asset('assets/camera.png',
                         fit: BoxFit.cover,
-                        height: height*0.06162241887,
-                        width:width*0.13152777777,
-                      ),
+                        height: height*0.04162241887,
+                        width:width*0.09152777777,
+                      )),
                     ),
-//                    child: new FlatButton.icon(
-//                      color: Colors.red,
-//                      icon: Icon(Icons.add_a_photo), //`Icon` to display
-//                      label: Text('Add a Photo'), //`Text` to display
-//                      onPressed: () {
-//                        flutterWebviewPlugin.hide();
-//                        Navigator.of(context).push(MaterialPageRoute(
-//                            builder: (BuildContext context) => new CameraPage(
-//                                widget.meetingTitle, widget.meetingUuid)));
-//                      },
-//                    ),
                   ),
                   Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: EdgeInsets.fromLTRB(width1 * 0.57215, 0.0, 0.0, 0.0),
+                    alignment: Alignment.bottomRight,
+                    margin: EdgeInsets.fromLTRB(width1 * 0.511, 0.0, 0.0, 0.0),
                     child: FlatButton(
                       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                       onPressed:(){
@@ -154,7 +143,7 @@ class _DetailState extends State<Detail> {
                       },
                       child: new Image.asset('assets/audio_meeting.png',
                         fit: BoxFit.cover,
-                        height: height*0.05162241887,
+                        height: height*0.04162241887,
                         width:width*0.04861111111,
                       ),
                     ),
