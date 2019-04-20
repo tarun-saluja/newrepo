@@ -58,9 +58,7 @@ class _DashboardState extends State<Dashboard> {
                       Scaffold.of(context).openDrawer();
                     },
                     child: new Image.asset('assets/menu.png',
-                      fit: BoxFit.cover,
-                      height: 20,
-                      width:25,
+                      fit: BoxFit.fill,
                     ),
                   ),
             ),

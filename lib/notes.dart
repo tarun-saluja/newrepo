@@ -66,14 +66,14 @@ class Notes extends StatelessWidget {
                               notes[index].meetingTitle,
                               style: TextStyle(
                                   fontSize: 15.0,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'RobotoBold',
                                   color: Color(0XFF5A6278)),
                               overflow: TextOverflow.ellipsis,
                             )),
                         Text(
                           'Last Modified $updatedAt',
-                          style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 15),
+                          style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 15,
+                            fontFamily: 'Roboto',),
                         )
                       ],
                     ),
