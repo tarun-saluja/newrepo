@@ -11,6 +11,9 @@ import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_file_manager/flutter_file_manager.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import 'package:memob/api_service.dart';
 import 'package:memob/dateTimeFormatter.dart' as DateTimeFormatter;
 import 'package:memob/utilities.dart' as utilities;
@@ -20,6 +23,7 @@ import './attachmentListDialog.dart';
 import './cameraPage.dart';
 import './constants.dart';
 import './dashboard.dart';
+import './constants.dart';
 import './share.dart';
 import './speechDialog.dart';
 import './api_service.dart';
@@ -30,6 +34,14 @@ const kAndroidUserAgent =
 final flutterWebviewPlugin = new FlutterWebviewPlugin();
 BuildContext m;
 final _scaffoldKey = new GlobalKey<ScaffoldState>();
+var mount = _files();
+_files()  {
+  var root = ( getApplicationDocumentsDirectory());
+  print(root);
+//    var fm = FileManager(root: root);
+//    var files = await fm.filesTree(excludedPaths: ["/data/user/0/com.example.untitled2/"]);
+//    return files;
+}
 
 class Detail extends StatefulWidget {
   final String meetingUuid;
@@ -43,6 +55,7 @@ class Detail extends StatefulWidget {
     return _DetailState();
   }
 }
+
 
 class _DetailState extends State<Detail> {
   InAppWebViewController webView;
@@ -68,6 +81,7 @@ class _DetailState extends State<Detail> {
 
   Future<Null> _goback() {
     flutterWebviewPlugin.close();
+//  flutterWebviewPlugin.goBack();
     Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
   }
 
@@ -89,34 +103,12 @@ class _DetailState extends State<Detail> {
     flutterWebviewPlugin.launch(url,
         rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.91),
         userAgent: kAndroidUserAgent);
-    flutterWebviewPlugin.onUrlChanged.listen((String url) {
-      if(count==1) {
-        if(url.startsWith('https://app.meetnotes.co/')){
-          count=1;
-        }
-        else if(url.startsWith('https://meetnotes-uploads.s3.amazonaws.com')){
-          _downloadFile(url,'attachment-1');
-        }
-        else {
-          launch(url);
-          flutterWebviewPlugin.goBack();
-        }
-      }
-      if(count==0){
-        count=1;
-      }
-      print(url);
-      print(count);
-      print('TestinURL');
-
-
-    });
     return WillPopScope(
       onWillPop: _goback,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: new AppBar(
-          title: const Text('Back to Login'),
+          title: Text('$LOGINBACK'),
         ),
         body: Column(children: [
           Container(
@@ -148,8 +140,8 @@ class _DetailState extends State<Detail> {
                       },
                       child: new Container(alignment: Alignment.bottomLeft,child:Image.asset('assets/camera.png',
                         fit: BoxFit.cover,
-                        height: height*0.04462241887,
-                        width:width*0.09352777777,
+                        height: 23,
+                        width: 28,
                       )),
                     ),
                   ),
@@ -166,8 +158,8 @@ class _DetailState extends State<Detail> {
                       },
                       child: new Image.asset('assets/audio_meeting.png',
                         fit: BoxFit.cover,
-                        height: height*0.04462241887,
-                        width:width*0.04861111111,
+                        height: 29,
+                        width: 19,
                       ),
                     ),
 //                    child: new FlatButton.icon(
@@ -249,7 +241,7 @@ class _DetailState extends State<Detail> {
     } else {
       // If that response was not OK, throw an error.
       noteLoaded = true;
-      throw Exception('Failed to load post');
+      throw Exception('$FAILEDPOST');
     }
     return '$SUCCESS';
   }
@@ -270,15 +262,16 @@ class _DetailState extends State<Detail> {
     } else {
       // If that response was not OK, throw an error.
       attachmentCountLoaded = true;
-      throw Exception('Failed to load post');
+      throw Exception('$FAILEDPOST');
     }
     return '$SUCCESS';
   }
-
+  StreamSubscription streamSubscription;
   @override
   void initState() {
     super.initState();
-    BuildContext context;
+//    BuildContext context;
+
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
@@ -288,7 +281,28 @@ class _DetailState extends State<Detail> {
       }
     });
     flutterWebviewPlugin.close();
+    flutterWebviewPlugin.onDestroy.listen((_){Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
+    });
     onChangedValue4(context);
+    int count=0;
+    flutterWebviewPlugin.onUrlChanged.listen((String url) {
+      int flag=0;
+      if(count==1) {
+        if(url.startsWith('https://app.meetnotes.co/')){
+          count=1;
+        }
+        else if(url.startsWith('https://meetnotes-uploads.s3.amazonaws.com')){
+          _downloadFile(url, 'attachment-1.txt');
+        }
+        else {
+          launch(url);
+          flutterWebviewPlugin.goBack();
+        }
+      }
+      if(count==0){
+        count=1;
+      }
+    });
 
   }
 
@@ -298,48 +312,22 @@ class _DetailState extends State<Detail> {
   void onChangedValue4(BuildContext contxt) {
     print(contxt);
     print('m');
-//    double height = MediaQuery.of(contxt).size.height;
-//    double width = MediaQuery.of(contxt).size.width;
-//    print(height);
-//    print(width);
-
-//    inAppBrowser.open(
-//        url: "https://app.meetnotes.co/m/${widget.meetingUuid}/",
-//        rect: new Rect.fromLTWH(
-//            0.0, 80.0, 430, 600.0),
-//        options: {
-//          "useShouldOverrideUrlLoading": true,
-//          "useOnLoadResource": true,
-//          "toolbarTop": false,
-//        });
-//    flutterWebviewPlugin.onUrlChanged.listen((onData) {
-//
-//
-////      onData=selectedUrl;
-//      if (onData.toString() != url.toString()){
-//        print(url);
-//        print(onData);
-//        flutterWebviewPlugin.close();
-//        flutterWebviewPlugin.launch(url, rect: new Rect.fromLTWH(
-//            0.0, 80.0, 430, 600.0),
-//            userAgent: kAndroidUserAgent);
-//      }
-//    });
   }
   static var httpClient = new HttpClient();
   Future<File> _downloadFile(String url, String filename) async {
-    http.Client client = new http.Client();
-    var req = await client.get(Uri.parse(url));
-    var bytes = req.bodyBytes;
-
-    String dir = (await getApplicationDocumentsDirectory()).path;
+    print(url);
+    print(filename);
+    var request = await httpClient.getUrl(Uri.parse(url));
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    String dir = (await getExternalStorageDirectory()).path;
     File file = new File('$dir/$filename');
-    print('$dir');
-    print('jkjkjk');
+    print(dir);
     await file.writeAsBytes(bytes);
-    utilities.showLongToast('Downloaded Successfully..!');
+    utilities.showLongToast(DOWNLOADSUCCESS);
     return file;
   }
+
   void choiceAction(String choice) {
     if (choice == Constants.Share) {
       Navigator.push(

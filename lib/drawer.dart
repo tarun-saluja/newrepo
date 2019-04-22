@@ -6,6 +6,7 @@ import 'package:memob/actionClass.dart';
 import 'package:memob/settings.dart';
 import 'package:memob/teamClass.dart';
 import 'package:memob/utilities.dart' as utilities;
+import 'package:memob/downloads.dart';
 import 'package:http/http.dart' as http;
 
 import './api_service.dart';
@@ -130,7 +131,7 @@ class _DwidgetState extends State<Dwidget> {
             margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
             child: new ListTile(
               onTap: () {
-                m=1;
+//                m=1;
                 Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
               },
               leading: Image.asset(
@@ -139,6 +140,29 @@ class _DwidgetState extends State<Dwidget> {
                 height: 25,
               ),
               title: new Text("$NOTES",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Roboto',
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w400)),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
+            child: new ListTile(
+              onTap: () {
+//                m=1;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Download()),
+                );
+              },
+              leading: Image.asset(
+                'assets/notes.png',
+                width: 25,
+                height: 25,
+              ),
+              title: new Text("Download",
                   style: TextStyle(
                       fontSize: 18,
                       fontFamily: 'Roboto',

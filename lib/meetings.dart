@@ -25,6 +25,12 @@ class Meetings extends StatelessWidget {
   Meetings([this.meetings]);
 
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+
+// Determine if we should use mobile layout or not, 600 here is
+// a common breakpoint for a typical 7-inch tablet.
+    final bool useMobileLayout = shortestSide < 600;
+
     @override
     Widget meetingCard = Center(
       child: CircularProgressIndicator(),
@@ -66,7 +72,7 @@ class Meetings extends StatelessWidget {
                     GridView.builder(
                       physics: ClampingScrollPhysics(),
                       gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 1.2),
+                          crossAxisCount: ( useMobileLayout ? 2 : 3), childAspectRatio: 1.5),
                       itemBuilder: (BuildContext context, int index) {
                         return _buildMeetingItem(context, parentIndex, index);
                       },
@@ -137,95 +143,86 @@ class Meetings extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     var isUpcoming = DateTimeFormatter.isUpcomingMeeting(display.startTime);
     return Container(
-        child:
-        Container(
-            margin: EdgeInsets.fromLTRB(
-                height * 0.0045280235,
-                height * 0.00645280235,
-                height * 0.00645280235 * 0,
-                height * 0.02945280235),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          Detail(display.uuid, display.title, display.eventUuid),
-                    ));
-              },
-              child: Card(
-                color: Color.fromRGBO(255, 255, 255, 1),
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(
-                      height * 0.01845280235 * 2,
-                      height * 0.02323008849,
-                      height * 0.02323008849,
-                      height * 0.00323008849),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                          decoration: new BoxDecoration(
-                              color: (isToday == 0)
-                                  ? (isUpcoming == true ? Colors.blue : Colors.blue)
-                                  : Colors.grey[400],
-                              border: Border.all(color: Colors.white, width: 1.0),
-                              borderRadius: BorderRadius.circular(
-                                  height * 0.01290560471 * 2)),
-                          child: (isUpcoming == false)
-                              ? ((isToday == 0)
-                              ? isUpcoming == true
-                              ? Text(
-                            '$UPCOMING',
-                            style: TextStyle(
-                                fontSize: 12.0, color: Colors.white),
-                          )
-                              : Text(
-                            '$TODAY',
-                            style: TextStyle(
-                                fontSize: 11.0, color: Colors.white),
-                          )
-                              : Text(
-                            '${DateTimeFormatter.getDate(display.startTime)}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11.0,
-                            ),
-                          ))
-                              : null),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      Detail(display.uuid, display.title, display.eventUuid),
+                ));
+          },
+          child: Card(
+            color: Color.fromRGBO(255, 255, 255, 1),
+            child: Container(
+              margin: EdgeInsets.fromLTRB(
+                  height * 0.01845280235 * 2,
+                  height * 0.02323008849,
+                  height * 0.02323008849,
+                  height * 0.00323008849),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+                      decoration: new BoxDecoration(
+                          color: (isToday == 0)
+                              ? (isUpcoming == true ? Colors.blue : Colors.blue)
+                              : Color(0XFFBCC4D1),
+                          border: Border.all(color: Colors.white, width: 1.0),
+                          borderRadius: BorderRadius.circular(
+                              height * 0.01290560471 * 2)),
+                      child: (isUpcoming == false)
+                          ? ((isToday == 0)
+                          ? isUpcoming == true
+                          ? Text(
+                        '$UPCOMING',
+                        style: TextStyle(
+                            fontFamily:'RobotoMedium',fontSize: 12.0, color: Colors.white),
+                      )
+                          : Text(
+                        '$TODAY',
+                        style: TextStyle(
+                            fontFamily:'RobotoMedium', fontSize: 12.0, color: Colors.white),
+                      )
+                          : Text(
+                        '${DateTimeFormatter.getDate(display.startTime)}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily:'RobotoMedium', fontSize: 12.0,
+                        ),
+                      ))
+                          : null),
 
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Column(
-                            children:[
-                              Container(
-                                  padding: EdgeInsets.only(bottom: 3.0),
-                                  alignment: Alignment.bottomLeft,
-                                  child:Text(
-                                    display.title,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Color(0XFF5A6278)),
-                                  )),
-                              Container(
-                                  alignment: Alignment.bottomLeft,
-                                  child:Text(
-                                    '${DateTimeFormatter.getTime(display.startTime)}',
-                                    style: TextStyle(fontSize: 14.0,fontFamily: 'Roboto', color: Color(0XFFBCC4D1)),
-                                  )),
-                            ]),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Column(
+                        children:[
+                          Container(
+                              padding: EdgeInsets.only(bottom: 5.0),
+                              alignment: Alignment.bottomLeft,
+                              child:Text(
+                                display.title,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontFamily: 'RobotoBold',
+                                    color: Color(0XFF5A6278)),
+                              )),
+                          Container(
+                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              alignment: Alignment.bottomLeft,
+                              child:Text(
+                                '${DateTimeFormatter.getTime(display.startTime)}',
+                                style: TextStyle(fontSize: 12.0,fontFamily: 'Roboto', color: Color(0XFFBCC4D1)),
+                              )),
+                        ]),
                   ),
-                ),
+                ],
               ),
-            ))
-    );
+            ),
+          ),
+        ));
   }
 }

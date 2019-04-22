@@ -5,6 +5,7 @@ import 'package:memob/Detail.dart';
 import 'package:memob/actionItems.dart';
 import 'package:memob/analyticUtil.dart';
 import 'package:memob/dashboard.dart';
+import 'package:memob/downloads.dart';
 import 'package:memob/localization.dart';
 import 'package:memob/notes.dart';
 import 'package:memob/NotesClass.dart';
@@ -32,6 +33,10 @@ void main() {
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new Login();
   }));
+  router.define('Download', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+        return new Download();
+      }));
   router.define('Detail', handler: new Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) {
         return new Detail();

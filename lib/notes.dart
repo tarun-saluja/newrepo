@@ -36,7 +36,7 @@ class Notes extends StatelessWidget {
     var open = notes[index].actionItems;
     return  Container(
         height: 90,
-        margin: new EdgeInsets.fromLTRB(20.0,5.0,20.0,5.0),
+        margin: new EdgeInsets.fromLTRB(20.0,3.0,20.0,0.0),
         child: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -65,15 +65,16 @@ class Notes extends StatelessWidget {
                             Text(
                               notes[index].meetingTitle,
                               style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                  fontFamily: 'RobotoBold',
                                   color: Color(0XFF5A6278)),
                               overflow: TextOverflow.ellipsis,
                             )),
                         Text(
                           'Last Modified $updatedAt',
-                          style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 13),
+       style: TextStyle(color: Color(0XFFBCC4D1), fontSize: 13,
+                            fontFamily: 'Roboto',),
+                          overflow: TextOverflow.ellipsis,
                         )
                       ],
                     ),
@@ -97,7 +98,7 @@ class Notes extends StatelessWidget {
                               child: Text(
                                 '$open Open',
                                 style: TextStyle(
-                                    color: Color(0XFF1DBC6F), fontSize: 12),
+                                    color: Color(0XFF1DBC6F), fontSize: 12, fontFamily: 'RobotoMedium'),
                               ),
                             )
                                 : Text(''),

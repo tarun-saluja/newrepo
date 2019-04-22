@@ -50,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('$DASHBOARD',style: TextStyle(color: Color(0XFFBCC4D1),fontSize: 18,fontWeight: FontWeight.bold),),
+            title: Text('$DASHBOARD',style: TextStyle(color: Color(0XFFBCC4D1),fontSize: 18, fontFamily: 'RobotoBold'),),
             leading:  Builder(
               builder: (context) =>
                   FlatButton(
@@ -59,7 +59,6 @@ class _DashboardState extends State<Dashboard> {
                     },
                     child: new Image.asset('assets/menu.png',
                       fit: BoxFit.fill,
-
                     ),
                   ),
             ),
@@ -71,10 +70,10 @@ class _DashboardState extends State<Dashboard> {
               tabs: [
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: screenHeight*.023, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
+                  child: Text(ALL_MEETINGS, style: TextStyle(fontSize: 17, fontFamily: 'RobotoMedium'),),
                 ),
                 Tab(
-                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: screenHeight*0.023, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
+                  child: Text(RECENT_NOTES, style: TextStyle(fontSize: 17, fontFamily: 'RobotoMedium'),),
                 ),
 
               ],
@@ -101,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   int value(){
-    print('klklklkl');
+//    print('klklklkl');
     print(secondtab[m]);
     return secondtab[m];
   }

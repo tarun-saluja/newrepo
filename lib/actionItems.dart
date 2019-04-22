@@ -60,7 +60,7 @@ class _ActionItems extends State<ActionItems> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('$ACTION_ITEMS',style: TextStyle(color: Color(0XFFBCC4D1), fontWeight: FontWeight.bold)),
+            title: Text('$ACTION_ITEMS',style: TextStyle(color: Color(0XFFBCC4D1), fontFamily: 'RobotoBold')),
             leading:  Builder(
               builder: (context) =>
                   FlatButton(
@@ -80,11 +80,11 @@ class _ActionItems extends State<ActionItems> {
                 //   Icons.filter
                 // ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8.0,8,10,8),
                   child: Image.asset(
                     'assets/filter.png',
-                    width: 30,
-                    height: 30,
+                    width: 20,
+                    height: 20,
                   ),
                 ),
                 onSelected: choiceAction,
@@ -109,10 +109,10 @@ class _ActionItems extends State<ActionItems> {
               tabs: <Widget>[
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text('All $ACTION', style: TextStyle(fontSize: screenHeight*.023, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
+                  child: Text('$ACTION', style: TextStyle(fontSize: 17, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
                 ),
                 Tab(
-                  child: Text('My $ACTION', style: TextStyle(fontSize: screenHeight*0.023, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
+                  child: Text('$MYACTION', style: TextStyle(fontSize: 17, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
                 ),
               ],
             ),
@@ -120,7 +120,7 @@ class _ActionItems extends State<ActionItems> {
           drawer: Dwidget(userToken, displayName, profile_picture),
           body: Container(
             decoration: BoxDecoration(
-              color: Color.fromRGBO(135, 206, 250, .4),
+              color: Color(0XFFEAF0F5),
             ),
             child: TabBarView(
               children: <Widget>[

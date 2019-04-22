@@ -43,6 +43,7 @@ class _MyAppState extends State<Speech> {
   initState() {
     super.initState();
     activateSpeechRecognizer();
+//    flutterWebviewPlugin.hide();
     fetchData();
     checkPermission();
     getPermissionStatus();

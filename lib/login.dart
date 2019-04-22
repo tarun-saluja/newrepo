@@ -39,10 +39,10 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 //    print(width);
 
     final Shader linearGradient = LinearGradient(
-    begin: Alignment.topLeft,
+      begin: Alignment.topLeft,
       end:Alignment.bottomRight,
-      colors: <Color>[Color(0XFF2BE7FA), Color(0XFF0f3ebf)],
-    ).createShader(Rect.fromLTWH(20.0, 0.0, 500.0, 0.0));
+      colors: <Color>[Color(0XFF2BE7FA), Color(0XFF6450f6)],
+    ).createShader(Rect.fromLTWH(50.0, 50.0, 200.0, 10.0));
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(26, 34, 51, 1),
@@ -57,97 +57,101 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
         ),
         child: LayoutBuilder(
           builder: (context, constraints) => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(screenWidth * 0.1,
-                        screenHeight * 0.35, screenWidth * 0.15, 0),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(screenWidth * 0.1,
+                    screenHeight * 0.35, screenWidth * 0.15, 0),
 
-                    child: Text('$NAME',
-                        style: TextStyle(
-                            fontSize: screenHeight*.06,
-                            fontFamily: 'Roboto Thin',
+                child: Text('$NAME',
+                    style: TextStyle(
+                      fontSize: screenHeight*.06,
+                      fontFamily: 'RobotoThin',
 //                            color: Color.fromRGBO(255, 255, 255, 0.8),
-                          foreground: Paint()..shader = linearGradient,
-                        )),
+                      foreground: Paint()..shader = linearGradient,
+                    )),
+              ),
+              Container(
+                height: screenHeight*0.075,
+                margin: EdgeInsets.fromLTRB(
+                    screenWidth * 0.1, screenHeight*.04, screenWidth * 0.183, 0),
+                child: RaisedButton.icon(
+                  color: Color(0XFFF6F8FB),
+                  onPressed: _launchLoginUrl,
+                  icon: Image.asset(
+                    'assets/google.png',
+                    height: 39,
+                    width: 38,
                   ),
-                  Container(
-                    height: screenHeight*0.075,
-                    margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, screenHeight*.04, screenWidth * 0.183, 0),
-                    child: RaisedButton.icon(
-                      color: Color(0XFFF6F8FB),
-                      onPressed: _launchLoginUrl,
-                      icon: Image.asset(
-                        'assets/google.png',
-                        height: 39,
-                        width: 38,
-                      ),
-                      label: Text('$GOOGLE',
-                          style: TextStyle(
-                            fontSize: screenHeight*0.025,
-                            fontFamily: 'Roboto',
-                          )),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40.0)),
+                  label: Text('$GOOGLE',
+                      style: TextStyle(
+                        fontSize: screenHeight*0.025,
+                        fontFamily: 'Roboto',
+                      )),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0)),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    screenWidth * 0.1, screenHeight*.025, screenWidth * 0.183, 15),
+                child: Row(children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(''),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 1.0,
+                      width: 72,
+                      color: Color.fromRGBO(255, 255, 255, 0.2),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(
-                        screenWidth * 0.1, screenHeight*.025, screenWidth * 0.35, 15),
-                    child: Row(children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(''),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          height: 1.0,
-                          width: 72,
-                          color: Color.fromRGBO(255, 255, 255, 0.2),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(''),
-                      ),
-                      Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'OR',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(255, 255, 255, 0.2),
-                                  fontSize: 15.0,
-                                  fontFamily: 'Roboto'),
-                            ),
-                          )),
-                      Expanded(
-                        flex: 1,
-                        child: Text(''),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          height: 1.0,
-                          width: 72,
-                          color: Color.fromRGBO(255, 255, 255, 0.2),
-                        ),
-                      ),
-                    ]),
+                  Expanded(
+                    flex: 1,
+                    child: Text(''),
                   ),
-                  Container(
-                      height: screenHeight*0.065,
-                      margin: EdgeInsets.fromLTRB(
-                          screenWidth * 0.1, screenHeight*.001, screenWidth * 0.182, 0),
-                      child: Row(children: [
+                  Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'OR',
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 255, 255, 0.2),
+                              fontSize: 15.0,
+                              fontFamily: 'Roboto'),
+                        ),
+                      )),
+                  Expanded(
+                    flex: 1,
+                    child: Text(''),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 1.0,
+                      width: 72,
+                      color: Color.fromRGBO(255, 255, 255, 0.2),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(''),
+                  ),
+                ]),
+              ),
+              Container(
+                  height: screenHeight*0.065,
+                  margin: EdgeInsets.fromLTRB(
+                      screenWidth * 0.1, screenHeight*.001, screenWidth * 0.182, 0),
+                  child: Row(children: [
                     Expanded(
                       flex: 8,
                       child: Container(
 //                         height: 55,
-                      width: 100,
+                        width: 100,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
@@ -233,161 +237,22 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                     ),
 
                   ])),
-        Container(
-          margin: EdgeInsets.fromLTRB(
-              screenWidth * 0.1, screenHeight*.15, screenWidth * 0.182, 0),
+              Container(
+                  child: Expanded(
+                    child: Align(
                       alignment: Alignment.bottomCenter,
-                    child:
-                    Text('version 0.0.1', style: TextStyle(color: Color(0XFF5A6278),fontSize:15,fontFamily: 'Roboto'),),),
-                ],
-              ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text('version 0.0.1', style:
+                        TextStyle(color: Color.fromRGBO(90, 98, 120, 1),fontSize:15,fontFamily: 'Roboto'),),
+                      ),),
+                  )
+              )
+            ],
+          ),
         ),
       ),
     );
-//                    ListView(
-//                      children:[
-//                     Container(
-//                       padding:
-//                       const EdgeInsets.fromLTRB(20.0, 450.0, 110.0, 0.0),
-//                        height: 520,
-//                        child: new RaisedButton.icon(
-//                          color: Color(0XFFF6F8FB),
-//                            onPressed: _launchLoginUrl,
-//                            icon: new Image.asset(
-//                              'assets/google.png',
-//                              height: height * 0.06452802359,
-//                              width: 50,
-//                            ),
-//                            label: new Text(GOOGLE,
-//                                style: new TextStyle(
-//                                  fontSize: 20.0,
-//                                )),
-//                            shape: new RoundedRectangleBorder(
-//                                borderRadius: new BorderRadius.circular(
-//                                    height * 0.05162241887))),
-//                      ),
-//
-//                    Row(children: [
-//                      Padding(
-//                        padding:
-//                            const EdgeInsets.fromLTRB(58.0, 20.0, 0.0, 00.0),
-//                        child: Container(
-//                          height: 1.0,
-//                          width: 72,
-//                          color: Color.fromRGBO(255, 255, 255, 0.2),
-//                        ),
-//                      ),
-//                      Padding(
-//                        padding:
-//                        const EdgeInsets.fromLTRB(15.0, 20.0, 0.0, 00.0),
-//                        child: Text(
-//                          'OR',
-//                          style: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.2),fontSize: 15.0,fontFamily: 'Roboto'),
-//                        ),
-//                      ),
-//                      Padding(
-//                        padding:
-//                        const EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 00.0),
-//                        child: Container(
-//                          height: 1.0,
-//                          width: 72,
-//                          color: Color.fromRGBO(255, 255, 255, 0.2),
-//                        ),
-//                      ),
-//                    ]),
-//
-//                     Row(
-//                       children:[
-//                     Padding(
-//                       padding: const EdgeInsets.fromLTRB(20.0,20.0,20.0,0.0),
-//                       child: Container(
-//                         height: 55,
-//                         decoration: BoxDecoration(
-//                            gradient: LinearGradient(
-//                              begin: Alignment.topLeft,
-//                              end: Alignment(0.8, 0.0),
-//                              // 10% of the width, so there are ten blinds.
-//                              colors: [
-//                                Color(0XFF0099B5), Color(0XFF00B55E)
-//                              ], // whitish to gray
-////                          tileMode: TileMode.clamp, // repeats the gradient over the canvas
-//                            ),
-//                            borderRadius: new BorderRadius.only(
-//                              topLeft: const Radius.circular(30),
-//                              topRight: const Radius.circular(30.0),
-//                              bottomLeft: const Radius.circular(30),
-//                              bottomRight: const Radius.circular(30),
-//                            ),
-//                          ),
-//                          child: new RaisedButton.icon(
-//                              elevation: 0,
-//                              color: Colors.transparent,
-//                              onPressed: _launchLoginUrlSlack,
-//                              icon: new Image.asset(
-//                                'assets/slack.png',
-//                                height: height * 0.02581120943 * 2,
-//                                width: height * 0.03871681415,
-//                              ),
-//                              label: new Text('$SLACK',
-//                                  style: new TextStyle(
-//                                    color: Colors.white,
-//                                    fontSize: 18.0,
-//                                  )),
-//                              shape: new RoundedRectangleBorder(
-//                                  borderRadius: new BorderRadius.circular(
-//                                      height * 0.05162241887))),
-//                        ),
-//                     ),
-//
-//                    Padding(
-//                      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 20.0, 0),
-//                      child: Container(
-//                        height: 55,
-//                        child: Container(
-//                          decoration: BoxDecoration(
-//                            gradient: LinearGradient(
-//                              begin: Alignment.topLeft,
-//                              end: Alignment(0.8, 0.0),
-//                              // 10% of the width, so there are ten blinds.
-//                              colors: [
-//                                Color(0XFFD8384F), Color(0XFFE15029)
-//                              ], // whitish to gray
-////                          tileMode: TileMode.clamp, // repeats the gradient over the canvas
-//                            ),
-//                            borderRadius: new BorderRadius.only(
-//                              topLeft: const Radius.circular(30),
-//                              topRight: const Radius.circular(30.0),
-//                              bottomLeft: const Radius.circular(30),
-//                              bottomRight: const Radius.circular(30),
-//                            ),
-//                          ),
-//                          child: new RaisedButton.icon(
-//                              elevation: 0,
-//                              color: Colors.transparent,
-//                              onPressed: _launchLoginUrlOffice,
-//                              icon: new Image.asset(
-//                                'assets/office_365.png',
-//                                height: height * 0.05162241887,
-//                                width: height * 0.03891681415,
-//                              ),
-//                              label: new Text('$OFFICE',
-//                                  style: new TextStyle(
-//                                      color: Colors.white,
-//                                    fontSize: 18.0,
-//                                    fontFamily: 'Roboto'
-//                                  )),
-//                              shape: new RoundedRectangleBorder(
-//                                  borderRadius: new BorderRadius.circular(
-//                                      height * 0.05162241887))),
-//                        ),
-//                      ),
-//                    )]),
-//                  ],
-//                ),
-//
-//          ),
-//        )
-//    );
   }
 
   initPlatformState() async {

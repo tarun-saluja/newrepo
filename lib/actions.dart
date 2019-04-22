@@ -49,7 +49,7 @@ class _Actions extends State<Actions> {
 
     return Container(
         height: 130,
-        margin: EdgeInsets.fromLTRB(15.0, 6.0, 15.0, 0.0),
+        margin: EdgeInsets.fromLTRB(15.0, 3.0, 15.0, 0.0),
         child: GestureDetector(
           onTap: () {
             showDialog(
@@ -107,6 +107,7 @@ class _Actions extends State<Actions> {
                                       createdAt,
                                       style: TextStyle(
                                           color: Colors.grey, fontSize: 14, fontFamily: 'Roboto'),
+
                                       overflow: TextOverflow.ellipsis,
                                     )
                                   ],
@@ -126,11 +127,12 @@ class _Actions extends State<Actions> {
                           child: Text(
 //                            choice[0].toUpperCase()+choice.substring(1)
                             allActions[index].status[0].toUpperCase()+allActions[index].status.substring(1),
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontFamily: 'RobotoMedium', fontSize: 12),
                           ),
                         ),
                         Container(
                           child: PopupMenuButton<String>(
+//                            icon: new ImageIcon.asset("assets/img/logo.png"),
                             onSelected: (choice) => choiceAction(choice, index),
                             itemBuilder: (BuildContext context) {
                               return Status.choices.map((String choice) {
@@ -155,6 +157,7 @@ class _Actions extends State<Actions> {
                             allActions[index].note,
                             style:
                                 TextStyle(color: Colors.black54, fontSize: 15),
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

@@ -115,7 +115,7 @@ class _CameraPageState extends State<CameraPage> {
       Container(
         height:widget.height*0.65,
           transform: Matrix4.translationValues(0, 70, 0),child:AlertDialog(
-                    contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                       content: Column(
 //                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -194,6 +194,7 @@ class _CameraPageState extends State<CameraPage> {
   /// Display the thumbnail of the captured image or video.
   Widget _thumbnailWidget() {
     return new Container(
+//      transform: Matrix4.translationValues(-10, 0, 0),
         child: imagePath == null
             ? null
             : new Column(
@@ -204,7 +205,7 @@ class _CameraPageState extends State<CameraPage> {
                       new SizedBox(
                         child: new Container(
                             child: new Image.file(new File(imagePath))),
-                        width: widget.height *.37,
+                        width: widget.height *.42,
                         height: widget.height * 0.54,
                       ),
                     ],
