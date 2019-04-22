@@ -91,7 +91,9 @@ class _ActionItems extends State<ActionItems> {
                     return PopupMenuItem<String>(
                       value: filter,
                       child: Text(filter,
-                        style: _result[filter]?TextStyle(color: Colors.blue, fontFamily: 'RobotoMedium'):TextStyle(color: Colors.black, fontFamily: 'RobotoMedium'),
+                        style: _result[filter] ?
+                        TextStyle(color: Colors.blue, fontFamily: 'RobotoMedium')
+                            :TextStyle(color: Color.fromRGBO(90,98,120,1), fontFamily: 'RobotoMedium'),
                       ),
                     );
                   }).toList();
@@ -107,10 +109,10 @@ class _ActionItems extends State<ActionItems> {
               tabs: <Widget>[
                 Tab(
 //                  text: 'All ' + ACTION,
-                  child: Text('$ACTION', style: TextStyle(fontSize: 17, fontFamily: 'Roboto', fontWeight: FontWeight.w600),),
+                  child: Text('$ACTION', style: TextStyle(fontSize: 17, fontFamily: 'RobotoMedium'),),
                 ),
                 Tab(
-                  child: Text('$MYACTION', style: TextStyle(fontSize: 17, fontFamily: 'Roboto',fontWeight: FontWeight.w600),),
+                  child: Text('$MYACTION', style: TextStyle(fontSize: 17, fontFamily: 'RobotoMedium'),),
                 ),
               ],
             ),

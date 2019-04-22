@@ -261,7 +261,7 @@ class _DwidgetState extends State<Dwidget> {
                       ))
                       : (CircleAvatar(
                           backgroundImage: AssetImage('assets/blank_user.jpeg'),
-                          maxRadius: 17,
+                          maxRadius: 13,
                         )),
                   title: (displayName != null)
                       ? (new Text(displayName,

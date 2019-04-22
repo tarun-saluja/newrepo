@@ -108,54 +108,68 @@ class _DetailState extends State<Detail> {
       child: Scaffold(
         key: _scaffoldKey,
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Container(
-                height: height * 0.1,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: FlatButton(
-                            padding: EdgeInsets.all(6.0),
-                            onPressed:(){
-                              flutterWebviewPlugin.hide();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => new CameraPage(
-                                      widget.meetingTitle, widget.meetingUuid)));
-                            },
-                            child: Image.asset('assets/camera.png',
-                              fit: BoxFit.cover,
-                              height: 28,
-                              width: 34,
+              Material(
+                elevation: 12.0,
+                child: Container(
+                  color: Colors.white,
+                    height: height * 0.094,
+                    /*decoration: new BoxDecoration(
+                      gradient: new LinearGradient(
+                          colors: [Colors.white,
+                          Color.fromRGBO(207, 208, 210, 1),
+                          Colors.white],
+                          begin: new Alignment(0.0, -0.9),
+                          end: Alignment.topCenter,
+                          tileMode: TileMode.clamp,
+                      ),
+                    ),*/
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: FlatButton(
+                              padding: EdgeInsets.all(6.0),
+                              onPressed:(){
+                                flutterWebviewPlugin.hide();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => new CameraPage(
+                                        widget.meetingTitle, widget.meetingUuid)));
+                              },
+                              child: Image.asset('assets/camera.png',
+                                fit: BoxFit.cover,
+                                height: 28,
+                                width: 34,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: FlatButton(
-                            padding: EdgeInsets.all(6.0),
-                            onPressed:(){
-                              flutterWebviewPlugin.hide();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                  new Speech(widget.meetingUuid)));
-                            },
-                            child: new Image.asset('assets/audio_meeting.png',
-                              fit: BoxFit.cover,
-                              height: 35,
-                              width: 23,
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: FlatButton(
+                              padding: EdgeInsets.all(6.0),
+                              onPressed:(){
+                                flutterWebviewPlugin.hide();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                    new Speech(widget.meetingUuid)));
+                              },
+                              child: new Image.asset('assets/audio_meeting.png',
+                                fit: BoxFit.cover,
+                                height: 35,
+                                width: 23,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ))
+                      ],
+                    )),
+              )
             ]),
       ),
     );

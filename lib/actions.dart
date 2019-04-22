@@ -139,7 +139,8 @@ class _Actions extends State<Actions> {
                               return Status.choices.map((String choice) {
                                 return (choice != allActions[index].status)
                                     ? PopupMenuItem<String>(
-                                        value: choice, child: Text(choice[0].toUpperCase()+choice.substring(1)))
+                                    value: choice, child: Text(choice[0].toUpperCase()+choice.substring(1),
+                                    style: TextStyle(color: Color.fromRGBO(90,98,120,1), fontFamily: 'RobotoMedium')))
                                     : (null);
                               }).toList();
                             },

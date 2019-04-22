@@ -66,14 +66,14 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
 
                 child: Text('$NAME',
                     style: TextStyle(
-                      fontSize: screenHeight*.06,
+                      fontSize: 40,
                       fontFamily: 'RobotoThin',
 //                            color: Color.fromRGBO(255, 255, 255, 0.8),
                       foreground: Paint()..shader = linearGradient,
                     )),
               ),
               Container(
-                height: screenHeight*0.075,
+                height: 62,
                 margin: EdgeInsets.fromLTRB(
                     screenWidth * 0.1, screenHeight*.04, screenWidth * 0.183, 0),
                 child: RaisedButton.icon(
@@ -86,7 +86,8 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                   ),
                   label: Text('$GOOGLE',
                       style: TextStyle(
-                        fontSize: screenHeight*0.025,
+                        fontSize: 14,
+                        color: Color.fromRGBO(138,147,170,1),
                         fontFamily: 'Roboto',
                       )),
                   shape: RoundedRectangleBorder(
@@ -121,7 +122,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                           Localization.of(context).example,
                           style: TextStyle(
                               color: Color.fromRGBO(255, 255, 255, 0.2),
-                              fontSize: 15.0,
+                              fontSize: 10.0,
                               fontFamily: 'Roboto'),
                         ),
                       )),
@@ -184,7 +185,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                                 style: new TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Roboto',
-                                  fontSize: screenHeight*.022,
+                                  fontSize: 12,
                                 )),
                             shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(40))),
@@ -229,7 +230,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                               label: new Text('$OFFICE',
                                   style: new TextStyle(
                                       color: Colors.white,
-                                      fontSize: screenHeight*.022,
+                                      fontSize: 12,
                                       fontFamily: 'Roboto')),
                               shape: new RoundedRectangleBorder(
                                   borderRadius: new BorderRadius.circular(40))),
