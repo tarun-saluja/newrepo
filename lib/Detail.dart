@@ -101,84 +101,62 @@ class _DetailState extends State<Detail> {
         url, 'sessionid', 'ocbq6fjxtl8w5nqqlz9a4ppp8izjjrwo');
 
     flutterWebviewPlugin.launch(url,
-        rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.91),
+        rect: new Rect.fromLTWH(0.0, 0.0, width, height * 0.9),
         userAgent: kAndroidUserAgent);
     return WillPopScope(
       onWillPop: _goback,
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: new AppBar(
-          title: Text('$LOGINBACK'),
-        ),
-        body: Column(children: [
-          Container(
-              alignment: Alignment.bottomLeft,
-              padding: EdgeInsets.fromLTRB(0.0, height1 * 0.798, 0.0, 0.0),
-              child: new Row(
-                children: [
-                  Container(
-                    alignment: Alignment.bottomLeft,
-//                    child: new RaisedButton.icon(
-//                        onPressed: (){print('pressed');},
-//                        icon: new Image.asset(
-//                          'assets/captures.png',
-//                          height: 20,
-//                          width: 50,
-//                        ),
-//                        label: new Text('',
-//                            style: new TextStyle(
-//                              fontSize: 20.0,
-//                            )),
-//                        ),
-                    child: FlatButton(
-                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                      onPressed:(){
-                        flutterWebviewPlugin.hide();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => new CameraPage(
-                                widget.meetingTitle, widget.meetingUuid)));
-                      },
-                      child: new Container(alignment: Alignment.bottomLeft,child:Image.asset('assets/camera.png',
-                        fit: BoxFit.cover,
-                        height: 23,
-                        width: 28,
-                      )),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    margin: EdgeInsets.fromLTRB(width1 * 0.511, 0.0, 0.0, 0.0),
-                    child: FlatButton(
-                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                      onPressed:(){
-                        flutterWebviewPlugin.hide();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                            new Speech(widget.meetingUuid)));
-                      },
-                      child: new Image.asset('assets/audio_meeting.png',
-                        fit: BoxFit.cover,
-                        height: 29,
-                        width: 19,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: height * 0.1,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: FlatButton(
+                            padding: EdgeInsets.all(6.0),
+                            onPressed:(){
+                              flutterWebviewPlugin.hide();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => new CameraPage(
+                                      widget.meetingTitle, widget.meetingUuid)));
+                            },
+                            child: Image.asset('assets/camera.png',
+                              fit: BoxFit.cover,
+                              height: 28,
+                              width: 34,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-//                    child: new FlatButton.icon(
-//                      color: Colors.red,
-//                      icon: Icon(Icons.add_a_photo), //`Icon` to display
-//                      label: Text('Hide'), //`Text` to display
-//                      onPressed: () {
-////              Code to execute when Floating Action Button is clicked
-////              ...
-//                        flutterWebviewPlugin.hide();
-//                        Navigator.of(context).push(MaterialPageRoute(
-//                            builder: (BuildContext context) =>
-//                                new Speech(widget.meetingUuid)));
-//                      },
-//                    ),
-                  ),
-                ],
-              ))
-        ]),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: FlatButton(
+                            padding: EdgeInsets.all(6.0),
+                            onPressed:(){
+                              flutterWebviewPlugin.hide();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  new Speech(widget.meetingUuid)));
+                            },
+                            child: new Image.asset('assets/audio_meeting.png',
+                              fit: BoxFit.cover,
+                              height: 35,
+                              width: 23,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
+            ]),
       ),
     );
   }
