@@ -119,9 +119,9 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                       child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          Localization.of(context).example,
+                          Localization.of(context).or,
                           style: TextStyle(
-                              color: Color.fromRGBO(255, 255, 255, 0.2),
+                              color: Color.fromRGBO(90,98,120,1),
                               fontSize: 10.0,
                               fontFamily: 'Roboto'),
                         ),
@@ -244,9 +244,10 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text('version 0.0.1', style:
-                        TextStyle(color: Color.fromRGBO(90, 98, 120, 1),fontSize:15,fontFamily: 'Roboto'),),
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text('version 0.0.1',
+                          style:
+                          TextStyle(color: Color.fromRGBO(90, 98, 120, 1),fontSize:12,fontFamily: 'RobotoThin'),),
                       ),),
                   )
               )
