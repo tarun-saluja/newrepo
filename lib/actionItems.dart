@@ -93,7 +93,7 @@ class _ActionItems extends State<ActionItems> {
                     return PopupMenuItem<String>(
                       value: filter,
                       child: Text(filter,
-                        style: _result[filter]?TextStyle(color: Colors.blue):TextStyle(color: Colors.black),
+                        style: _result[filter]?TextStyle(color: Colors.blue, fontFamily: 'RobotoMedium'):TextStyle(color: Colors.black, fontFamily: 'RobotoMedium'),
                       ),
                     );
                   }).toList();

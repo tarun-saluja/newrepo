@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:memob/localization.dart';
 import 'package:memob/utilities.dart' as utilities;
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,7 +118,7 @@ class _MyAppState extends State<Login> with SingleTickerProviderStateMixin {
                       child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          'OR',
+                          Localization.of(context).example,
                           style: TextStyle(
                               color: Color.fromRGBO(255, 255, 255, 0.2),
                               fontSize: 15.0,

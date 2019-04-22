@@ -116,7 +116,7 @@ class _Actions extends State<Actions> {
                       Row(children: <Widget>[
                         Container(
                           padding:
-                              const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 2.0),
+                              const EdgeInsets.fromLTRB(8.0, 6.0, 8.0, 6.0),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
                               color: (allActions[index].status == 'pending')
@@ -127,12 +127,13 @@ class _Actions extends State<Actions> {
                           child: Text(
 //                            choice[0].toUpperCase()+choice.substring(1)
                             allActions[index].status[0].toUpperCase()+allActions[index].status.substring(1),
-                            style: TextStyle(color: Colors.white, fontFamily: 'RobotoMedium', fontSize: 12),
+                            style: TextStyle(color: Colors.white, fontFamily: 'RobotoMedium', fontSize: 10),
                           ),
                         ),
                         Container(
                           child: PopupMenuButton<String>(
 //                            icon: new ImageIcon.asset("assets/img/logo.png"),
+                          icon: Icon(Icons.more_vert,color: Color.fromRGBO(188,196,209,1),),
                             onSelected: (choice) => choiceAction(choice, index),
                             itemBuilder: (BuildContext context) {
                               return Status.choices.map((String choice) {

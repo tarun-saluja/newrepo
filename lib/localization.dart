@@ -20,7 +20,7 @@ class Localization {
   _getValue(String key) => _localizedValues[locale.languageCode][key];
 
   String get signUpGoogle => _getValue(SignUpGoogle);
-
+  String get example => _getValue(Example);
 }
 
 class LocalizationDelegate extends LocalizationsDelegate<Localization> {

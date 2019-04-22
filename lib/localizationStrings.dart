@@ -28,6 +28,7 @@ const String LoginMessage = 'login_message',
     DailySummary= "daily_summary",
     SendViaSlack= "send_via_slack",
     Logo= "logo",
+    Example= 'example',
     SharedNotes= "share_notes";
 
 
@@ -63,5 +64,6 @@ final en= {
  DailySummary: "DAILY_SUMMARY",
  SendViaSlack: "Daily Summary via Slack",
  Logo: "MeetNotes",
+ Example: "Example",
  SharedNotes: "Share Notes",
 };
