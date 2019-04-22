@@ -60,7 +60,7 @@ class _ActionItems extends State<ActionItems> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('$ACTION_ITEMS',style: TextStyle(color: Color(0XFFBCC4D1), fontFamily: 'RobotoBold')),
+            title: Text('$ACTION_ITEMS',style: TextStyle(color: Color(0XFFBCC4D1),fontSize: 18, fontFamily: 'RobotoBold'),),
             leading:  Builder(
               builder: (context) =>
                   FlatButton(
@@ -68,9 +68,7 @@ class _ActionItems extends State<ActionItems> {
                       Scaffold.of(context).openDrawer();
                     },
                     child: new Image.asset('assets/menu.png',
-                      fit: BoxFit.cover,
-                      height: 20,
-                      width:25,
+                      fit: BoxFit.fill,
                     ),
                   ),
             ),
@@ -80,7 +78,7 @@ class _ActionItems extends State<ActionItems> {
                 //   Icons.filter
                 // ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0,8,10,8),
+                  padding: const EdgeInsets.fromLTRB(8.0,8,16,8),
                   child: Image.asset(
                     'assets/filter.png',
                     width: 20,

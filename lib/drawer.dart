@@ -64,27 +64,26 @@ class _DwidgetState extends State<Dwidget> {
     print(heights);
     print(widths);
     return new Drawer(
-      child: new ListView(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07191666666, widths*0.08506944444, 0, widths*0.12152777777),
-            child: new ListTile(
-              leading: Image.asset(
-                'assets/meetnotes_icon.png',
-                width: 30,
-                height: 30,
-              ),
-              title: new Text(
-                "$LOGONAME",
-                textScaleFactor: 1.2,
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black38,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w400),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: new ListView(
+          children: <Widget>[
+            Container(
+              child: new ListTile(
+                leading: Image.asset(
+                  'assets/meetnotes_icon.png',
+                  width: 24,
+                  height: 22,
+                ),
+                title: new Text(
+                  "$LOGONAME",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromRGBO(188, 196, 209, 1),
+                      fontFamily: 'QuicksandMedium'),
+                ),
               ),
             ),
-          ),
 //          new Container(
 //            child: Container(
 //              margin: EdgeInsets.fromLTRB(widths*0.07191666666, widths*0.08506944444, 0, widths*0.12152777777),
@@ -106,203 +105,202 @@ class _DwidgetState extends State<Dwidget> {
 //              ),
 //            ),
 //          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
-            child: new ListTile(
-              onTap: () {
-                Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
-              },
-              leading: Image.asset(
-                'assets/dashboard.png',
-                width: 25,
-                height: 25,
-              ),
-              title: new Text(
-                "$DASHBOARDS",
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black38,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w400),
+            Container(
+              margin: EdgeInsets.only(top: 14),
+              child: new ListTile(
+                onTap: () {
+                  Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
+                },
+                dense: true,
+                leading: Image.asset(
+                  'assets/dashboard.png',
+                  width: 22,
+                  height: 22,
+                ),
+                title: new Text(
+                  "$DASHBOARDS",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromRGBO(138, 147, 170, 1),
+                      fontFamily: 'Roboto',
+                      ),
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
-            child: new ListTile(
-              onTap: () {
+            Container(
+              child: new ListTile(
+                onTap: () {
 //                m=1;
-                Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
-              },
-              leading: Image.asset(
-                'assets/notes.png',
-                width: 25,
-                height: 25,
+                  Navigator.popUntil(context, ModalRoute.withName('Dashboard'));
+                },
+                dense: true,
+                leading: Image.asset(
+                  'assets/notes.png',
+                  width: 22,
+                  height: 22,
+                ),
+                title: new Text("$NOTES",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        color: Color.fromRGBO(138, 147, 170, 1),
+                        )),
               ),
-              title: new Text("$NOTES",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Roboto',
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400)),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
-            child: new ListTile(
-              onTap: () {
+            Container(
+              child: new ListTile(
+                onTap: () {
 //                m=1;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Download()),
-                );
-              },
-              leading: Image.asset(
-                'assets/notes.png',
-                width: 25,
-                height: 25,
-              ),
-              title: new Text("Download",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Roboto',
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
-            child: new ListTile(
-              onTap: () {
-                bool isNewRouteSameAsCurrent = false;
-                Navigator.popUntil(context, (route) {
-                  if (route.settings.name == "ActionItems") {
-                    isNewRouteSameAsCurrent = true;
-                  }
-                  return true;
-                });
-                if (!isNewRouteSameAsCurrent) {
-                  Navigator.pushNamed(context, 'ActionItems');
-                } else {
-                  Navigator.pop(context, 'ActionItems');
-                }
-              },
-              leading: Image.asset(
-                'assets/action_items.png',
-                width: 25,
-                height: 25,
-              ),
-              title: new Text("$ACTION",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black38,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-          new Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, widths*0.07291666666, 0, 0),
-            child: ExpansionTile(
-              leading: Image.asset(
-                'assets/team.png',
-                width: 25,
-                height: 25,
-              ),
-              title: Text("$TEAM",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Roboto',
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400)),
-              children: <Widget>[
-                _buildTeamNames(),
-              ],
-            ),
-          ),
-          new Divider(
-            color: Colors.white,
-            height: widths*0.12152777777,
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, heights*0.06166666666, 0, 0),
-            child: new ListTile(
-              onTap: () {
-                Navigator.push(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => Settings(),
-                    ));
-              },
-              leading: Image.asset(
-                'assets/settings.png',
-                width: 25,
-                height: 25,
-                color: Colors.black12,
+                    MaterialPageRoute(builder: (context) => Download()),
+                  );
+                },
+                dense: true,
+                leading: Image.asset(
+                  'assets/notes.png',
+                  width: 22,
+                  height: 22,
+                ),
+                title: new Text("Download",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        color: Color.fromRGBO(138, 147, 170, 1),
+                        )),
               ),
-              title: new Text("$SETTINGS",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Roboto',
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400)),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
-            child: new ListTile(
-                leading: (profilepicture != null)
-                    ? Container(
-                    height: 30,
-                    width: 30,
-                    decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: new NetworkImage(
-                                profilepicture)
-                        )
-                    ))
-                    : (CircleAvatar(
-                        backgroundImage: AssetImage('assets/blank_user.jpeg'),
-                        maxRadius: 17,
-                      )),
-                title: (displayName != null)
-                    ? (new Text(displayName,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black38,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w400)))
-                    : (new Text('User',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Roboto',
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400)))),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(widths*0.07291666666, 0, 0, 0),
-            child: new ListTile(
-              leading: Image.asset(
-                'assets/logout.png',
-                width: 25,
-                height: 25,
+            Container(
+              child: new ListTile(
+                onTap: () {
+                  bool isNewRouteSameAsCurrent = false;
+                  Navigator.popUntil(context, (route) {
+                    if (route.settings.name == "ActionItems") {
+                      isNewRouteSameAsCurrent = true;
+                    }
+                    return true;
+                  });
+                  if (!isNewRouteSameAsCurrent) {
+                    Navigator.pushNamed(context, 'ActionItems');
+                  } else {
+                    Navigator.pop(context, 'ActionItems');
+                  }
+                },
+                dense: true,
+                leading: Image.asset(
+                  'assets/action_items.png',
+                  width: 22,
+                  height: 22,
+                ),
+                title: new Text("$ACTIONITEMS",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Color.fromRGBO(138, 147, 170, 1),
+                        fontFamily: 'Roboto',
+                        )),
               ),
-              title: new Text("$LOGOUT",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Roboto',
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400)),
-              onTap: () async {
-                utilities.removeToken().then((result) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/Login', (Route<dynamic> route) => false);
-                });
-              },
             ),
-          ),
-        ],
+            new Container(
+              margin: EdgeInsets.only(top: 30),
+              child: ExpansionTile(
+                leading: Image.asset(
+                  'assets/team.png',
+                  width: 22,
+                  height: 22,
+                ),
+                title: Text("$TEAM",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        color: Color.fromRGBO(138, 147, 170, 1),
+                        )),
+                children: <Widget>[
+                  _buildTeamNames(),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 70),
+              child: new ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Settings(),
+                      ));
+                },
+                dense: true,
+                leading: Image.asset(
+                  'assets/settings.png',
+                  width: 22,
+                  height: 22,
+                  color: Colors.black12,
+                ),
+                title: new Text("$SETTINGS",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        color: Color.fromRGBO(138, 147, 170, 1),
+                        )),
+              ),
+            ),
+            Container(
+              child: new ListTile(
+                  dense: true,
+                  leading: (profilepicture != null)
+                      ? Container(
+                      height: 26,
+                      width: 26,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  profilepicture)
+                          )
+                      ))
+                      : (CircleAvatar(
+                          backgroundImage: AssetImage('assets/blank_user.jpeg'),
+                          maxRadius: 17,
+                        )),
+                  title: (displayName != null)
+                      ? (new Text(displayName,
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color.fromRGBO(138, 147, 170, 1),
+                              fontFamily: 'Roboto',
+                              )))
+                      : (new Text('User',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Roboto',
+                              color: Color.fromRGBO(138, 147, 170, 1),
+                              )))
+              ),
+            ),
+            Container(
+              child: new ListTile(
+                leading: Image.asset(
+                  'assets/logout.png',
+                  width: 22,
+                  height: 22,
+                ),
+                dense: true,
+                title: new Text("$LOGOUT",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        color: Color.fromRGBO(138, 147, 170, 1),)),
+                onTap: () async {
+                  utilities.removeToken().then((result) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/Login', (Route<dynamic> route) => false);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -317,7 +315,10 @@ class _DwidgetState extends State<Dwidget> {
               for (var i = 0; i < snapshot.data.length; i++) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 6.0),
-                  child: Center(child: Text(snapshot.data[i].name, style: TextStyle(fontFamily: 'Roboto'),)),
+                  child: Center(child: Text(snapshot.data[i].name, style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    color: Color.fromRGBO(138, 147, 170, 1),),)),
                 );
               }
             } else {

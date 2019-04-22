@@ -146,6 +146,10 @@ flutter:
       fonts:
         - asset: fonts/Roboto-Italic.ttf
 
+    - family: QuicksandMedium
+      fonts:
+        - asset: fonts/Quicksand-Medium.ttf
+
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
