@@ -45,187 +45,235 @@ class _Settings extends State<Settings> {
     var width = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: Text('$SETTINGS', style: TextStyle(fontFamily: 'Roboto'),),
+          title: Text('$SETTINGS'.toUpperCase() ,style: TextStyle(color: Color(0XFFBCC4D1),fontSize: 18, fontFamily: 'RobotoBold'),),
         ),
         body: (dailyEmail != null)
             ? ((Container(
-                    padding: EdgeInsets.all(20),
-                    child: Form(
-                      child: ListView(
-                        children: <Widget>[
-                          Text(
-                            title,
-                            style: TextStyle(fontSize: 25, fontFamily: 'Roboto'),
-                          ),
-                          Divider(),
-                          Text(''),
-                          Text('Name', style: TextStyle(fontFamily: 'Roboto'),),
-                          Text(''),
-                          TextFormField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                                labelText: name,
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black))),
-                          ),
-                          Text(''),
-                          Text('$EMAIL', style: TextStyle(fontFamily: 'Roboto'),),
-                          Text(''),
-                          TextFormField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                                labelText: email,
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black))),
-                          ),
-                          Text(''),
-                          Text('$NOTIFICATION_PREF',style: TextStyle(fontFamily: 'Roboto')),
-                          Text(''),
-                          CheckboxListTile(
-                            title: Text('$SEND_VIA_EMAIL',style: TextStyle(fontFamily: 'Roboto')),
-                            value: this.dailyEmail,
-                            onChanged: (bool val) {
-                              this.setState(() {
-                                dailyEmail = !dailyEmail;
-                              });
-                              Map body = {
-                                "settings": {"$DAILY_SUMMARY": dailyEmail}
-                              };
-                              settingsUpdate(body);
-                            },
-                          ),
-                          CheckboxListTile(
-                            title: Text('$SEND_VIA_SLACK',style: TextStyle(fontFamily: 'Roboto')),
-                            value: this.dailySlack,
-                            onChanged: (bool val) {
-                              this.setState(() {
-                                dailySlack = !dailySlack;
-                              });
-                              Map body = {
-                                "settings": {
-                                  "DAILY_SUMMARY_SLACK_REMINDER": dailySlack
-                                }
-                              };
-                              settingsUpdate(body);
-                            },
-                          ),
-                          CheckboxListTile(
-                            title: Text('Meeting Reminder',style: TextStyle(fontFamily: 'Roboto')),
-                            value: this.meetingReminder,
-                            onChanged: (bool val) {
-                              this.setState(() {
-                                meetingReminder = !meetingReminder;
-                              });
-                              Map body = {
-                                "settings": {
-                                  "MEETING_REMINDER": meetingReminder
-                                }
-                              };
-                              settingsUpdate(body);
-                            },
-                          ),
-                          CheckboxListTile(
-                            title: Text('Meeting Agenda Reminder',style: TextStyle(fontFamily: 'Roboto')),
-                            value: this.meetingAgenda,
-                            onChanged: (bool val) {
-                              this.setState(() {
-                                meetingAgenda = !meetingAgenda;
-                              });
-                              Map body = {
-                                "settings": {
-                                  "MEETING_AGENDA_REMINDER": meetingAgenda
-                                }
-                              };
-                              settingsUpdate(body);
-                            },
-                          ),
-                          CheckboxListTile(
-                            title: Text('Daily Meetings Feedback',style: TextStyle(fontFamily: 'Roboto')),
-                            value: this.meetingsFeedback,
-                            onChanged: (bool val) {
-                              this.setState(() {
-                                meetingsFeedback = !meetingsFeedback;
-                              });
-                              Map body = {
-                                "settings": {
-                                  "DAILY_FEEDBACK_REMINDER": meetingsFeedback
-                                }
-                              };
-                              settingsUpdate(body);
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top:8.0, bottom: 8.0),
-                            child: Container(
-                              height: 1,
-                              width: width*1.1,
-                              color: Colors.black26,
-                            ),
-                          ),
-                          Form(
-                                  child: Column(
-                                      children:[
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child:Text(
-                                      'Aliases',
-                                      style: TextStyle(fontSize: 25, fontFamily: 'Roboto'),
-                                    )),
-                                    Divider(),
-                                    Text(''),
-                                    Container(alignment: Alignment.topLeft,
-                                        child:Text('Email', style: TextStyle(fontSize: 15.0, fontFamily: 'Roboto'),)),
-                                    Text(''),
-                                    TextFormField(
-                                      enabled: false,
-                                      decoration: InputDecoration(
-                                          labelText: email,
-                                          border: OutlineInputBorder(
-                                              borderSide:
-                                              BorderSide(color: Colors.black))),
-                                    ),
-                                    Text(''),
-                              Container(alignment: Alignment.topLeft,
-                                  child:Text('Other Email Aliases', style: TextStyle(fontSize: 15.0, fontFamily: 'Roboto'),)),
-                                    Text(''),
-                              Container(alignment: Alignment.topLeft,
-                                  child:Text(
-                                        '$aliasemail',style: TextStyle(fontFamily: 'Roboto')
-                                    )),
-                                    Text(''),
-                                    TextFormField(
-                                      controller: aliasController,
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide:
-                                              BorderSide(color: Colors.black))),
-                                      onSaved: (String value) {
-                                        this.aliasEmail = value;
-                                      },
-                                      style: TextStyle(height: 1.0),
-                                    ),
-                              Container(alignment: Alignment.topLeft,
-                                  child:Padding(
-                                      padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,0.0),
-                                      child: RaisedButton(
-                                        child: Text('+Add Another Aliases',style: TextStyle(fontFamily: 'Roboto')),
-                                        color: Colors.blue,
-                                        onPressed: () {
-                                          Map body = {"email": aliasController.text};
-                                          addAliases(body);
-                                        },
-                                      ),
-                                    ))
-                                  ]))
-                        ],
+          child: Form(
+            child: ListView(
+              children: <Widget>[
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(26.0, 20, 26, 10),
+                        color: Color.fromRGBO(227, 227, 227, 1),
+                        child: Text(
+                          title,
+                          style: TextStyle(fontSize: 14, fontFamily: 'RobotoMedium'),
+                        ),
                       ),
                     ),
-                  )))
+                  ],
+                ),
+                Divider(height: 1, color: Colors.grey,),
+                Container(padding: EdgeInsets.all(26.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Name', style: TextStyle(fontSize: 12, fontFamily: 'Roboto'),),
+                      Padding(padding: EdgeInsets.all(4),),
+                      Text(name, style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium'),),
+                      /*TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            labelText: name,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.black))),
+                      ),*/
+                      Padding(padding: EdgeInsets.all(10),),
+                      Text('$EMAIL', style: TextStyle(fontSize: 12, fontFamily: 'Roboto'),),
+                      Padding(padding: EdgeInsets.all(4),),
+                      Text(email, style: TextStyle(fontSize: 15, fontFamily: 'RobotoMedium'),),
+
+                      /*TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            labelText: email,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.black))),
+                      ),*/
+                    ],
+                  ),),
+
+                Divider(height: 1, color: Colors.grey,),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(26.0, 20, 26, 10),
+                        color: Color.fromRGBO(227, 227, 227, 1),
+                        child: Text(
+                          '$NOTIFICATION_PREF',
+                          style: TextStyle(fontSize: 14, fontFamily: 'RobotoMedium'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(height: 1, color: Colors.grey,),
+
+                Container(padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      CheckboxListTile(
+                        title: Text('$SEND_VIA_EMAIL',style: TextStyle(fontSize: 15, fontFamily: 'Roboto')),
+                        value: this.dailyEmail,
+                        onChanged: (bool val) {
+                          this.setState(() {
+                            dailyEmail = !dailyEmail;
+                          });
+                          Map body = {
+                            "settings": {"$DAILY_SUMMARY": dailyEmail}
+                          };
+                          settingsUpdate(body);
+                        },
+                      ),
+                      CheckboxListTile(
+                        title: Text('$SEND_VIA_SLACK',style: TextStyle(fontSize: 15, fontFamily: 'Roboto')),
+                        value: this.dailySlack,
+                        onChanged: (bool val) {
+                          this.setState(() {
+                            dailySlack = !dailySlack;
+                          });
+                          Map body = {
+                            "settings": {
+                              "DAILY_SUMMARY_SLACK_REMINDER": dailySlack
+                            }
+                          };
+                          settingsUpdate(body);
+                        },
+                      ),
+                      CheckboxListTile(
+                        title: Text('Meeting Reminder',style: TextStyle(fontSize: 15, fontFamily: 'Roboto')),
+                        value: this.meetingReminder,
+                        onChanged: (bool val) {
+                          this.setState(() {
+                            meetingReminder = !meetingReminder;
+                          });
+                          Map body = {
+                            "settings": {
+                              "MEETING_REMINDER": meetingReminder
+                            }
+                          };
+                          settingsUpdate(body);
+                        },
+                      ),
+                      CheckboxListTile(
+                        title: Text('Meeting Agenda Reminder',style: TextStyle(fontSize: 15, fontFamily: 'Roboto')),
+                        value: this.meetingAgenda,
+                        onChanged: (bool val) {
+                          this.setState(() {
+                            meetingAgenda = !meetingAgenda;
+                          });
+                          Map body = {
+                            "settings": {
+                              "MEETING_AGENDA_REMINDER": meetingAgenda
+                            }
+                          };
+                          settingsUpdate(body);
+                        },
+                      ),
+                      CheckboxListTile(
+                        title: Text('Daily Meetings Feedback',style: TextStyle(fontSize: 15, fontFamily: 'Roboto')),
+                        value: this.meetingsFeedback,
+                        onChanged: (bool val) {
+                          this.setState(() {
+                            meetingsFeedback = !meetingsFeedback;
+                          });
+                          Map body = {
+                            "settings": {
+                              "DAILY_FEEDBACK_REMINDER": meetingsFeedback
+                            }
+                          };
+                          settingsUpdate(body);
+                        },
+                      ),
+                    ],
+                  ),),
+
+
+
+                Divider(height: 1, color: Colors.grey,),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(26.0, 20, 26, 10),
+                        color: Color.fromRGBO(227, 227, 227, 1),
+                        child: Text(
+                          'Aliases',
+                          style: TextStyle(fontSize: 14, fontFamily: 'RobotoMedium'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(height: 1, color: Colors.grey,),
+
+                Container(padding: EdgeInsets.all(26.0),
+                  child: Form(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:[
+                            Text('Email', style: TextStyle(fontSize: 12.0, fontFamily: 'Roboto'),),
+                            /*
+                            TextFormField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                  labelText: email,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                      BorderSide(color: Colors.black))),
+                            ),*/
+                            Padding(padding: EdgeInsets.all(4),),
+                            Text(email, style: TextStyle(fontSize: 14, fontFamily: 'RobotoMedium'),),
+                            Padding(padding: EdgeInsets.all(10),),
+                            Text('Other Email Aliases', style: TextStyle(fontSize: 12.0, fontFamily: 'Roboto'),),
+                            Padding(padding: EdgeInsets.all(4),),
+                            Text('$aliasemail', style: TextStyle(fontSize: 14, fontFamily: 'RobotoMedium'),),
+                            Padding(padding: EdgeInsets.all(10),),
+                            TextFormField(
+                              controller: aliasController,
+                              decoration: InputDecoration(
+                                hintText: 'Enter email alias to be added..',
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue)),),
+                              onSaved: (String value) {
+                                this.aliasEmail = value;
+                              },
+                              style: TextStyle(height: 1.0),
+                            ),
+                            Container(alignment: Alignment.topLeft,
+                                child:Padding(
+                                  padding: const EdgeInsets.fromLTRB(0.0,8.0,0.0,0.0),
+                                  child: RaisedButton(
+                                    child: Text('+ Add Another Alias',style: TextStyle(color: Colors.white, fontFamily: 'RobotoMedium')),
+                                    color: Colors.blue,
+                                    onPressed: () {
+                                      Map body = {"email": aliasController.text};
+                                      addAliases(body);
+                                    },
+                                  ),
+                                ))
+                          ])),)
+
+
+              ],
+            ),
+          ),
+        )))
             : (Center(
-                child: CircularProgressIndicator(),
-              )));
+          child: CircularProgressIndicator(),
+        )));
   }
 
   Future<Null> fetchData() async {
@@ -252,12 +300,12 @@ class _Settings extends State<Settings> {
         email = mData['user']['email'];
         dailyEmail = mData["notification_settings"]["DAILY_SUMMARY"];
         dailySlack =
-            mData["notification_settings"]["DAILY_SUMMARY_SLACK_REMINDER"];
+        mData["notification_settings"]["DAILY_SUMMARY_SLACK_REMINDER"];
         meetingReminder = mData["notification_settings"]["MEETING_REMINDER"];
         meetingAgenda =
-            mData["notification_settings"]["MEETING_AGENDA_REMINDER"];
+        mData["notification_settings"]["MEETING_AGENDA_REMINDER"];
         meetingsFeedback =
-            mData["notification_settings"]["DAILY_FEEDBACK_REMINDER"];
+        mData["notification_settings"]["DAILY_FEEDBACK_REMINDER"];
       });
       return null;
     } else {
@@ -268,7 +316,7 @@ class _Settings extends State<Settings> {
 
   Future<Null> settingsUpdate(Map body) async {
     var response =
-        await api.settingsUpdate(body);
+    await api.settingsUpdate(body);
   }
 
   Future<Null> addAliases(Map body) async {
