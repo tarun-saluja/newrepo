@@ -115,13 +115,14 @@ class _CameraPageState extends State<CameraPage> {
       Container(
         height:widget.height*0.65,
           transform: Matrix4.translationValues(0, 70, 0),child:AlertDialog(
-                    contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      content: Column(
+
+                      content: Center(
+                          child:Column(
 //                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         _thumbnailWidget(),
                       ],
-                    ))
+                    )))
 
       ),
     _cameraSaveController()
@@ -142,53 +143,61 @@ class _CameraPageState extends State<CameraPage> {
       );
     } else {
       return new AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
+        aspectRatio: 90.0/100.0,
         child: new CameraPreview(controller),
       );
     }
   }
 
   Widget _cameraSaveController() {
-    return new Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Container(
-          child: FlatButton(
-            padding:
-            const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
-            onPressed: () {
-              UploadAttachment.uploadAttachment(
+    double width = MediaQuery.of(context).size.width;
+    return new Container(
+        width: width,
+        child:Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(right: widget.width*0.098),
+                alignment: Alignment.centerRight,
+                child: FlatButton(
+                  onPressed: () {
+    UploadAttachment.uploadAttachment(
                   userToken, imagePath, widget.meetingUuid);
 
               Navigator.pop(context);
               flutterWebviewPlugin.show();
-              },
-            child: new Image.asset(
-              'assets/tick.png',
-              fit: BoxFit.cover,
-              height: 100,
-              width: 80,
+                  },
+                  child: new Image.asset(
+                    'assets/tick.png',
+                    fit: BoxFit.cover,
+                    height: 100,
+                    width: 70,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-        Container(
-          child: FlatButton(
-            padding:
-            const EdgeInsets.fromLTRB(0.0, 4.5, 0.0, 0.0),
-            onPressed: () {
-              Navigator.pop(context);
-              flutterWebviewPlugin.show();
-            },
-            child: new Image.asset(
-              'assets/cross.png',
-              fit: BoxFit.cover,
-              height: 100,
-              width: 80,
-            ),
-          ),
-        ),
-      ],
-    );
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: widget.width*0.098),
+                alignment: Alignment.centerLeft,
+
+                child: FlatButton(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    flutterWebviewPlugin.show();
+                  },
+                  child: new Image.asset(
+                    'assets/cross.png',
+                    fit: BoxFit.cover,
+                    height: 100,
+                    width: 70,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   /// Display the thumbnail of the captured image or video.
@@ -198,15 +207,17 @@ class _CameraPageState extends State<CameraPage> {
         child: imagePath == null
             ? null
             : new Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   new Row(
                     children: <Widget>[
                       new SizedBox(
+
                         child: new Container(
                             child: new Image.file(new File(imagePath))),
-                        width: widget.height *.42,
-                        height: widget.height * 0.54,
+                        width: widget.width*0.66,
+//                        height: 400,
                       ),
                     ],
                   ),
@@ -301,6 +312,7 @@ class _CameraPageState extends State<CameraPage> {
     }
     return filePath;
   }
+
 
   void _showCameraException(CameraException e) {
     logError(e.code, e.description);

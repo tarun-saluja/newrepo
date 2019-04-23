@@ -1,5 +1,5 @@
 final NAME = "Meetings\nthat Get\nThings Done!";
-final GOOGLE = "Sign in with google";
+final GOOGLE = "Sign in with Google";
 final SLACK = "Slack";
 final OFFICE = "Office 365";
 final ALL_MEETINGS = "All Meetings";

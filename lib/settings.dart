@@ -8,6 +8,8 @@ import 'package:memob/utilities.dart' as utilities;
 
 import './constants.dart';
 import './api_service.dart';
+import 'drawer.dart';
+import 'dashboard.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -23,6 +25,8 @@ class _Settings extends State<Settings> {
   bool meetingAgenda;
   bool meetingsFeedback;
   String name;
+  String _displayName;
+  String _profilepicture;
   String email;
   String aliasemail;
   String userToken;
@@ -46,7 +50,19 @@ class _Settings extends State<Settings> {
     return Scaffold(
         appBar: AppBar(
           title: Text('$SETTINGS'.toUpperCase() ,style: TextStyle(color: Color(0XFFBCC4D1),fontSize: 18, fontFamily: 'RobotoBold'),),
+          leading:  Builder(
+            builder: (context) =>
+                FlatButton(
+                  onPressed:(){
+                    Scaffold.of(context).openDrawer();
+                  },
+                  child: new Image.asset('assets/menu.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+          ),
         ),
+        drawer: Dwidget(userToken, _displayName, _profilepicture),
         body: (dailyEmail != null)
             ? ((Container(
           child: Form(
@@ -275,6 +291,18 @@ class _Settings extends State<Settings> {
           child: CircularProgressIndicator(),
         )));
   }
+  Future<Null> getUserDetails() async {
+    final response = await api.getUser();
+
+    if (response.statusCode == 200) {
+      this.setState(() {
+        Map<String, dynamic> mData = json.decode(response.body);
+        _displayName = mData['user']['display_name'];
+        _profilepicture = mData['user']['profilepicture'];
+      });
+
+    }
+  }
 
   Future<Null> fetchData() async {
     Future<String> token = utilities.getTokenData();
@@ -283,6 +311,7 @@ class _Settings extends State<Settings> {
         userToken = value;
         fetchUserData();
         getAliases();
+        getUserDetails();
       } else {
         utilities.showLongToast(value);
         return null;
