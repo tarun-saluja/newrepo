@@ -180,6 +180,7 @@ class _Actions extends State<Actions> {
     );
     if (allActions.length > 0) {
       actionCard = ListView.builder(
+        padding: EdgeInsets.only(top: 16, bottom: 16),
         itemBuilder: _buildActionItem,
         itemCount: allActions.length,
       );
