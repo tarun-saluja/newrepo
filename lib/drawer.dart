@@ -33,14 +33,6 @@ class _DwidgetState extends State<Dwidget> {
   List<String> team = new List();
   List<TeamClass> teamNames = new List();
 
-  List<ActionClass> allActions = new List();
-  List allAssignees = new List();
-  List allMeetings = new List();
-
-  List<ActionClass> myActions = new List();
-  List myAssignees = new List();
-  List myMeetings = new List();
-
   String userToken;
   int userID;
   String profile_picture;
@@ -231,10 +223,9 @@ class _DwidgetState extends State<Dwidget> {
                 },
                 dense: true,
                 leading: Image.asset(
-                  'assets/settings.png',
+                  'assets/dashboard_settings.png',
                   width: 22,
                   height: 22,
-                  color: Colors.black12,
                 ),
                 title: new Text("$SETTINGS",
                     style: TextStyle(
@@ -245,8 +236,7 @@ class _DwidgetState extends State<Dwidget> {
               ),
             ),
             Container(
-              child: new ListTile(
-                  dense: true,
+              child: new ExpansionTile(
                   leading: (profilepicture != null)
                       ? Container(
                       height: 26,
@@ -275,28 +265,31 @@ class _DwidgetState extends State<Dwidget> {
                               fontSize: 16,
                               fontFamily: 'Roboto',
                               color: Color.fromRGBO(138, 147, 170, 1),
-                              )))
-              ),
-            ),
-            Container(
-              child: new ListTile(
-                leading: Image.asset(
-                  'assets/logout.png',
-                  width: 22,
-                  height: 22,
-                ),
-                dense: true,
-                title: new Text("$LOGOUT",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
-                        color: Color.fromRGBO(138, 147, 170, 1),)),
-                onTap: () async {
-                  utilities.removeToken().then((result) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/Login', (Route<dynamic> route) => false);
-                  });
-                },
+                              ))),
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left:50),
+                      child: new ListTile(
+                        leading: Image.asset(
+                          'assets/logout.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        dense: true,
+                        title: new Text("$LOGOUT",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Roboto',
+                              color: Color.fromRGBO(138, 147, 170, 1),)),
+                        onTap: () async {
+                          utilities.removeToken().then((result) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/Login', (Route<dynamic> route) => false);
+                          });
+                        },
+                      ),
+                    ),
+                  ]
               ),
             ),
           ],

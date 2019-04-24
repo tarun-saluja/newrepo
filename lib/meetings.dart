@@ -85,6 +85,30 @@ class Meetings extends StatelessWidget {
             },
           );
     }
+    else{
+      meetingCard = Container(
+        color: Color(0XFFeaf0f5),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+          Container(
+              child: Image.asset('assets/empty.png',
+                fit: BoxFit.cover,
+                height: 150,
+                width: 180,
+              ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:18.0),
+                child: Text('No Meetings Created',style: TextStyle(fontFamily: 'Roboto',color: Color.fromRGBO(188, 196, 209, 1), fontSize: 20),),
+              )])));
+//    child:Text('Tarun'))),
+
+    }
     return meetingCard;
   }
 

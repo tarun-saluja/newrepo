@@ -134,11 +134,14 @@ class _MyAppState extends State<Speech> {
                     child: new Padding(
                         padding: new EdgeInsets.all(1.0),
                         child: new Center(
-                          child: new Column(
+                          child: new SingleChildScrollView(
+                            child:
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              new Container(child: new Text(transcription)),
+                              new Container(child: new Text(transcription, style: TextStyle(fontFamily: 'Roboto', color: Color.fromRGBO(138, 147, 170, 1), fontSize: 16),)),
                             ],
-                          ),
+                          )),
                         )),
                   ),
                   height: height * 0.55,

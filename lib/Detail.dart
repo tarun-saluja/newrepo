@@ -298,6 +298,12 @@ class _DetailState extends State<Detail> {
 
   }
 
+  @override
+  void dispose() {
+    flutterWebviewPlugin.close();
+    super.dispose();
+  }
+
   bool value4 = false;
   MyInAppBrowser inAppBrowser = new MyInAppBrowser();
 

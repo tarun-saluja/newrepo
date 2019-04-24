@@ -55,8 +55,8 @@ class _Actions extends State<Actions> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                    title: Text(meetings[index]['title']),
-                    content: Container(child: Text(allActions[index].note))));
+                    title: Text(meetings[index]['title'], style: TextStyle(fontFamily: 'RobotoMedium', color:Color.fromRGBO(90, 98, 120, 1), fontSize: 16),),
+                    content: Container(child: Text(allActions[index].note,style: TextStyle(fontFamily: 'Roboto', color:Color.fromRGBO(90, 98, 120, 1), fontSize: 14),))));
           },
           child: Card(
             elevation: 100.0,
