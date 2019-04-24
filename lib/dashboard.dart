@@ -31,12 +31,13 @@ class Dashboard extends StatefulWidget {
   }
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMixin{
   String userToken;
   String _displayName;
   String _profilepicture;
   bool _connectionStatus = false;
   final Connectivity _connectivity = new Connectivity();
+  TabController _tabController;
 
   List<MeetingClass> _meetings = new List();
   List<NotesClass> _notes = new List();
@@ -63,6 +64,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
             ),
             bottom: TabBar(
+              controller: _tabController,
               indicatorWeight: 3,
               unselectedLabelColor: Color(0XFF8A93AA),
               labelColor: Color(0XFF1794FF),
@@ -86,6 +88,7 @@ class _DashboardState extends State<Dashboard> {
                   image: AssetImage('assets/bg.png'), fit: BoxFit.cover),
             ),
             child: TabBarView(
+              controller: _tabController,
               children: <Widget>[
                 new RefreshIndicator(
                     child: AllMeetings(_meetings), onRefresh: getMeetingData),
@@ -204,11 +207,18 @@ class _DashboardState extends State<Dashboard> {
   @override
   initState() {
     super.initState();
+    _tabController = new TabController(vsync: this, length: 2);
     flutterWebviewPlugin.close();
     initConnectivity().then((result) {
       if (result) {
         this.fetchData();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }

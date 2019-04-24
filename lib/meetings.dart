@@ -24,6 +24,7 @@ class Meetings extends StatelessWidget {
 
   Meetings([this.meetings]);
 
+  @override
   Widget build(BuildContext context) {
     var shortestSide = MediaQuery.of(context).size.shortestSide;
 
@@ -31,7 +32,6 @@ class Meetings extends StatelessWidget {
 // a common breakpoint for a typical 7-inch tablet.
     final bool useMobileLayout = shortestSide < 600;
 
-    @override
     Widget meetingCard = Center(
       child: CircularProgressIndicator(),
     );
@@ -48,41 +48,43 @@ class Meetings extends StatelessWidget {
       print(total_meeting[i].meetinglist.length);
     }
 
-    meetingCard =
-        ListView.builder(
-          itemCount: total_meeting.length,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int parentIndex) {
-            return new Container(
-                padding: EdgeInsets.only(left:20, right: 20, bottom: 6, top: 6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            dayprint(parentIndex),
-                            style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.normal),
+    if (meetings.length > 0) {
+      meetingCard =
+          ListView.builder(
+            itemCount: total_meeting.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int parentIndex) {
+              return new Container(
+                  padding: EdgeInsets.only(left:20, right: 20, bottom: 6, top: 6),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              dayprint(parentIndex),
+                              style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.normal),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    GridView.builder(
-                      physics: ClampingScrollPhysics(),
-                      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: ( useMobileLayout ? 2 : 3), childAspectRatio: 1.5),
-                      itemBuilder: (BuildContext context, int index) {
-                        return _buildMeetingItem(context, parentIndex, index);
-                      },
-                      itemCount: total_meeting[parentIndex].meetinglist.length,
-                      shrinkWrap: true,
-                    )
-                  ],
-                ));
-          },
-        );
+                        ],
+                      ),
+                      GridView.builder(
+                        physics: ClampingScrollPhysics(),
+                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: ( useMobileLayout ? 2 : 3), childAspectRatio: 1.5),
+                        itemBuilder: (BuildContext context, int index) {
+                          return _buildMeetingItem(context, parentIndex, index);
+                        },
+                        itemCount: total_meeting[parentIndex].meetinglist.length,
+                        shrinkWrap: true,
+                      )
+                    ],
+                  ));
+            },
+          );
+    }
     return meetingCard;
   }
 
@@ -156,10 +158,10 @@ class Meetings extends StatelessWidget {
             color: Color.fromRGBO(255, 255, 255, 1),
             child: Container(
               margin: EdgeInsets.fromLTRB(
-                  height * 0.01845280235 * 2,
-                  height * 0.02323008849,
-                  height * 0.02323008849,
-                  height * 0.00323008849),
+                  20,
+                  15,
+                  20,
+                  15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
